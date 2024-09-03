@@ -2,6 +2,6 @@
     "name":"CMS-WEB-GRUPO-06",
     "version": "1.0",
     "scripts": {
-        "docker:dev":"start http://localhost:5173 & docker compose up"
+        "docker:dev":"start http://localhost:5173 & docker compose build && docker compose up"
     }
 }

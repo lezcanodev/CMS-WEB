@@ -10,7 +10,6 @@ COPY package.json package-lock.json ./
 
 # Instalamos las dependencias en el directorio de docker
 RUN npm install
-RUN npm run generate-docs
 
 # Copiamos las dependencias instaladas en el directorio del docker a nuestro directorio de frontend
 COPY . .
