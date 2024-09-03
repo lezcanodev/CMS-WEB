@@ -1,0 +1,37 @@
+services:
+  api:
+    build: ./CMS-WEB-BACKEND/backend
+    ports:
+      - "8000:8000"
+    command: >
+      sh -c "python manage.py makemigrations &&
+             python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./CMS-WEB-BACKEND:/CMS-WEB-BACKEND/backend
+    env_file:
+      - ./CMS-WEB-BACKEND/backend/backend/.env
+    depends_on:
+      - database
+
+  web:
+    build: ./CMS-WEB-FRONTEND
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./CMS-WEB-FRONTEND:/CMS-WEB-FRONTEND
+
+  database:
+    image: postgres
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: Django
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres-data:
