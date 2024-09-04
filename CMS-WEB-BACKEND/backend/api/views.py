@@ -4,9 +4,9 @@ from rest_framework import generics
 from .serializers import UserSerializer, LibroSerializer, CategoriaSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Libro, Categoria
+from rest_framework.response import Response
 
 #Crear/listar y borrar un articulo:
-#CAMBIO 4
 
 class LibroListCreate(generics.CreateAPIView):
     """ Clase para listar/instanciar un libro atraves de la clase CreateAPIView del framework REST
@@ -14,21 +14,36 @@ class LibroListCreate(generics.CreateAPIView):
     serializer_class = LibroSerializer
     permission_classes = [AllowAny]
 
+        
     def get_queryset(self):
         """metodo reescrito, get_queryset retornara un set de libros del modelo "Libro" con el filtro de categoria
         """
         categoria = self.request.categoria
-        return Libro.objects.filter(categoria=categoria)
+        return Libro.objects.all()
 
     def perform_create(self, serializer):
         """Metodo reescrito para verificar que el objeto enviado atraves del serializer cumple con los atributos necesarios para su creacion para luego ser guardado
         """
         if serializer.is_valid():
+        
             serializer.save(author=self.request.user)
         else:
             print(serializer.errors)
 
-#CAMBIO 5
+class LibroListar(generics.ListAPIView):
+    """ Clase para listar los libro atraves de la clase ListAPIView del framework REST
+    """
+    serializer_class = LibroSerializer
+    permission_classes = [AllowAny]
+        
+    def get_queryset(self):
+        """retorna todos los libros
+        """
+       
+        return Libro.objects.all()
+
+
+
 class LibroDelete(generics.DestroyAPIView):
     """View para borrar un articulo del modelo Libro
     con la clase DestroyAPIView del framework REST
@@ -41,7 +56,7 @@ class LibroDelete(generics.DestroyAPIView):
         user = self.request.user
         return Libro.objects.filter(author = user)
 
-#PARA CATEGORIA CAMBIO 6
+
 class CategoriaListCreate(generics.CreateAPIView):
     """View para crear/listar categorias (uso opcional)"""
     serializer_class = CategoriaSerializer
@@ -59,8 +74,20 @@ class CategoriaListCreate(generics.CreateAPIView):
         else:
             print(serializer.errors)
 
+class CategoriaListar(generics.ListAPIView):
+    """ Clase para listar las categorias atraves de la clase ListAPIView del framework REST
+    """
+    serializer_class = CategoriaSerializer
+    permission_classes = [AllowAny]
+        
+    def get_queryset(self):
+        """retorna todas las categorias
+        """
+        
+        return Categoria.objects.all()
 
-#CAMBIO 7
+
+
 class CategoriaDelete(generics.DestroyAPIView):
     """View para borrar una categoria(opcional)
     """
