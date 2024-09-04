@@ -52,7 +52,6 @@ export function RegisterPage(){
       } 
     })
 
-
     return <>
         <RegisterPageElement 
             onSubmitRegister={formikRegister.handleSubmit}

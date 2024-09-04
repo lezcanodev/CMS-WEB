@@ -15,7 +15,7 @@ class Categoria(models.Model):
 
 
 #clase del orm para la creacion de libros
-class Libro(models.Model): 
+class Libro(models.Model):
     """
     Guarda una instancia de un articulo
     """
@@ -23,9 +23,10 @@ class Libro(models.Model):
     fecha = models.DateTimeField(auto_now_add=True)
 
     #el related_name me permite user.notes()
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="libro")
-    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, related_name="categoria", default=1)
-
+    #author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="libro")
+    #categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, related_name="categoria", default=1)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="libros")
+    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, related_name="libros")
     """
     Retorna el nombre del articulo
     """
