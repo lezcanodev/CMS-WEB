@@ -3,8 +3,9 @@ services:
     build: ./CMS-WEB-BACKEND/backend
     ports:
       - "8000:8000"
+    # python detect_postgres.py para que no se conecte antes que postgres este listo
     command: >
-      sh -c "python manage.py makemigrations &&
+      sh -c "python detect_postgres.py && python manage.py makemigrations &&
              python manage.py migrate &&
              python manage.py runserver 0.0.0.0:8000"
     volumes:
@@ -13,13 +14,16 @@ services:
       - ./CMS-WEB-BACKEND/backend/backend/.env
     depends_on:
       - database
-
+  
   web:
+
     build: ./CMS-WEB-FRONTEND
     ports:
       - "5173:5173"
     volumes:
       - ./CMS-WEB-FRONTEND:/CMS-WEB-FRONTEND
+    depends_on:
+      - database
 
   database:
     image: postgres
