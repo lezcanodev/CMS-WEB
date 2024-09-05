@@ -97,8 +97,9 @@ class CategoriaDelete(generics.DestroyAPIView):
     def get_queryset(self):
         """Metodo que retorna el objeto que conicida con el nombre para ser eliminado
         """
-        nombre = self.request.nombre
-        return Categoria.objects.filter(nombre = nombre)
+        #nombre = self.request.nombre
+        return Categoria.objects.all()
+   
 
 
 
@@ -109,3 +110,39 @@ class CreateUserView(generics.CreateAPIView):
     serializer_class = UserSerializer #especificamos que tipo de datos necesitamos para la creacion
     permission_classes = [AllowAny] #especifiacomes quien puede llamar a esta funcion
     #con estos parametros se hace la creacion automatica
+
+
+    #UPDATES
+class UpdateCategoriaAPIView(generics.UpdateAPIView):
+    queryset = Categoria.objects.all()
+    serializer_class = CategoriaSerializer
+    lookup_field = 'pk'
+    permission_classes = [AllowAny]
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "mobile number updated successfully"})
+
+        else:
+            return Response({"message": "failed", "details": serializer.errors})
+
+class UpdateLibroAPIView(generics.UpdateAPIView):
+    queryset = Libro.objects.all()
+    serializer_class = LibroSerializer
+    lookup_field = 'pk'
+    permission_classes = [AllowAny]
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "mobile number updated successfully"})
+
+        else:
+            return Response({"message": "failed", "details": serializer.errors})

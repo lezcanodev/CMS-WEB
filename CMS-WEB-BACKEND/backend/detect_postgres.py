@@ -15,8 +15,21 @@ def check_postgres():
             host='database',
             port=5432
         )
+        conn.autocommit = True  # Necesario para ejecutar comandos como LIST DATABASES
+
+        # Crear un cursor para ejecutar consultas
+        cursor = conn.cursor()
+        
+        # Verificar si la base de datos 'Django' existe
+        cursor.execute("SELECT 1 FROM pg_database WHERE datname = 'Django'")
+        db_exists = cursor.fetchone()
+        
+        cursor.close()
         conn.close()
-        return True
+        
+        return db_exists is not None
+        #conn.close()
+        #return True
     except psycopg2.OperationalError:
         return False
 
