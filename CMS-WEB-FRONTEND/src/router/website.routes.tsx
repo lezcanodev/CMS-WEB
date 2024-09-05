@@ -1,16 +1,17 @@
 import { createBrowserRouter, RouteObject } from 'react-router-dom';
-import DashboardLayout from '@/layouts/dasboard.Layout';
+import DashboardLayout from '@/layouts/dasboard.layout';
 
 // Paginas
 import Home from '@/pages/dashboard/Home';
 import { LoginPage } from '@/pages/Login.page';
 import { InicioPage } from '../pages/Inicio.page';
-import { MainLayout } from '../layouts/MainLayout';
+import { MainLayout } from '../layouts/Main.layout';
 
 // Routes
 import { BASE_URL } from './helpers';
 import { ProtectedRoute } from './middlewares/ProtectedRoute';
 import { RegisterPage } from '@/pages/Register.page';
+import GestionCategorias from '@/pages/dashboard/gestionCategorias';
 
 // Rutas publicas accesibles sin necesidad de autenticación
 const PublicRoutes: RouteObject[] = [
@@ -44,11 +45,14 @@ const PublicRoutes: RouteObject[] = [
 const PrivateRoutes: RouteObject[] = [
   {
     path: BASE_URL+'dashboard',
-    element: <DashboardLayout/>,
+    element: <ProtectedRoute><DashboardLayout/></ProtectedRoute>,
     children: [
       {
         path:'home',
         element: <Home/>
+      },{
+        path: 'gestion-categorias',
+        element: <GestionCategorias />
       }
     ]
   }

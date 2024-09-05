@@ -94,3 +94,33 @@ docs/_build/
 
 # PyBuilder
 target/
+
+
+# Logs
+CMS-WEB-FRONTEND/logs
+CMS-WEB-FRONTEND/*.log
+CMS-WEB-FRONTEND/npm-debug.log*
+CMS-WEB-FRONTEND/yarn-debug.log*
+CMS-WEB-FRONTEND/yarn-error.log*
+CMS-WEB-FRONTEND/pnpm-debug.log*
+CMS-WEB-FRONTEND/lerna-debug.log*
+
+CMS-WEB-FRONTEND/node_modules
+CMS-WEB-FRONTEND/docs/
+CMS-WEB-FRONTEND/coverage
+CMS-WEB-FRONTEND/dist
+CMS-WEB-FRONTEND/dist-ssr
+CMS-WEB-FRONTEND/*.local
+
+# Editor directories and files
+CMS-WEB-FRONTEND/.vscode/*
+CMS-WEB-FRONTEND/!.vscode/extensions.json
+CMS-WEB-FRONTEND/.idea
+CMS-WEB-FRONTEND/.DS_Store
+CMS-WEB-FRONTEND/*.suo
+CMS-WEB-FRONTEND/*.ntvs*
+CMS-WEB-FRONTEND/*.njsproj
+CMS-WEB-FRONTEND/*.sln
+CMS-WEB-FRONTEND/*.sw?
+
+CMS-WEB-FRONTEND/*storybook.log
