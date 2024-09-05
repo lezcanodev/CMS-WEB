@@ -1,13 +1,16 @@
 services:
   api:
     build: ./CMS-WEB-BACKEND/backend
+    restart: always
     ports:
       - "8000:8000"
     # python detect_postgres.py para que no se conecte antes que postgres este listo
     command: >
-      sh -c "python detect_postgres.py && python manage.py makemigrations &&
-             python manage.py migrate &&
-             python manage.py runserver 0.0.0.0:8000"
+      sh -c " python detect_postgres.py && 
+              python manage.py makemigrations &&
+              python manage.py makemigrations api &&
+              python manage.py migrate &&
+              python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./CMS-WEB-BACKEND:/CMS-WEB-BACKEND/backend
     env_file:
@@ -16,7 +19,6 @@ services:
       - database
   
   web:
-
     build: ./CMS-WEB-FRONTEND
     ports:
       - "5173:5173"

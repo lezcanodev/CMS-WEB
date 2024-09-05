@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "jest",
-    "generate-doc": "typedoc --options typedoc.config.mjs && open docs/index.html"
+    "generate-doc": "typedoc --options typedoc.config.mjs && start docs/index.html"
   },
   "dependencies": {
     "@emotion/react": "^11.13.0",

@@ -1,18 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { baseApiThunk } from '@/api/core/base.api.thunk';
-import ApiRegistrarse from './crearCategoria.api';
-import { CategoriaRequest } from './crearCategoria.model';
+import { CategoriaCrearRequest } from './crearCategoria.model';
+import ApiCrearCategoria from './crearCategoria.api';
 
-/**
- * Creamos una instancia y inyectamos todas las dependencias necesarias
- */
-const seguridadApi = new ApiRegistrarse();
 
-/**
- * Se encarga de manejar el estado para la request de ingresar, es decir
- * mantiene un estado para saber si la request esta en curso y cuando finaliza
- * guarda la respuesta en el estado
- */
-export const seguridadRegistrarseThunk = createAsyncThunk(
-    'gestionCategorias/crear', baseApiThunk<CategoriaRequest>( async (registerData) => await seguridadApi.execute(registerData))
+const categoriaCrear = new ApiCrearCategoria();
+
+
+export const categoriaCrearApiThunk = createAsyncThunk(
+    'categoria/crear', baseApiThunk<CategoriaCrearRequest>( async (registerData) => await categoriaCrear.execute(registerData))
 )

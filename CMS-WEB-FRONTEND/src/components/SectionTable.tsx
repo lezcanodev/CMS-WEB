@@ -1,15 +1,16 @@
-import { Box, Button, Grid, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Grid, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import SearchIcon from '@mui/icons-material/Search';
 
 interface SectionTableProps{
     columns: {columnName: string, key: string,action?:(currentRow: any) => React.ReactElement}[],
     rows: any[],
+    loading: boolean,
     onSearch: (query: string) => void,
     onCreate: () => void
 }
 export default function SectionTable({
-    columns, rows, onSearch, onCreate
+    columns, rows, onSearch, onCreate, loading
 }: SectionTableProps) {
   return (
     <Stack direction={'column'} gap={5}>
@@ -52,16 +53,26 @@ export default function SectionTable({
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows.map((row, index) => (
-                                <TableRow
-                                    key={'row'+index}
-                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                >
-                                    {
-                                        columns.map(({key, action}, index) => action ? <TableCell key={index}>{action(row)}</TableCell> : <TableCell key={index} align="center">{row[key]}</TableCell>)
-                                    }
+                            {loading ? (
+                                <>
+                                <TableRow>
+                                    <TableCell colSpan={columns.length} align="center">
+                                        <CircularProgress />
+                                    </TableCell>
                                 </TableRow>
-                            ))}
+                                </>
+                            ) : (
+                                rows.map((row, index) => (
+                                    <TableRow
+                                        key={'row'+index}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        {
+                                            columns.map(({key, action}, index) => action ? <TableCell key={index}>{action(row)}</TableCell> : <TableCell key={index} align="center">{row[key]}</TableCell>)
+                                        }
+                                    </TableRow>
+                                ))
+                            )}
                         </TableBody>
                     </Table>
                 </TableContainer>

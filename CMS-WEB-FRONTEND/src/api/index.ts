@@ -1,5 +1,6 @@
 import { combineSlices } from '@reduxjs/toolkit';
 import seguridadReducer from './seguridad/seguridad.reducer';
+import categoriaReducer, { categoriaApi } from './gestionCategorias/gestionCategoria.reducer';
 
 /**
  * Combina todos los slices de los distintos recursos que secuestran
@@ -12,5 +13,11 @@ import seguridadReducer from './seguridad/seguridad.reducer';
  * @property {seguridadReducer} seguridad - Maneja peticiones al backend del recurso seguridad
  */
 export const apiReducer = combineSlices({
-    seguridad: seguridadReducer
+    seguridad: seguridadReducer,
+    categoria: categoriaReducer
 });
+
+
+export const api = {
+    categoria: categoriaApi
+}

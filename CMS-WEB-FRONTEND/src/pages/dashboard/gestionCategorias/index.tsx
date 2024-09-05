@@ -7,9 +7,15 @@ import { Modal } from '@/components/Modal';
 import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
+<<<<<<< HEAD
+import { useAppDispatch, useAppSelector } from '@/redux';
+import { api } from '@/api';
+import { CategoriaListarData } from '@/api/gestionCategorias/listar/listartCategoria.model';
+=======
 import { apiBorrarCategoria } from '@/api/gestionCategorias/borrar/borrarCategoria.api';
 import { apiCrearCategoria } from '@/api/gestionCategorias/crear/crearCategoria.api';
 import { apiListarCategoria } from '@/api/gestionCategorias/listar/listartCategoria.api';
+>>>>>>> 1e7ad2013d9ae7ad06c4acc6fbb3dc9096d0a2be
 
 // esquema de datos para el formulario login
 const categoryDataSchema = Yup.object({
@@ -17,23 +23,41 @@ const categoryDataSchema = Yup.object({
 });
 
 export default function GestionCategorias(){
+    const dispatch = useAppDispatch();
+    const { data: categorias, loading: loadingCategorias } = useAppSelector((state) => state.api.categoria.listar);
     const [openForm, setOpenForm] = useState<boolean>(false);
     const [reload, setReload] = useState<boolean>(false);
-    const [categories, setCategories] = useState<any>([]);
-    const [editCategory, setEditCategory] = useState<any>(null);
+    const [editCategory, setEditCategory] = useState<CategoriaListarData | null>(null);
     const formikCategory = useFormik({
         initialValues: {
             nombre: '',
         },
         validationSchema: categoryDataSchema,
-        // Aaqui se controla la creación de categoria
+        // Aquí se controla la creación de categoria
         onSubmit: async (values) => {
-          try{
-            await apiCrearCategoria.execute(values);
-            setReload(!reload);
-          }catch(error){
-            console.log({error});
-          }
+            let asyncCategory = () => api.categoria.categoriaCrearApiThunk(values);
+            if(editCategory){
+                asyncCategory = () => api.categoria.categoriaActualizarApiThunk({
+                    id: editCategory.id,
+                    nombre: values.nombre
+                });
+            }
+
+            dispatch(asyncCategory())
+            .unwrap()
+            .then(() => {
+                setOpenForm(false);
+                setReload(!reload);
+                setEditCategory(null);
+                formikCategory.resetForm();
+            })
+            .catch(error => {
+              const errors: any = {};
+              if(error?.nombre){
+                errors['nombre'] = error?.nombre?.toString() || 'El campo no es valido';
+              }
+              formikCategory.setErrors(errors);
+            });
         } 
     })
 
@@ -44,28 +68,27 @@ export default function GestionCategorias(){
 
     // Aqui se controla la eliminacion de categoria
     const handleDeleteCategory = async (currentRow: any) => {
-        await apiBorrarCategoria.execute({id: currentRow.id});
-        setReload(!reload);
+        if(currentRow?.id){
+            dispatch(api.categoria.categoriaBorrarApiThunk({id: currentRow.id}))
+            .unwrap()
+            .then(() => {
+                setReload(!reload);
+            })
+        }
     }
 
     // para obtener todos los datos y luego cargar en la tabla
     useEffect(() => {
-        const getData = async () => {
-            const r = await apiListarCategoria.execute(null);
-            console.log({r});
-            setCategories(r);
-        }
-        getData();
+       dispatch(api.categoria.categoriaListarApiThunk())
     },[reload])
 
-    //const handleEditCategory = (currentRow: any) => {
-    //    console.log('eliminar', currentRow);
-    //    setEditCategory(currentRow);
-    //    formikCategory.setValues({
-    //        category: currentRow.nombreCategoria
-    //    })
-    //    setOpenForm(true);
-    //}
+    const handleEditCategory = (currentRow: any) => {
+        setEditCategory(currentRow);
+        formikCategory.setValues({
+            nombre: currentRow.nombre
+        });
+        setOpenForm(true);
+    }
     
     const handleSearch = (query: string) => {
         console.log('buscar', query);
@@ -75,6 +98,7 @@ export default function GestionCategorias(){
         <SectionTable
             onSearch={handleSearch}
             onCreate={(handleCreateCategory)}
+            loading={loadingCategorias}
             columns={[
                 {columnName: 'Acciones', key:'acciones', action: (currentRow) => {
                     return <>
@@ -82,20 +106,20 @@ export default function GestionCategorias(){
                             <Button onClick={() => handleDeleteCategory(currentRow)}>
                                 <DeleteOutlineIcon color='error'/>
                             </Button>
-                            {/*<Button onClick={() => handleEditCategory(currentRow)}>
+                            <Button onClick={() => handleEditCategory(currentRow)}>
                                 <EditIcon color='primary' />
-                            </Button>*/}
+                            </Button>
                         </Stack>
                     </>
                 }},
                 {columnName: 'Nombre categoría', key:'nombre'}
             ]}
-            rows={categories?.data || []}
+            rows={ categorias?.data || []}
         />
         <Modal 
             open={openForm}
             setOpen={() => {setOpenForm(false);}}
-            title='Crear nueva categoría'
+            title={`${editCategory ? 'Editar' : 'Crear nueva'} categoría`}
             Actions={ 
                 <Stack direction='row' gap={1} justifyContent={'space-between'} width={'100%'} marginX={'auto'}>
                     <Button onClick={() => {setOpenForm(false); setEditCategory(null); formikCategory.resetForm() }}>
@@ -106,20 +130,20 @@ export default function GestionCategorias(){
                     </Button>
                 </Stack>
             }
-        ><>
-        <Box paddingY={1}>
-            <TextField
-                fullWidth
-                type= 'text'
-                label= 'Nueva categoría'
-                name='nombre'
-                value= {formikCategory.values.nombre}
-                onChange= {formikCategory.handleChange}
-                onBlur= {formikCategory.handleBlur}
-                error= {!!(formikCategory.touched.nombre && Boolean(formikCategory.errors.nombre))}
-                helperText={formikCategory.touched.nombre && formikCategory.errors.nombre as any}
-            />
-        </Box>
-        </></Modal>
+        >
+            <Box paddingY={1}>
+                <TextField
+                    fullWidth
+                    type= 'text'
+                    label= 'Nombre de categoría'
+                    name='nombre'
+                    value= {formikCategory.values.nombre}
+                    onChange= {formikCategory.handleChange}
+                    onBlur= {formikCategory.handleBlur}
+                    error= {!!(formikCategory.touched.nombre && Boolean(formikCategory.errors.nombre))}
+                    helperText={formikCategory.touched.nombre && formikCategory.errors.nombre as any}
+                />
+            </Box>
+        </Modal>
     </>
 }
