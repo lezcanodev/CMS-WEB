@@ -10,9 +10,6 @@ import { useFormik } from 'formik';
 import { useAppDispatch, useAppSelector } from '@/redux';
 import { api } from '@/api';
 import { CategoriaListarData } from '@/api/gestionCategorias/listar/listartCategoria.model';
-import { apiBorrarCategoria } from '@/api/gestionCategorias/borrar/borrarCategoria.api';
-import { apiCrearCategoria } from '@/api/gestionCategorias/crear/crearCategoria.api';
-import { apiListarCategoria } from '@/api/gestionCategorias/listar/listartCategoria.api';
 
 // esquema de datos para el formulario login
 const categoryDataSchema = Yup.object({
