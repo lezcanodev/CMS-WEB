@@ -7,15 +7,12 @@ import { Modal } from '@/components/Modal';
 import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-<<<<<<< HEAD
 import { useAppDispatch, useAppSelector } from '@/redux';
 import { api } from '@/api';
 import { CategoriaListarData } from '@/api/gestionCategorias/listar/listartCategoria.model';
-=======
 import { apiBorrarCategoria } from '@/api/gestionCategorias/borrar/borrarCategoria.api';
 import { apiCrearCategoria } from '@/api/gestionCategorias/crear/crearCategoria.api';
 import { apiListarCategoria } from '@/api/gestionCategorias/listar/listartCategoria.api';
->>>>>>> 1e7ad2013d9ae7ad06c4acc6fbb3dc9096d0a2be
 
 // esquema de datos para el formulario login
 const categoryDataSchema = Yup.object({
