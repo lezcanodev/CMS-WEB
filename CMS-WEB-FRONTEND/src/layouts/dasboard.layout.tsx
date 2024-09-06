@@ -23,7 +23,7 @@ import { useAppDispatch } from '@/redux';
 import { logout } from '@/api/seguridad/seguridad.reducer';
 
 const MEMUS: {readonly label: string, readonly icon: React.ReactElement, readonly to: string}[] = [
-    { label: 'Gestionar Contenidos', icon: <WebStoriesIcon  color='inherit'/>,to: getRouteByName('') },
+    { label: 'Gestionar Libros', icon: <WebStoriesIcon  color='inherit'/>,to: getRouteByName('dashboard.gestioLibro') },
     { label: 'Gestionar Categorías', icon: <SellIcon  color='inherit'/>, to: getRouteByName('dashboard.gestioCategoria') },
     { label: 'Gestionar Reportes', icon: <ArticleIcon  color='inherit'/>, to: getRouteByName('') },
     { label: 'Gestionar Usuarios', icon: <GroupIcon  color='inherit'/>, to: getRouteByName('') },

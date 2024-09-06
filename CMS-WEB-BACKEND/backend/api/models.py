@@ -25,8 +25,8 @@ class Libro(models.Model):
     #el related_name me permite user.notes()
     #author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="libro")
     #categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, related_name="categoria", default=1)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="libros")
-    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, related_name="libros")
+    author = models.ForeignKey(User, on_delete=models.DO_NOTHING , related_name="author")
+    categoria = models.ForeignKey(Categoria,on_delete=models.DO_NOTHING, related_name="categoria")
     """
     Retorna el nombre del articulo
     """

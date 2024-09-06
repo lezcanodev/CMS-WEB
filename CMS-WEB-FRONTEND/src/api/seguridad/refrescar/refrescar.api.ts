@@ -30,7 +30,9 @@ export default class ApiRefrescar extends Api<void, RefrescarResponse | null>{
         const datos: RefrescarRequest = { refresh };
         const response = await this.api.post<RefrescarResponse>('token/refresh/', datos);
         const data = response.data;
+        
         this.params.localStorage.set('token', data.access);
+
         return this.data(response.data, {
             token: data.access,
             userData:  JSON.parse(this.params.localStorage.get('user') as any)
