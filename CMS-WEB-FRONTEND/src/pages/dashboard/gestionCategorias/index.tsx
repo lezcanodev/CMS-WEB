@@ -90,6 +90,7 @@ export default function GestionCategorias(){
 
     return<>
         <SectionTable
+            title='Gestión de categorías'
             onSearch={handleSearch}
             onCreate={(handleCreateCategory)}
             loading={loadingCategorias}
@@ -112,7 +113,7 @@ export default function GestionCategorias(){
         />
         <Modal 
             open={openForm}
-            setOpen={() => {setOpenForm(false);}}
+            setOpen={() => {setOpenForm(false); setEditCategory(null); formikCategory.resetForm(); }}
             title={`${editCategory ? 'Editar' : 'Crear nueva'} categoría`}
             Actions={ 
                 <Stack direction='row' gap={1} justifyContent={'space-between'} width={'100%'} marginX={'auto'}>

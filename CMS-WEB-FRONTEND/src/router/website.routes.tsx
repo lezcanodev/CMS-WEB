@@ -12,6 +12,7 @@ import { BASE_URL } from './helpers';
 import { ProtectedRoute } from './middlewares/ProtectedRoute';
 import { RegisterPage } from '@/pages/Register.page';
 import GestionCategorias from '@/pages/dashboard/gestionCategorias';
+import GestionLibros from '@/pages/dashboard/gestionLibros';
 
 // Rutas publicas accesibles sin necesidad de autenticación
 const PublicRoutes: RouteObject[] = [
@@ -53,6 +54,9 @@ const PrivateRoutes: RouteObject[] = [
       },{
         path: 'gestion-categorias',
         element: <GestionCategorias />
+      },{
+        path: 'gestion-libros',
+        element: <GestionLibros />
       }
     ]
   }
