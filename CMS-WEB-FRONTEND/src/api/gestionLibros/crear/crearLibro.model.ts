@@ -4,7 +4,8 @@
 export interface LibroCrearRequest{
     titulo: string;
     categoria: number;
-    author: number
+    author: number;
+    contenido: string;
 }
 
 /**
