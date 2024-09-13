@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-
 #clase del orm para categorias
 class Categoria(models.Model):
     """
@@ -12,6 +11,14 @@ class Categoria(models.Model):
     def __str__(self):
         """retorna el nombre de la categoria"""
         return self.nombre
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    role = models.CharField(max_length=50, blank=True, null=True)
+
+    def __str__(self):
+        return self.user.username
 
 
 #clase del orm para la creacion de libros
