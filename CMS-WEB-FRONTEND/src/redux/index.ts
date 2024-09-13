@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { useDispatch, useSelector } from 'react-redux';
 import { apiReducer } from '@/api';
+import { snackbarReducer } from './snackbar/snackbar.slice';
 
 const store = configureStore({
     reducer: {
-        api: apiReducer
+        api: apiReducer,
+        snackbar: snackbarReducer
     }
 });
 

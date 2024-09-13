@@ -10,7 +10,7 @@ export interface LoginRequest{
  * Datos retornados por el backend
  */
 export interface LoginResponse{
-    token: string,
+    access: string,
     refresh: string;
 }
 
@@ -18,5 +18,6 @@ export interface LoginResponse{
  * Datos del usuario autenticado
  */
 export interface UserData{
-    username: string
+    userId: number;
+    username: string;
 }

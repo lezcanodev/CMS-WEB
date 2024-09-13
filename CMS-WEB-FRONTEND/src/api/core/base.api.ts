@@ -32,6 +32,14 @@ export default abstract class Api<RequestData, ResponseData>{
         this.api = axios.create({
             baseURL: import.meta.env.VITE_API_URL,
         });
+        // Añadimos el token access en caso que existe
+        this.api.interceptors.request.use((config) => {
+            const tokenAccess = localStorage.getItem('token');
+            if(tokenAccess){
+                config.headers.Authorization = `Bearer ${tokenAccess}`;
+            }
+            return config;
+        })
     }
 
     /**

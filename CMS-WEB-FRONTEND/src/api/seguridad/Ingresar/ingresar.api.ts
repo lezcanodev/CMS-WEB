@@ -2,6 +2,7 @@ import { LocalStorageServices } from '@/services';
 import { LoginRequest, LoginResponse, UserData } from './Ingresar.model';
 import { AxiosError } from 'axios';
 import Api from '@/api/core/base.api';
+import { jwtDecode } from 'jwt-decode';
 
 
 /**
@@ -27,13 +28,16 @@ export default class ApiIngresar extends Api<LoginRequest, LoginResponse>{
         try{
             const response = await this.api.post<LoginResponse>('token/', datos);
             const data = response.data;
-
-            this.params.localStorage.set('token', data.token);
+            const decodeToken = jwtDecode<{user_id: number}>(data.refresh);
+            const userData: UserData = {
+                userId: decodeToken.user_id, 
+                username: datos.username
+            };
+            this.params.localStorage.set('token', data.access);
             this.params.localStorage.set('refresh', data.refresh);
+            this.params.localStorage.set('user',  JSON.stringify(userData));
 
-            return this.data<UserData>(response.data, {
-                 username: datos.username
-            });
+            return this.data<UserData>(response.data, userData);
 
         }catch(error){
 

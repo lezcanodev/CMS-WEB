@@ -22,6 +22,7 @@ const seguridadIngresar = createSlice({
             state.error = null;
             localStorageServices.delete('token');
             localStorageServices.delete('refresh');
+            localStorageServices.delete('user');
         }
     },
     extraReducers: (builder) => {
@@ -33,7 +34,7 @@ const seguridadIngresar = createSlice({
                     state.data = {
                         data: {
                             refresh: action.payload.data.access,
-                            token: action.payload.extraData.token
+                            access: action.payload.extraData.token
                         },
                         extraData: action.payload.extraData.userData
                     };

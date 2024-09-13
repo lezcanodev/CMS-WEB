@@ -106,6 +106,9 @@ DATABASES = {
         "PASSWORD": os.getenv("PG_PASSWORD"),
         "HOST": os.getenv("PG_HOST"),
         "PORT": os.getenv("PG_PORT"),
+        'TEST': {
+            'NAME': 'test_db',  # Nombre de la base de datos de pruebas
+        }
     }
 }
 

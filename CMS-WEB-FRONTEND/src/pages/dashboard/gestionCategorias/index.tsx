@@ -10,6 +10,7 @@ import { useFormik } from 'formik';
 import { useAppDispatch, useAppSelector } from '@/redux';
 import { api } from '@/api';
 import { CategoriaListarData } from '@/api/gestionCategorias/listar/listartCategoria.model';
+import { snackbarActions } from '@/redux/snackbar/snackbar.slice';
 
 // esquema de datos para el formulario login
 const categoryDataSchema = Yup.object({
@@ -44,12 +45,23 @@ export default function GestionCategorias(){
                 setReload(!reload);
                 setEditCategory(null);
                 formikCategory.resetForm();
+                dispatch(snackbarActions.openSnackbar({
+                    message: `Se ha realizado la operación correctamente`
+                }))
             })
             .catch(error => {
               const errors: any = {};
               if(error?.nombre){
                 errors['nombre'] = error?.nombre?.toString() || 'El campo no es valido';
               }
+
+              if(error?.general){
+                dispatch(snackbarActions.openSnackbar({
+                    message: error?.general,
+                    type: 'error'
+                }))
+              }
+
               formikCategory.setErrors(errors);
             });
         } 
@@ -67,6 +79,17 @@ export default function GestionCategorias(){
             .unwrap()
             .then(() => {
                 setReload(!reload);
+                dispatch(snackbarActions.openSnackbar({
+                    message: `Se ha realizado la operación correctamente`
+                }))
+            })
+            .catch(error => {
+                if(error?.general){
+                    dispatch(snackbarActions.openSnackbar({
+                        message: error?.general,
+                        type: 'error'
+                    }))
+                }
             })
         }
     }
@@ -90,6 +113,7 @@ export default function GestionCategorias(){
 
     return<>
         <SectionTable
+            title='Gestión de categorías'
             onSearch={handleSearch}
             onCreate={(handleCreateCategory)}
             loading={loadingCategorias}
@@ -112,7 +136,7 @@ export default function GestionCategorias(){
         />
         <Modal 
             open={openForm}
-            setOpen={() => {setOpenForm(false);}}
+            setOpen={() => {setOpenForm(false); setEditCategory(null); formikCategory.resetForm(); }}
             title={`${editCategory ? 'Editar' : 'Crear nueva'} categoría`}
             Actions={ 
                 <Stack direction='row' gap={1} justifyContent={'space-between'} width={'100%'} marginX={'auto'}>

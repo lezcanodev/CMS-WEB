@@ -6,7 +6,6 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Libro, Categoria
 from rest_framework.response import Response
 
-#Crear/listar y borrar un articulo:
 
 class LibroListCreate(generics.CreateAPIView):
     """ Clase para listar/instanciar un libro atraves de la clase CreateAPIView del framework REST
@@ -14,7 +13,7 @@ class LibroListCreate(generics.CreateAPIView):
     serializer_class = LibroSerializer
     permission_classes = [AllowAny]
 
-        
+            
     def get_queryset(self):
         """metodo reescrito, get_queryset retornara un set de libros del modelo "Libro" con el filtro de categoria
         """
@@ -39,7 +38,9 @@ class LibroListar(generics.ListAPIView):
     def get_queryset(self):
         """retorna todos los libros
         """
-       
+        id_param = self.request.query_params.get('id', None)
+        if id_param:
+            return Libro.objects.filter(id=id_param)
         return Libro.objects.all()
 
 
