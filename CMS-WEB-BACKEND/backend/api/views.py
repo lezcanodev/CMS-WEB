@@ -38,7 +38,9 @@ class LibroListar(generics.ListAPIView):
     def get_queryset(self):
         """retorna todos los libros
         """
-       
+        id_param = self.request.query_params.get('id', None)
+        if id_param:
+            return Libro.objects.filter(id=id_param)
         return Libro.objects.all()
 
 
