@@ -6,5 +6,5 @@ import ApiListarLibro from './listartLibro.api';
 const libroListarApi = new ApiListarLibro();
 
 export const libroListarApiThunk = createAsyncThunk(
-    'libro/listar', baseApiThunk<LibroListarRequest | undefined>( async () => await libroListarApi.execute({}))
+    'libro/listar', baseApiThunk<LibroListarRequest | undefined>( async (request) => await libroListarApi.execute(request || {}))
 )

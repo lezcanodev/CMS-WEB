@@ -6,7 +6,8 @@ export const BASE_URL = `/`;
 const PUBLIC_ROUTES: {[routeName: string]: string} = {
     'inicio': BASE_URL,  
     'ingresar': BASE_URL+'seguridad/ingresar',
-    'registrarse': BASE_URL+'seguridad/registrarse'
+    'registrarse': BASE_URL+'seguridad/registrarse',
+    'verLibro': BASE_URL+'ver-libro/:id'
 };
 
 const PRIVATE_ROUTES: {[routeName: string]: string} = {
@@ -16,6 +17,14 @@ const PRIVATE_ROUTES: {[routeName: string]: string} = {
     'dashboard.gestioLibro': BASE_URL+'dashboard/gestion-libros'
 };
 
-export function getRouteByName(routeName: string){
+export function getRouteByName(routeName: string, params?: {[param: string]: any}){
+  if(params){
+    let route = '/';
+    Object.keys(params).forEach((param) => {
+      route = (PUBLIC_ROUTES?.[routeName]  || PRIVATE_ROUTES?.[routeName])?.replace(':'+param, params[param]) || '/';
+    })
+    return route;
+  }
+  
   return PUBLIC_ROUTES?.[routeName]  || PRIVATE_ROUTES?.[routeName] ||  '/';
 }

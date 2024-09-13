@@ -4,6 +4,10 @@ import { useAppDispatch, useAppSelector } from '@/redux';
 import { getRouteByName } from '@/router/helpers';
 import { useNavigate } from 'react-router';
 
+/**
+ * Pagina de inicio del sitio web
+ * @returns React.Element
+ */
 export function InicioPage(){
     const dispatch = useAppDispatch();
     const {elements} = useTemplate();

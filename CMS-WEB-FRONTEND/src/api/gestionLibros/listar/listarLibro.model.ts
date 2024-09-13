@@ -1,7 +1,9 @@
 /**
  * Datos necesarios para hacer una request a login del backend
  */
-export interface LibroListarRequest{}
+export interface LibroListarRequest{
+  id?: number
+}
 
 /**
  * Datos retornados por el backend
@@ -12,6 +14,7 @@ export interface LibroListarData{
     id: number,
     titulo: string,
     fecha: string,
+    contenido: string,
     author: {
       id: number,
       username: string

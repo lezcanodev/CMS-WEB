@@ -4,14 +4,11 @@ import categoriaReducer, { categoriaApi } from './gestionCategorias/gestionCateg
 import libroReducer, { libroApi } from './gestionLibros/gestionLibros.reducer';
 
 /**
- * Combina todos los slices de los distintos recursos que secuestran
+ * Combina todos los slices {@link https://redux-toolkit.js.org/api/createSlice} de los distintos recursos que se encuentran
  * en la carpeta api (ej: seguridad), los slices son para manejar
  * el estado de las peticiones al backend
- *
- * @constant {Reducer} apiReducer  para comunicarnos con la api a traves de les paginas
- * @type {Reducer}
- *
- * @property {seguridadReducer} seguridad - Maneja peticiones al backend del recurso seguridad
+ * 
+ * @privateRemarks
  */
 export const apiReducer = combineSlices({
     seguridad: seguridadReducer,
@@ -19,7 +16,12 @@ export const apiReducer = combineSlices({
     libro: libroReducer
 });
 
-
+/**
+ * Combina todos los recursos de las api dentro del objeto api, estos son los que 
+ * iniciaran la solicitud 
+ * 
+ * @privateRemarks
+ */
 export const api = {
     categoria: categoriaApi,
     libro: libroApi

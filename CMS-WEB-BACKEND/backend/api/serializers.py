@@ -8,7 +8,7 @@ class LibroSerializer(serializers.ModelSerializer):
     """Serilizer para un articulo con los atributos id, titulo, fecha, autor, categoria"""
     class Meta:
         model = Libro
-        fields = ["id", "titulo", "fecha", "author", "categoria"]
+        fields = ["id", "titulo", "fecha", "author", "categoria", "contenido"]
         extra_kwargs ={"autor": {"read_only": True}}
 
 

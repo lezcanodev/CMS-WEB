@@ -1,17 +1,14 @@
 # CMS WEB - GRUPO 06
 ### Ejecutar el proyecto en el entorno de desarrollo
 ##### **OBS:** se debe tener instalado docker (https://docs.docker.com/compose/install/#installation-scenarios)
-- Forma uno: <code>npm run dev</code>
-- Forma dos: <code>docker compose up</code>
-- Forma tres sin docker:
-    **OBS:** debe haber un servidor Postgres corriendo con los parámetros indicados en ./CMS-WEB-BACKEND/backend/.env
-    1. Primero ir a ./CMS-WEB-FRONTEND y ejecutar
-        **OBS:** se debe tener instalado npm y node
-        - <code>npm install</code>
-        - <code>npm run dev</code>
-    2. Segundo ir a ./CMS-WEB-BACKEND/backend y ejecutar
-        **OBS:** se debe tener instalado PIP y python
-        - <code>pip install -r requirements.txt</code>
-        - <code>python manage.py makemigrations</code>
-        - <code>python manage.py migrate</code>
-        - <code>python manage.py runserver 0.0.0.0:8000</code>
+## En la raíz del proyecto /CMS-WEB, ejecutar en orden:<br/>
+1. <code>npm run docker:build</code> o <code>docker compose build</code>
+2. <code>npm run docker:dev</code> o <code>docker compose up</code> y luego ingresar a http://localhost:5173/
+3. finalizar los procesos <code>npm run docker:down</code> o <code>docker compose down</code>
+
+## Para ejecutar las pruebas unitarias, en la raiz del proyecto ejecutar
+### Pruebas para backend
+<code>npm run api:test</code>
+
+### Pruebas para fronted
+<code>npm run web:test</code>
