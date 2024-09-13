@@ -18,7 +18,7 @@ export default function SectionTable({
         <Box>
             <Typography variant={'h5'} fontWeight={'bold'} style={{opacity: .5}} >{title}</Typography>
         </Box>
-        <Grid container maxWidth={600} marginX={'auto'} gap={2}>
+        <Grid container maxWidth={1080} marginX={'auto'} gap={2}>
             <Grid item xs={12}>
                 <Stack direction='column' gap={1}>
                     <Box>
@@ -44,7 +44,7 @@ export default function SectionTable({
                 </Stack>
             </Grid>
             <Grid item xs={12}>
-                <TableContainer component={Paper} sx={{ maxWidth: 650 }}>
+                <TableContainer component={Paper} sx={{ width: '100%' }}>
                     <Table  aria-label="simple table">
                         <TableHead>
                             <TableRow>

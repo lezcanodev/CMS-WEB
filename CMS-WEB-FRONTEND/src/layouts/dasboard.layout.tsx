@@ -21,6 +21,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import React from 'react';
 import { useAppDispatch } from '@/redux';
 import { logout } from '@/api/seguridad/seguridad.reducer';
+import { SnackbarGlobal } from '@/components/SnackbarGlobal';
 
 const MEMUS: {readonly label: string, readonly icon: React.ReactElement, readonly to: string}[] = [
     { label: 'Gestionar Libros', icon: <WebStoriesIcon  color='inherit'/>,to: getRouteByName('dashboard.gestioLibro') },
@@ -31,7 +32,10 @@ const MEMUS: {readonly label: string, readonly icon: React.ReactElement, readonl
 ]
 
 export default function DashboardLayout(){
-    return <MiniDrawer />;
+    return <>
+      <MiniDrawer />
+      <SnackbarGlobal />
+    </>;
 }
 
 const drawerWidth = 240;

@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from '@/redux';
 import { api } from '@/api';
 import ReplyAllIcon from '@mui/icons-material/ReplyAll';
 import { localStorageServices } from '@/services';
+import { snackbarActions } from '@/redux/snackbar/snackbar.slice';
 
 // esquema de datos para el formulario login
 const libroDataSchema = Yup.object({
@@ -37,17 +38,13 @@ export default function LibroEditor({
                 contenido: contenido,
                 author: JSON.parse(localStorageServices.get('user') as any).userId as any
             });
-            console.log({
-                titulo: values.titulo,
-                categoria: parseInt(values.categoria),
-                contenido: contenido,
-                author: JSON.parse(localStorageServices.get('user') as any).userId as any
-            });
-            return;
             dispatch(asyncCategory())
             .unwrap()
             .then(() => {
                 formikLibro.resetForm();
+                dispatch(snackbarActions.openSnackbar({
+                    message: `Se ha creado el libro "${values.titulo}"`
+                }))
             })
             .catch((error: any) => {
               const errors: any = {};
@@ -57,9 +54,16 @@ export default function LibroEditor({
               if(error?.categoria){
                 errors['categoria'] = error?.categoria?.toString() || 'El campo no es valido';
               }
+
+              if(error?.general){
+                dispatch(snackbarActions.openSnackbar({
+                    message: error?.general
+                }))
+              }
+              
               formikLibro.setErrors(errors);
             });
-        } 
+        }
     })
 
     useEffect(() => {

@@ -6,6 +6,7 @@ import SectionTable from '@/components/SectionTable';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/redux';
 import { api } from '@/api';
+import { snackbarActions } from '@/redux/snackbar/snackbar.slice';
 
 
 interface TablaLibrosProps{
@@ -26,6 +27,9 @@ export default function TablaLibros({
             .unwrap()
             .then(() => {
                 setReload(!reload);
+                dispatch(snackbarActions.openSnackbar({
+                    message: `Se ha realizado la operación correctamente`
+                }))
             })
         }
     }
@@ -47,7 +51,7 @@ export default function TablaLibros({
             columns={[
                 {columnName: 'Acciones', key:'acciones', action: (currentRow) => {
                     return <>
-                        <Stack direction='row' gap={1} justifyContent={'space-between'} maxWidth={120} marginX={'auto'}>
+                        <Stack direction='row' gap={1} justifyContent={'center'} marginX={'auto'}>
                             <Button onClick={() => handleDelete(currentRow)}>
                                 <DeleteOutlineIcon color='error'/>
                             </Button>
