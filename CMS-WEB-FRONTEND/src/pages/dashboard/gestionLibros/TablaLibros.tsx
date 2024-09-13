@@ -7,6 +7,8 @@ import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/redux';
 import { api } from '@/api';
 import { snackbarActions } from '@/redux/snackbar/snackbar.slice';
+import { useNavigate } from 'react-router';
+import { getRouteByName } from '@/router/helpers';
 
 
 interface TablaLibrosProps{
@@ -18,7 +20,7 @@ export default function TablaLibros({
     const dispatch = useAppDispatch();
     const { data, loading } = useAppSelector((state) => state.api.libro.listar);
     const [reload, setReload] = useState<boolean>(false);
-
+    const navigate = useNavigate();
 
     // Aqui se controla la eliminacion de categoria
     const handleDelete = async (currentRow: any) => {
@@ -58,7 +60,7 @@ export default function TablaLibros({
                             <Button onClick={() => {}} disabled>
                                 <EditIcon color='primary' />
                             </Button>
-                            <Button onClick={() => {}}>
+                            <Button onClick={() => navigate(getRouteByName('verLibro', {id: currentRow.id }))}>
                                 ver
                             </Button>
                         </Stack>

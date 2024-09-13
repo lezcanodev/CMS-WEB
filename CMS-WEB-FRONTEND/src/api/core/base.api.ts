@@ -62,6 +62,20 @@ export default abstract class Api<RequestData, ResponseData>{
     }
 
     /**
+     * Construye la query para pasarla por ulr al endpoint, ejemplo: {id: 1} -> id=1
+     * @param queries 
+     */
+    protected buildQuery(queries: {[query: string]: any }){
+        const result = new URLSearchParams();
+        Object.keys(queries).forEach(query => {
+            result.append(query, queries[query]);
+        })
+        const queryString = result.toString();
+        if(queryString.length) return '?'+queryString;
+        return '';
+    }
+
+    /**
      * Método que se encarga de hacer la solicitud a la api
      * @param data - datos que dependen de la endpoint 
      * @returns response - respuesta de la api
