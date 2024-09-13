@@ -28,7 +28,17 @@ Front-End del proyecto Sistema de Administración de Contenido Web (CMS Web).
 |   \---seguridad
 |       +---Ingresar
 |       +---refrescar
-|       \---register
+|       +---register
+|   \---gestionCategorias
+|       +---actualizar
+|       +---borrar
+|       +---crear
+|       +---listar
+|   \---gestionLibros
+|       +---actualizar
+|       +---borrar
+|       +---crear
+|       +---listar
 +---assets
 +---components
 +---contexts

@@ -42,7 +42,9 @@ export default function TablaLibros({
     },[reload])
 
     
-    const handleSearch = (query: string) => {}
+    const handleSearch = (query: string) => {
+        console.log(query);
+    }
 
     return<>
         <SectionTable

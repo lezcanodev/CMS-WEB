@@ -17,7 +17,7 @@ services:
       - ./CMS-WEB-BACKEND/backend/backend/.env
     depends_on:
       - database
-  
+
   web:
     build: ./CMS-WEB-FRONTEND
     ports:

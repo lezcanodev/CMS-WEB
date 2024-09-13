@@ -2,6 +2,10 @@
     "name":"CMS-WEB-GRUPO-06",
     "version": "1.0",
     "scripts": {
-        "docker:dev":"start http://localhost:5173 & docker compose build && docker compose up"
+        "docker:build": "docker compose build",
+        "docker:dev":"docker compose up -d && start http://localhost:5173",
+        "docker:down": "docker compose down",
+        "api:test": "docker compose up -d database && docker compose run api sh -c \"clear && python manage.py test\" && docker compose down database api ",
+        "web:test": "docker compose run web sh -c \"clear && npm run test\" && docker compose down web"
     }
 }

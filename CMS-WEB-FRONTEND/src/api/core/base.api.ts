@@ -6,8 +6,6 @@ import { ApiErrorRequest } from './base.api.error';
 /**
  * Clase encargada de proporcionar la configuración y métodos comunes para la comunicación
  * con la api del backend
- * 
- * @abstract
  */
 export default abstract class Api<RequestData, ResponseData>{
     /**
