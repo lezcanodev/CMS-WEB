@@ -1,17 +1,31 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import generics
-from .serializers import UserSerializer, LibroSerializer, CategoriaSerializer
+from .serializers import UserProfileSerializer, UserProfileUpdateSerializer, UserSerializer, LibroSerializer, CategoriaSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .models import Libro, Categoria
+from .models import Libro, Categoria, UserProfile
+from .permisos import rol_Requerido
 from rest_framework.response import Response
 
+
+class UserProfileUpdateView(generics.UpdateAPIView):
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileUpdateSerializer
+    permission_classes = [AllowAny]  # Solo 'admin' puede actualizar el rol
+    rol_Requerido.roles = ['Admin']
+
+    def get_object(self):
+        """
+        retorna el perfil de usuario a ser actualizado.-
+        """
+        return self.request.user.userprofile
 
 class LibroListCreate(generics.CreateAPIView):
     """ Clase para listar/instanciar un libro atraves de la clase CreateAPIView del framework REST
     """
     serializer_class = LibroSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [rol_Requerido]         #solo el administrador o el autor pueden crear libros     
+    rol_Requerido.roles = ['admin', 'autor']
 
             
     def get_queryset(self):
@@ -50,7 +64,8 @@ class LibroDelete(generics.DestroyAPIView):
     con la clase DestroyAPIView del framework REST
     """
     serializer_class = LibroSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [rol_Requerido]
+    rol_Requerido.roless = ['admin','autor','editor']
 
     def get_queryset(self):
         """Metodo reescrito, get_queryset dentro del metodo DestroyAPIView retorna el set de objetos que pueden ser borrados, solo podran ser borrados articulos que pertenecen al usuario"""
@@ -61,7 +76,8 @@ class LibroDelete(generics.DestroyAPIView):
 class CategoriaListCreate(generics.CreateAPIView):
     """View para crear/listar categorias (uso opcional)"""
     serializer_class = CategoriaSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [rol_Requerido]
+    rol_Requerido.roles = ['admin']
 
     def get_queryset(self):
         """metodo que retorna todos los objetos del modelo Categoria"""
@@ -93,7 +109,8 @@ class CategoriaDelete(generics.DestroyAPIView):
     """View para borrar una categoria(opcional)
     """
     serializer_class = CategoriaSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [rol_Requerido]
+    rol_Requerido.roles = ['admin']
 
     def get_queryset(self):
         """Metodo que retorna el objeto que conicida con el nombre para ser eliminado
@@ -118,7 +135,8 @@ class UpdateCategoriaAPIView(generics.UpdateAPIView):
     queryset = Categoria.objects.all()
     serializer_class = CategoriaSerializer
     lookup_field = 'pk'
-    permission_classes = [AllowAny]
+    permission_classes = [rol_Requerido]
+    rol_Requerido.roles = ['admin']
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -135,7 +153,8 @@ class UpdateLibroAPIView(generics.UpdateAPIView):
     queryset = Libro.objects.all()
     serializer_class = LibroSerializer
     lookup_field = 'pk'
-    permission_classes = [AllowAny]
+    permission_classes = [rol_Requerido]
+    rol_Requerido.roles = ['admin','editor']
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -147,3 +166,13 @@ class UpdateLibroAPIView(generics.UpdateAPIView):
 
         else:
             return Response({"message": "failed", "details": serializer.errors})
+
+
+    
+class UserProfileListView(generics.ListAPIView):
+    """ 
+        View para la creacion de perfil de usuario
+    """
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileSerializer
+    permission_classes = [AllowAny]

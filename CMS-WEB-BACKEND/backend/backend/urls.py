@@ -1,7 +1,7 @@
 
 from django.contrib import admin
 from django.urls import path, include
-from api.views import CreateUserView, LibroListCreate, CategoriaListCreate, CategoriaDelete,LibroDelete, LibroListar,CategoriaListar, UpdateCategoriaAPIView, UpdateLibroAPIView
+from api.views import CreateUserView, LibroListCreate, CategoriaListCreate, CategoriaDelete,LibroDelete, LibroListar,CategoriaListar, UpdateCategoriaAPIView, UpdateLibroAPIView, UserProfileUpdateView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
@@ -42,6 +42,8 @@ urlpatterns = [
     path("api/crear-categoria", CategoriaListCreate.as_view(), name="crear-categoria"),
     path("api/listar-categoria", CategoriaListar.as_view(), name="listar-categoria"),
     path("api/borrar-categoria/<int:pk>",CategoriaDelete.as_view(), name="borrar-categoria" ),
-    path("api/update-categoria/<int:pk>",UpdateCategoriaAPIView.as_view(), name="update-categoria" ) 
+    path("api/update-categoria/<int:pk>",UpdateCategoriaAPIView.as_view(), name="update-categoria" ),
+    path("api/actualizar-role",UserProfileUpdateView.as_view(),name="actualizar-role")
+
 ]
 
