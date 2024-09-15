@@ -2,6 +2,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from api.views import CreateUserView, LibroListCreate, CategoriaListCreate, CategoriaDelete,LibroDelete, LibroListar,CategoriaListar, UpdateCategoriaAPIView, UpdateLibroAPIView
+from api.gestion_usuarios_views import CrearUsuarioView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
@@ -20,6 +21,9 @@ schema_view = get_schema_view(
     public=True,
     permission_classes=(permissions.AllowAny,),
 )
+from api.views import *
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
     #documentacion
@@ -42,6 +46,28 @@ urlpatterns = [
     path("api/crear-categoria", CategoriaListCreate.as_view(), name="crear-categoria"),
     path("api/listar-categoria", CategoriaListar.as_view(), name="listar-categoria"),
     path("api/borrar-categoria/<int:pk>",CategoriaDelete.as_view(), name="borrar-categoria" ),
-    path("api/update-categoria/<int:pk>",UpdateCategoriaAPIView.as_view(), name="update-categoria" ) 
+    path("api/update-categoria/<int:pk>",UpdateCategoriaAPIView.as_view(), name="update-categoria" ),
+
+    # ABM gestión usuarios para admin
+    path("api/crear-usuario", CrearUsuarioView.as_view(), name="crear-usuario"),
+    #path("api/listar-usuario", CategoriaListar.as_view(), name="listar-usuario"),
+    #path("api/borrar-usuario/<int:pk>",CategoriaDelete.as_view(), name="borrar-usuario" ),
+    #path("api/update-usuario/<int:pk>",UpdateCategoriaAPIView.as_view(), name="update-usuario" ),
+
+    #path("api/listar-libro", login_required(LibroListar.as_view()), name="listar-libro"),
+
+    #path("api/borrar-libro",login_required(LibroDelete.as_view()), name="borrar-libro" ),
+
+    #path("api/crear-categoria", login_required(CategoriaListCreate.as_view()), name="crear-categoria"),
+
+    #path("api/listar-categoria", login_required(CategoriaListar.as_view()), name="listar-categoria"),
+
+    #path("api/borrar-categoria",login_required(CategoriaDelete.as_view()), name="borrar-categoria"),
+    
+    #path("api/actualizar-role",login_required(UserProfileUpdateView.as_view()),name="actualizar-role"),
+
+    #path("api/listar-roles", RolesListar.as_view(), name="listar-roles"),
+
+    #path("api/borrar-rol",RolesDelete.as_view(), name="borrar-rol" )   
 ]
 
