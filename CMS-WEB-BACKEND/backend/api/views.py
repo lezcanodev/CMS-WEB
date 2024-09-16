@@ -4,10 +4,24 @@ from rest_framework import generics
 from .serializers import UserProfileSerializer, UserProfileUpdateSerializer, UserSerializer, LibroSerializer, CategoriaSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Libro, Categoria, UserProfile
+from .permisos import rol_Requerido
+
 from rest_framework.response import Response
 from .permisos import rol_Requerido
 from rest_framework.permissions import IsAuthenticated
 from api.roles import Roles
+
+class UserProfileUpdateView(generics.UpdateAPIView):
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileUpdateSerializer
+    permission_classes = [AllowAny]  # Solo 'admin' puede actualizar el rol
+    rol_Requerido.roles = ['Admin']
+
+    def get_object(self):
+        """
+        retorna el perfil de usuario a ser actualizado.-
+        """
+        return self.request.user.userprofile
 
 class LibroListCreate(generics.CreateAPIView):
     """ Clase para listar/instanciar un libro atraves de la clase CreateAPIView del framework REST
@@ -15,7 +29,7 @@ class LibroListCreate(generics.CreateAPIView):
     serializer_class = LibroSerializer
     permission_classes = [IsAuthenticated]         #solo el administrador o el autor pueden crear libros     
     #rol_Requerido.roles = ['admin', 'autor']
-        
+    
     def get_queryset(self):
         """metodo reescrito, get_queryset retornara un set de libros del modelo "Libro" con el filtro de categoria
         """
@@ -122,7 +136,8 @@ class UpdateCategoriaAPIView(generics.UpdateAPIView):
     queryset = Categoria.objects.all()
     serializer_class = CategoriaSerializer
     lookup_field = 'pk'
-    permission_classes = [AllowAny]
+    permission_classes = [rol_Requerido]
+    rol_Requerido.roles = ['admin']
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -139,7 +154,8 @@ class UpdateLibroAPIView(generics.UpdateAPIView):
     queryset = Libro.objects.all()
     serializer_class = LibroSerializer
     lookup_field = 'pk'
-    permission_classes = [AllowAny]
+    permission_classes = [rol_Requerido]
+    rol_Requerido.roles = ['admin','editor']
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -153,7 +169,7 @@ class UpdateLibroAPIView(generics.UpdateAPIView):
             return Response({"message": "failed", "details": serializer.errors})
     permission_classes = [AllowAny] #especificamos quien puede llamar a esta funcion
     #con estos parametros se hace la creacion automatica
-    
+
     
 class UserProfileListView(generics.ListAPIView):
     """ 
@@ -162,6 +178,7 @@ class UserProfileListView(generics.ListAPIView):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
     permission_classes = [AllowAny]
+
 
 class UserProfileUpdateView(generics.UpdateAPIView):
     queryset = UserProfile.objects.all()
