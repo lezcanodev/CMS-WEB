@@ -7,11 +7,12 @@ interface SectionTableProps{
     rows: any[],
     loading: boolean,
     title: string,
+    puedoCrear?: boolean,
     onSearch: (query: string) => void,
     onCreate: () => void
 }
 export default function SectionTable({
-    columns, rows, onSearch, onCreate, loading, title
+    columns, rows, onSearch, onCreate, loading, title, puedoCrear = false
 }: SectionTableProps) {
   return (
     <Stack direction={'column'} gap={5}>
@@ -22,7 +23,9 @@ export default function SectionTable({
             <Grid item xs={12}>
                 <Stack direction='column' gap={1}>
                     <Box>
-                        <Button onClick={() => onCreate()} variant='outlined' endIcon={<LibraryAddIcon   fontSize='small'/>}>Crear</Button>
+                        { puedoCrear && (
+                            <Button onClick={() => onCreate()} variant='outlined' endIcon={<LibraryAddIcon   fontSize='small'/>}>Crear</Button>
+                        )}
                     </Box>
                     <Box maxWidth={300} >
                         <TextField 

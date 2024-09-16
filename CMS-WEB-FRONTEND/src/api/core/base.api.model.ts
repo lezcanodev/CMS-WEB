@@ -40,3 +40,9 @@ export interface BaseResponse<DataApi, ExtraData=any>{
         [field: string]: string | number | undefined
     }
 }
+
+
+/**
+ * Roles del sistema
+ */
+export type UserRol = 'Administrador' | 'Editor' | 'Publicador' | 'Suscriptor';

@@ -2,11 +2,13 @@ import { configureStore } from '@reduxjs/toolkit'
 import { useDispatch, useSelector } from 'react-redux';
 import { apiReducer } from '@/api';
 import { snackbarReducer } from './snackbar/snackbar.slice';
+import permisosSlice from './permisos/permisos.slice';
 
 const store = configureStore({
     reducer: {
         api: apiReducer,
-        snackbar: snackbarReducer
+        snackbar: snackbarReducer,
+        permisos: permisosSlice
     }
 });
 

@@ -17,6 +17,7 @@ interface TablaLibrosProps{
 export default function TablaLibros({
     onOpenLibroEditor
 }: TablaLibrosProps){
+    const { permisosPaginas } = useAppSelector(st => st.permisos);
     const dispatch = useAppDispatch();
     const { data, loading } = useAppSelector((state) => state.api.libro.listar);
     const [reload, setReload] = useState<boolean>(false);
@@ -49,6 +50,7 @@ export default function TablaLibros({
     return<>
         <SectionTable
             title='Gestión de libros'
+            puedoCrear={permisosPaginas?.LIBRO_PAGINA.CREAR}
             onSearch={handleSearch}
             onCreate={(onOpenLibroEditor)}
             loading={loading}
@@ -56,22 +58,22 @@ export default function TablaLibros({
                 {columnName: 'Acciones', key:'acciones', action: (currentRow) => {
                     return <>
                         <Stack direction='row' gap={1} justifyContent={'center'} marginX={'auto'}>
-                            <Button onClick={() => handleDelete(currentRow)}>
+                            {permisosPaginas?.LIBRO_PAGINA.ELIMINAR &&  <Button onClick={() => handleDelete(currentRow)}>
                                 <DeleteOutlineIcon color='error'/>
-                            </Button>
-                            <Button onClick={() => {}} disabled>
+                            </Button>}
+                            {permisosPaginas?.LIBRO_PAGINA.EDITAR &&  <Button onClick={() => {}} disabled>
                                 <EditIcon color='primary' />
-                            </Button>
+                            </Button>}
                             <Button onClick={() => navigate(getRouteByName('verLibro', {id: currentRow.id }))}>
                                 ver
                             </Button>
                         </Stack>
                     </>
                 }},
-                {columnName: 'Autor', key:'author'},
+                {columnName: 'Autor', key:'autorNombre'},
                 {columnName: 'Titulo', key:'titulo'},
                 {columnName: 'Estado', key:'estado'},
-                {columnName: 'Categoría', key:'categoria'},
+                {columnName: 'Categoría', key:'categoriaNombre'},
                 {columnName: 'Fecha', key:'fecha'}
             ]}
             rows={ data?.data || []}

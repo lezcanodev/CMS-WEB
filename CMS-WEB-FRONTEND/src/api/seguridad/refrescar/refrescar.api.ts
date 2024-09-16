@@ -1,6 +1,7 @@
 import { LocalStorageServices } from '@/services';
 import { RefrescarRequest, RefrescarResponse } from './refrescar.model';
 import Api from '@/api/core/base.api';
+import { UserUtils } from '@/utils/User/User.utils';
 
 
 /**
@@ -35,7 +36,7 @@ export default class ApiRefrescar extends Api<void, RefrescarResponse | null>{
 
         return this.data(response.data, {
             token: data.access,
-            userData:  JSON.parse(this.params.localStorage.get('user') as any)
+            userData: UserUtils.getUser()
         });
     }
 }

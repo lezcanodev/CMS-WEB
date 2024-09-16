@@ -2,6 +2,7 @@ import { combineSlices } from '@reduxjs/toolkit';
 import seguridadReducer from './seguridad/seguridad.reducer';
 import categoriaReducer, { categoriaApi } from './gestionCategorias/gestionCategoria.reducer';
 import libroReducer, { libroApi } from './gestionLibros/gestionLibros.reducer';
+import usuarioReducer, { usuarioApi } from './gestionUsuarios/gestionUsuario.reducer';
 
 /**
  * Combina todos los slices {@link https://redux-toolkit.js.org/api/createSlice} de los distintos recursos que se encuentran
@@ -13,8 +14,10 @@ import libroReducer, { libroApi } from './gestionLibros/gestionLibros.reducer';
 export const apiReducer = combineSlices({
     seguridad: seguridadReducer,
     categoria: categoriaReducer,
-    libro: libroReducer
+    libro: libroReducer,
+    usuario: usuarioReducer
 });
+
 
 /**
  * Combina todos los recursos de las api dentro del objeto api, estos son los que 
@@ -24,5 +27,6 @@ export const apiReducer = combineSlices({
  */
 export const api = {
     categoria: categoriaApi,
-    libro: libroApi
+    libro: libroApi,
+    usuario: usuarioApi
 }

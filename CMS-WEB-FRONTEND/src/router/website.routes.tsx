@@ -14,6 +14,7 @@ import { RegisterPage } from '@/pages/Register.page';
 import GestionCategorias from '@/pages/dashboard/gestionCategorias';
 import GestionLibros from '@/pages/dashboard/gestionLibros';
 import { VerLibro } from '@/pages/VerLibro.page';
+import GestionUsuarios from '@/pages/dashboard/gestionUsuarios';
 
 // Rutas publicas accesibles sin necesidad de autenticación
 const PublicRoutes: RouteObject[] = [
@@ -62,6 +63,9 @@ const PrivateRoutes: RouteObject[] = [
       },{
         path: 'gestion-libros',
         element: <GestionLibros />
+      },{
+        path: 'gestion-usuarios',
+        element: <GestionUsuarios />
       }
     ]
   }
