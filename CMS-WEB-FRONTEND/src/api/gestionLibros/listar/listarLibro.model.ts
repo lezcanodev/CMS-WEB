@@ -15,12 +15,8 @@ export interface LibroListarData{
     titulo: string,
     fecha: string,
     contenido: string,
-    author: {
-      id: number,
-      username: string
-    },
-    categoria: {
-      id: number,
-      nombre: string
-    }
+    author: number,
+    categoria: number,
+    categoriaNombre: string,
+    autorNombre: string
 }

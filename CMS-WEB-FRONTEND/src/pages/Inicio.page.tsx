@@ -2,6 +2,7 @@ import { logout } from '@/api/seguridad/seguridad.reducer';
 import { useTemplate } from '@/contexts/templateContext/useTemplate';
 import { useAppDispatch, useAppSelector } from '@/redux';
 import { getRouteByName } from '@/router/helpers';
+import { UserUtils } from '@/utils/User/User.utils';
 import { useNavigate } from 'react-router';
 
 /**
@@ -30,12 +31,13 @@ export function InicioPage(){
 
     return <InicioPageElement 
         title='Ingeniería de software II'
+        isAdmin={UserUtils.isAdmin()}
         logout={handleLogout}
         goToDashboard={() => {navigate(getRouteByName('dashboard'))}}
         auth={{
             isAuth: !!data,
             userData: {
-                username: data?.extraData?.username || '???'
+                username: UserUtils.getUser()?.username || '???'
             }
         }}
         goToLogin={goToLogin}

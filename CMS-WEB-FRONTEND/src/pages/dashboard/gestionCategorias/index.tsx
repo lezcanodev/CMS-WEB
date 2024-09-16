@@ -18,6 +18,7 @@ const categoryDataSchema = Yup.object({
 });
 
 export default function GestionCategorias(){
+    const { permisosPaginas } = useAppSelector(st => st.permisos);
     const dispatch = useAppDispatch();
     const { data: categorias, loading: loadingCategorias } = useAppSelector((state) => state.api.categoria.listar);
     const [openForm, setOpenForm] = useState<boolean>(false);
@@ -114,6 +115,7 @@ export default function GestionCategorias(){
     return<>
         <SectionTable
             title='Gestión de categorías'
+            puedoCrear={permisosPaginas?.CATEGORIA_PAGINA.CREAR}
             onSearch={handleSearch}
             onCreate={(handleCreateCategory)}
             loading={loadingCategorias}
@@ -121,12 +123,12 @@ export default function GestionCategorias(){
                 {columnName: 'Acciones', key:'acciones', action: (currentRow) => {
                     return <>
                         <Stack direction='row' gap={1} justifyContent={'space-between'} maxWidth={120} marginX={'auto'}>
-                            <Button onClick={() => handleDeleteCategory(currentRow)}>
+                            {permisosPaginas?.CATEGORIA_PAGINA.ELIMINAR && <Button onClick={() => handleDeleteCategory(currentRow)}>
                                 <DeleteOutlineIcon color='error'/>
-                            </Button>
-                            <Button onClick={() => handleEditCategory(currentRow)}>
+                            </Button>}
+                            {permisosPaginas?.CATEGORIA_PAGINA.EDITAR && <Button onClick={() => handleEditCategory(currentRow)}>
                                 <EditIcon color='primary' />
-                            </Button>
+                            </Button>}
                         </Stack>
                     </>
                 }},

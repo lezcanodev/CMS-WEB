@@ -11,7 +11,8 @@ import {
 
 
 export default function InicioPage({
-    title, goToLogin, goToRegister, auth, logout, goToDashboard
+    title, goToLogin, goToRegister, auth, logout, goToDashboard,
+    isAdmin
 }: IInicioPage){
 
     return <>
@@ -39,7 +40,9 @@ export default function InicioPage({
                     justifyContent={'flex-end'}
                 >
                     <LinkWithIcon goTo={goToLogin}  label={auth.userData?.username || 'Mi cuenta'} icon={<PersonIcon fontSize='small'/>} />
-                    <LinkWithIcon goTo={goToDashboard}  label='Dashboard' icon={<SpaceDashboardIcon fontSize='small'/>} />
+                    {isAdmin && (
+                        <LinkWithIcon goTo={goToDashboard}  label='Dashboard' icon={<SpaceDashboardIcon fontSize='small'/>} />
+                    )}
                     <LinkWithIcon goTo={logout}  label='Salir' icon={<ExitToAppIcon fontSize='small'/>} />
                 </Stack>}
                 <Stack
