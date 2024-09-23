@@ -18,20 +18,45 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import React from 'react';
-import { useAppDispatch } from '@/redux';
+import React, { useEffect, useMemo } from 'react';
+import { useAppDispatch, useAppSelector } from '@/redux';
 import { logout } from '@/api/seguridad/seguridad.reducer';
+import { SnackbarGlobal } from '@/components/SnackbarGlobal';
+import { PermisoPaginas } from '@/redux/permisos/permisos.state';
+import { getPermisos } from '@/redux/permisos/permisos.slice';
 
-const MEMUS: {readonly label: string, readonly icon: React.ReactElement, readonly to: string}[] = [
-    { label: 'Gestionar Contenidos', icon: <WebStoriesIcon  color='inherit'/>,to: getRouteByName('') },
-    { label: 'Gestionar Categorías', icon: <SellIcon  color='inherit'/>, to: getRouteByName('dashboard.gestioCategoria') },
-    { label: 'Gestionar Reportes', icon: <ArticleIcon  color='inherit'/>, to: getRouteByName('') },
-    { label: 'Gestionar Usuarios', icon: <GroupIcon  color='inherit'/>, to: getRouteByName('') },
-    { label: 'Gestionar Roles', icon: <SecurityIcon  color='inherit'/>, to: getRouteByName('') }
-]
+interface Menu{pagina: keyof PermisoPaginas, label: string, icon: React.ReactElement, to: string};
 
 export default function DashboardLayout(){
-    return <MiniDrawer />;
+  const dispatch = useAppDispatch();
+  const { permisosPaginas } = useAppSelector(st => st.permisos);
+  const menu = useMemo<Menu[]>(() => {
+
+    const preMenu: Menu[] =  [
+      {pagina: 'LIBRO_PAGINA', label: 'Gestionar Libros', icon: <WebStoriesIcon  color='inherit'/>,to: getRouteByName('dashboard.gestioLibro') },
+      {pagina: 'CATEGORIA_PAGINA', label: 'Gestionar Categorías', icon: <SellIcon  color='inherit'/>, to: getRouteByName('dashboard.gestioCategoria') },
+      //{pagina: NULL, label: 'Gestionar Reportes', icon: <ArticleIcon  color='inherit'/>, to: getRouteByName('') },
+      {pagina:  'USUARIO_PAGINA', label: 'Gestionar Usuarios', icon: <GroupIcon  color='inherit'/>, to: getRouteByName('dashboard.gestioUsuarios') },
+      //{ label: 'Gestionar Roles', icon: <SecurityIcon  color='inherit'/>, to: getRouteByName('') }
+    ];
+    
+    return preMenu.filter( ({pagina}) => {
+      return permisosPaginas?.[pagina]?.puedoAcceder || false;
+    }); 
+
+  }, [permisosPaginas])
+
+
+  useEffect(() => {
+    dispatch(getPermisos());
+  },[])
+
+  return <>
+    <MiniDrawer 
+      menu={menu}
+    />
+    <SnackbarGlobal />
+  </>;
 }
 
 const drawerWidth = 240;
@@ -118,7 +143,9 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-function MiniDrawer() {
+function MiniDrawer({
+  menu
+}: {menu: any}) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
@@ -174,7 +201,7 @@ function MiniDrawer() {
         </DrawerHeader>
         <Divider />
         <List>
-          {MEMUS.map((menu, index) => (
+          {menu.map((menu: any, index: any) => (
             <ListItem key={index} disablePadding sx={{ display: 'block' }}>
               <ListItemButton
                 onClick={() => navigate(menu.to)}

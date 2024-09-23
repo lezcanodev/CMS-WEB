@@ -1,12 +1,13 @@
 import { combineReducers, createSlice } from '@reduxjs/toolkit';
 import { seguridadIngresarThunk } from './Ingresar/ingresar.thunk';
-import { LoginResponse, UserData } from './Ingresar/Ingresar.model';
+import { LoginResponse } from './Ingresar/Ingresar.model';
 import { buildCommonCases,  generateBaseState } from '@/redux/base.slice';
 import { BaseResponse } from '../core/base.api.model';
 import { localStorageServices } from '@/services';
 import { seguridadRefrescarThunk } from './refrescar/refrescar.thunk';
 import { seguridadRegistrarseThunk } from './register/register.thunk';
 import { RegisterResponse } from './register/register.model';
+import { UserUtils } from '@/utils/User/User.utils';
 
 /**
  * Controlador de estado para la autenticación del usuario
@@ -14,7 +15,7 @@ import { RegisterResponse } from './register/register.model';
  */
 const seguridadIngresar = createSlice({
     name: 'seguridadIngresar',
-    initialState: generateBaseState<BaseResponse<LoginResponse, UserData>>(),
+    initialState: generateBaseState<BaseResponse<LoginResponse>>(),
     reducers: {
         logout: (state) => {
             state.data = null;
@@ -22,6 +23,7 @@ const seguridadIngresar = createSlice({
             state.error = null;
             localStorageServices.delete('token');
             localStorageServices.delete('refresh');
+            UserUtils.deleteUser();
         }
     },
     extraReducers: (builder) => {
@@ -30,13 +32,7 @@ const seguridadIngresar = createSlice({
             .addCase(seguridadRefrescarThunk.fulfilled, (state, action) => {
                 state.loading = false;
                 if(action.payload.data){
-                    state.data = {
-                        data: {
-                            refresh: action.payload.data.access,
-                            token: action.payload.extraData.token
-                        },
-                        extraData: action.payload.extraData.userData
-                    };
+                    state.data = { data:  action.payload.data };
                 }else{
                     state.data = null;
                     state.error = null;

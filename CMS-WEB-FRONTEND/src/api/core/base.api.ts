@@ -6,8 +6,6 @@ import { ApiErrorRequest } from './base.api.error';
 /**
  * Clase encargada de proporcionar la configuración y métodos comunes para la comunicación
  * con la api del backend
- * 
- * @abstract
  */
 export default abstract class Api<RequestData, ResponseData>{
     /**
@@ -32,6 +30,14 @@ export default abstract class Api<RequestData, ResponseData>{
         this.api = axios.create({
             baseURL: import.meta.env.VITE_API_URL,
         });
+        // Añadimos el token access en caso que existe
+        this.api.interceptors.request.use((config) => {
+            const tokenAccess = localStorage.getItem('token');
+            if(tokenAccess){
+                config.headers.Authorization = `Bearer ${tokenAccess}`;
+            }
+            return config;
+        })
     }
 
     /**
@@ -51,6 +57,20 @@ export default abstract class Api<RequestData, ResponseData>{
      */
     protected data<TDataExtra = any>(data: ResponseData, extraData?: TDataExtra): BaseResponse<ResponseData>{
         return { data, extraData };
+    }
+
+    /**
+     * Construye la query para pasarla por ulr al endpoint, ejemplo: {id: 1} -> id=1
+     * @param queries 
+     */
+    protected buildQuery(queries: {[query: string]: any }){
+        const result = new URLSearchParams();
+        Object.keys(queries).forEach(query => {
+            result.append(query, queries[query]);
+        })
+        const queryString = result.toString();
+        if(queryString.length) return '?'+queryString;
+        return '';
     }
 
     /**

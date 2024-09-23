@@ -1,3 +1,5 @@
+import { UserRol } from '@/api/core/base.api.model';
+
 /**
  * Datos necesarios para hacer una request a login del backend
  */
@@ -10,13 +12,7 @@ export interface LoginRequest{
  * Datos retornados por el backend
  */
 export interface LoginResponse{
-    token: string,
+    access: string,
     refresh: string;
-}
-
-/**
- * Datos del usuario autenticado
- */
-export interface UserData{
-    username: string
+    role: UserRol;
 }

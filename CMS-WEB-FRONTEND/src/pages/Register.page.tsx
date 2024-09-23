@@ -12,12 +12,20 @@ import { useTemplate } from '@/contexts/templateContext/useTemplate';
 // helpers
 import { getRouteByName } from '@/router/helpers';
 
-// esquema de datos para el formulario login
+/**
+ * esquema de datos para el formulario login
+ */
 const registerDataSchema = Yup.object({
+  /** nombre del usuario */
   username: Yup.string().required('El campo es obligatorio'),
+  /** contraseña del usuario */
   password: Yup.string().required('El campo es obligatorio').min(6, 'debe tener 6 caracteres mínimos')
 });
 
+/**
+ * Formulario de registro de usuario
+ * @returns React.Element
+ */
 export function RegisterPage(){
     const {elements} = useTemplate();
     const RegisterPageElement = elements['RegisterPage'];

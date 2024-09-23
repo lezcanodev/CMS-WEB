@@ -1,7 +1,7 @@
 /** @type {Partial<import('typedoc').TypeDocOptions>} */
 const config = {
     "projectDocuments": [ 
-        "documents/*.md",
+        "Estructura-del-proyecto.md",
         "README.md", 
     ],
     "entryPoints": [
