@@ -1,3 +1,11 @@
+---
+title: Estructura de carpetas
+group: Documents
+category: folder_structure
+children:
+    - ./carpeta_api.md
+---
+
 ## Estructura de carpetas
 
 # Api

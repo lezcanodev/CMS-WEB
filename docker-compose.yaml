@@ -22,10 +22,20 @@ services:
     build: ./CMS-WEB-FRONTEND
     ports:
       - "5173:5173"
+      - "51204:51204"
     volumes:
       - ./CMS-WEB-FRONTEND:/CMS-WEB-FRONTEND
     depends_on:
       - database
+
+    
+  web-test:
+    build: ./CMS-WEB-FRONTEND
+    command: sh -c "npm run test:ui" 
+    ports:
+      - "51204:51204"
+    volumes:
+      - ./CMS-WEB-FRONTEND:/CMS-WEB-FRONTEND
 
   database:
     image: postgres
