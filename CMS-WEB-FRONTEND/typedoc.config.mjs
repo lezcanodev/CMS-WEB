@@ -1,13 +1,15 @@
 /** @type {Partial<import('typedoc').TypeDocOptions>} */
 const config = {
     "projectDocuments": [ 
-        "Estructura-del-proyecto.md",
+        "documents/Guia-del-proyecto.md",
+        "documents/Estructura-del-proyecto.md",
         "README.md", 
     ],
     "entryPoints": [
         "src/api/**/*.ts",
         "src/pages/**/*.tsx"
     ],
+    "sortEntryPoints": false,
     "entryPointStrategy": "expand",
     "out": "docs",
     "plugin": ["typedoc-github-theme"],

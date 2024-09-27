@@ -1,3 +1,4 @@
+import react from 'react';
 import { seguridadRefrescarThunk } from '@/api/seguridad/refrescar/refrescar.thunk';
 import { useTemplate } from '@/contexts/templateContext/useTemplate';
 import { useAppDispatch } from '@/redux';
