@@ -25,7 +25,8 @@ export function VerLibro(){
         <VerLibro
            isEmpty={!data?.data?.length}
            loading={loading}
-           categoria={data?.data?.[0]?.categoria + ''}
+           categoria={data?.data?.[0]?.categoriaNombre + ''}
+           autorNombre={data?.data?.[0]?.autorNombre + ''}
            contenido={<>
             {
                 !data?.data?.length ? (
@@ -41,3 +42,5 @@ export function VerLibro(){
         /> 
     </>
 }
+
+

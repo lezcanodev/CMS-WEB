@@ -15,6 +15,7 @@ export interface LibroListarData{
     titulo: string,
     fecha: string,
     contenido: string,
+    estado: string,
     author: number,
     categoria: number,
     categoriaNombre: string,

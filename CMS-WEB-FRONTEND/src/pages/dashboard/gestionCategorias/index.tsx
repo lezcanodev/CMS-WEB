@@ -1,4 +1,5 @@
 
+import React from 'react'; 
 import { Box, Button, Stack, TextField, Typography, } from '@mui/material';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
@@ -97,7 +98,7 @@ export default function GestionCategorias(){
 
     // para obtener todos los datos y luego cargar en la tabla
     useEffect(() => {
-       dispatch(api.categoria.categoriaListarApiThunk())
+       dispatch(api.categoria.categoriaListarApiThunk({}))
     },[reload])
 
     const handleEditCategory = (currentRow: any) => {
@@ -136,34 +137,52 @@ export default function GestionCategorias(){
             ]}
             rows={ categorias?.data || []}
         />
-        <Modal 
-            open={openForm}
-            setOpen={() => {setOpenForm(false); setEditCategory(null); formikCategory.resetForm(); }}
-            title={`${editCategory ? 'Editar' : 'Crear nueva'} categoría`}
-            Actions={ 
-                <Stack direction='row' gap={1} justifyContent={'space-between'} width={'100%'} marginX={'auto'}>
-                    <Button onClick={() => {setOpenForm(false); setEditCategory(null); formikCategory.resetForm() }}>
-                        <Typography color='error'>Cancelar</Typography>
-                    </Button>
-                    <Button onClick={() => {formikCategory.submitForm()}}>
-                        Confirmar
-                    </Button>
-                </Stack>
-            }
-        >
-            <Box paddingY={1}>
-                <TextField
-                    fullWidth
-                    type= 'text'
-                    label= 'Nombre de categoría'
-                    name='nombre'
-                    value= {formikCategory.values.nombre}
-                    onChange= {formikCategory.handleChange}
-                    onBlur= {formikCategory.handleBlur}
-                    error= {!!(formikCategory.touched.nombre && Boolean(formikCategory.errors.nombre))}
-                    helperText={formikCategory.touched.nombre && formikCategory.errors.nombre as any}
-                />
-            </Box>
-        </Modal>
+        <FormCrearCategoria
+            openForm={openForm}
+            setOpenForm={setOpenForm}
+            setEditCategory={setEditCategory}
+            editCategory={editCategory}
+            formikCategory={formikCategory} 
+        />
+    </>
+}
+
+
+export function FormCrearCategoria({
+    openForm,
+    setOpenForm,
+    setEditCategory,
+    editCategory,
+    formikCategory
+}: any){
+
+    return <>
+            <Modal 
+                open={openForm}
+                setOpen={() => {setOpenForm(false); setEditCategory(null); formikCategory.resetForm(); }}
+                title={`${editCategory ? 'Editar' : 'Crear nueva'} categoría`}
+                Actions={ 
+                    <Stack direction='row' gap={1} justifyContent={'space-between'} width={'100%'} marginX={'auto'}>
+                        <Button onClick={() => {setOpenForm(false); setEditCategory(null); formikCategory.resetForm() }}>
+                            <Typography color='error'>Cancelar</Typography>
+                        </Button>
+                        <Button onClick={() => {formikCategory.submitForm()}}>Confirmar</Button>
+                    </Stack>
+                }
+            >
+                <Box paddingY={1}>
+                    <TextField
+                        fullWidth
+                        type= 'text'
+                        label= 'Nombre de categoría'
+                        name='nombre'
+                        value= {formikCategory.values.nombre}
+                        onChange= {formikCategory.handleChange}
+                        onBlur= {formikCategory.handleBlur}
+                        error= {!!(formikCategory.touched.nombre && Boolean(formikCategory.errors.nombre))}
+                        helperText={formikCategory.touched.nombre && formikCategory.errors.nombre as any}
+                    />
+                </Box>
+            </Modal>
     </>
 }

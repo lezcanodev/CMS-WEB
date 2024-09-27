@@ -10,7 +10,8 @@ export default class ApiListarLibro extends Api<LibroListarRequest, LibroListarR
         const response = await this.api.get<LibroListarResponse>(`listar-libro${queries}`);
         return this.data(response.data.map((libro) => ({
             ...libro,   
-            fecha: new Date(libro.fecha).toLocaleDateString() 
+            fecha: new Date(libro.fecha).toLocaleDateString(),
+            estado: 'Publicado'
         })));
     }
 }
