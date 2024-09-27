@@ -12,7 +12,8 @@ import {
 
 export default function InicioPage({
     title, goToLogin, goToRegister, auth, logout, goToDashboard,
-    isAdmin
+    isAdmin, applyFilters, categorias, goToPageVerLibro, libros,
+    currentFilters
 }: IInicioPage){
 
     return <>
@@ -71,6 +72,7 @@ export default function InicioPage({
                         </Box>
                         <Box style={{width:'100%'}}>                            
                             <input
+                                value={currentFilters?.buscarPorTexto || ''}
                                 style={{
                                     width:'100%',
                                     outline: 'none',
@@ -79,6 +81,9 @@ export default function InicioPage({
                                     fontSize: '1.2em'
                                 }}
                                 placeholder='Buscar contenido...'
+                                onChange={(e) => {
+                                    applyFilters({buscarPorTexto: e?.currentTarget?.value})
+                                }}
                             />
                         </Box>                       
                     </Stack>
@@ -88,61 +93,44 @@ export default function InicioPage({
         <Box>
             <Stack direction={'row'} gap={1} overflow={'auto'} paddingBottom={1} paddingX={2} marginBottom={2}>
                 <Chip
-                    variant='filled'
+                    variant={currentFilters?.categoriaId ? 'outlined' : 'filled'}
                     color='primary'
-                    label='redes'
+                    label='Todas'
+                    onClick={() => {
+                        applyFilters({}, {resetFilters: true})
+                    }}
+                    clickable
                 />
-                <Chip
-                    variant='outlined'
-                    color='primary'
-                    label='programación'
-                />
-                <Chip
-                    variant='outlined'
-                    color='primary'
-                    label='calculo II'
-                />
-                <Chip
-                    variant='outlined'
-                    color='primary'
-                    label='Investigación de operaciones I'
-                />
+                {categorias?.data?.map(categoria => (<>                
+                    <Chip
+                        key={categoria?.id}
+                        variant={currentFilters?.categoriaId  == categoria?.id ? 'filled' : 'outlined'}
+                        color='primary'
+                        label={categoria?.nombre}
+                        onClick={() => {
+                            applyFilters({categoriaId: categoria?.id})
+                        }}
+                        clickable
+                    />
+                </>))}
             </Stack>
         </Box>
         <Box paddingBottom={2} paddingX={1}>
-            <Stack direction={'row'} flexWrap={'wrap'} gap={1} justifyContent={'center'}>
-                <Box style={{width: '100%', height: '100%'}} maxWidth={'380px'}>
-                    <ContentCard
-                        title='Llamado a Concurso Externo: Auxiliar Administrativo para el Departamento Operativo de Contrataciones ' 
-                        publishedDate='12/12/2024' 
-                        shortDescrition='Auxiliar Administrativo para el Departamento Operativo de Contrataciones (CE-FP-UNA-27-2024)...'
-                        image='https://i0.wp.com/www.pol.una.py/wp-content/uploads/llamado-a-concurso.jpg?resize=768%2C768&ssl=1'
-                    />
-                </Box>
-                <Box style={{width: '100%', height: '100%'}} maxWidth={'380px'}>
-                    <ContentCard
-                        title='Estudiantes de Ingeniería en Energía Presentan Trabajo Final de Grado sobre Diésel Renovable en el Transporte Público' 
-                        publishedDate='12/12/2024' 
-                        shortDescrition='El pasado martes 27 de agosto de 2024, a las 17:00 horas, en el aula B02 de la Facultad Politécnica...'
-                        image='https://i0.wp.com/www.pol.una.py/wp-content/uploads/IMG_3343-scaled.jpg?resize=768%2C665&ssl=1'
-                    />
-                </Box>
-                <Box style={{width: '100%', height: '100%'}} maxWidth={'380px'}>
-                    <ContentCard
-                        title='Estudiantes de Ingeniería en Energía Presentan Trabajo Final de Grado sobre Diésel Renovable en el Transporte Público' 
-                        publishedDate='12/12/2024' 
-                        shortDescrition='El pasado martes 27 de agosto de 2024, a las 17:00 horas, en el aula B02 de la Facultad Politécnica...'
-                        image='https://i0.wp.com/www.pol.una.py/wp-content/uploads/IMG_3343-scaled.jpg?resize=768%2C665&ssl=1'
-                    />
-                </Box>
-                <Box style={{width: '100%', height: '100%'}} maxWidth={'380px'}>
-                    <ContentCard
-                        title='Llamado a Concurso Externo: Auxiliar Administrativo para el Departamento Operativo de Contrataciones ' 
-                        publishedDate='12/12/2024' 
-                        shortDescrition='Auxiliar Administrativo para el Departamento Operativo de Contrataciones (CE-FP-UNA-27-2024)...'
-                        image='https://i0.wp.com/www.pol.una.py/wp-content/uploads/llamado-a-concurso.jpg?resize=768%2C768&ssl=1'
-                    />
-                </Box>
+            <Stack direction={'row'} flexWrap={'wrap'} gap={1} justifyContent={'center'} minHeight={400}>
+                {
+                    libros?.data?.map((libro => (<>
+                        <Box key={libro?.id} style={{width: '100%', height: '100%'}} maxWidth={'380px'}>
+                            <ContentCard
+                                title={libro.titulo} 
+                                verLibro={() => goToPageVerLibro(libro?.id)}
+                                publishedDate={libro.fecha} 
+                                shortDescrition={`${libro?.categoriaNombre} | Publicado por ${libro?.autorNombre}`}
+                                image='https://i0.wp.com/www.pol.una.py/wp-content/uploads/llamado-a-concurso.jpg?resize=768%2C768&ssl=1'
+                            />
+                        </Box>   
+                    </>)))
+                }
+                { !libros?.data?.length && <Typography textAlign={'center'} fontSize={'2em'} >No hay libros</Typography> }
             </Stack>
         </Box>
     </>
@@ -174,10 +162,11 @@ interface ContentCardProps{
     title: string,
     publishedDate: string,
     shortDescrition: string, 
-    image: string
+    image: string,
+    verLibro: () => void
 }
 function ContentCard({
-    title, publishedDate, shortDescrition, image
+    title, publishedDate, shortDescrition, image, verLibro
 }: ContentCardProps){
     return <>
         <Card>
@@ -198,7 +187,7 @@ function ContentCard({
                             <Divider/>
                         </Box>
                         <Typography  fontSize='.95em'>
-                            {shortDescrition} <Link style={{cursor: 'pointer'}}>leer mas</Link>
+                            {shortDescrition} <Link style={{cursor: 'pointer'}} onClick={(e)=>{e?.preventDefault(); verLibro();}} >leer mas</Link>
                         </Typography>
                     </Stack>
                 </Stack>
