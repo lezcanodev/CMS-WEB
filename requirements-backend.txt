@@ -9,3 +9,4 @@ sqlparse
 python-dotenv
 drf-yasg
 pytest-django
+psycopg2-binary
