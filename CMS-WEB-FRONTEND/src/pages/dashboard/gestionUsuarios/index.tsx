@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from '@/redux';
 import { api } from '@/api';
 import { CategoriaListarData } from '@/api/gestionCategorias/listar/listartCategoria.model';
 import { snackbarActions } from '@/redux/snackbar/snackbar.slice';
+import NoAccountsIcon from '@mui/icons-material/NoAccounts';
 
 // esquema de datos para el formulario login
 const categoryDataSchema = Yup.object({
@@ -28,6 +29,7 @@ export default function GestionUsuarios(){
     const { data: usuarios, loading: loadingCategorias } = useAppSelector((state) => state.api.usuario.listar);
     const [openForm, setOpenForm] = useState<boolean>(false);
     const [reload, setReload] = useState<boolean>(false);
+    const [usuariosBaneados, setUsuariosBaneados] = useState([]);
     const [editCategory, setEditCategory] = useState<CategoriaListarData | null>(null);
     const formikCategory = useFormik({
         initialValues: {
@@ -113,7 +115,10 @@ export default function GestionUsuarios(){
 
     // para obtener todos los datos y luego cargar en la tabla
     useEffect(() => {
-       dispatch(api.usuario.usuarioListarApiThunk())
+       dispatch(api.usuario.usuarioListarApiThunk());
+       const users = localStorage.getItem('baneados') ? JSON.parse(localStorage.getItem('baneados') || '[]') : [];
+       console.log(users) 
+       setUsuariosBaneados(users);
     },[reload])
 
     const handleEdit = (currentRow: any) => {
@@ -121,6 +126,28 @@ export default function GestionUsuarios(){
     
     const handleSearch = (query: string) => {
         console.log('buscar', query);
+    }
+
+    const handleBloquear = (currentRow: any) => {
+        const userId = currentRow?.id;
+        let users = localStorage.getItem('baneados') ? JSON.parse(localStorage.getItem('baneados') || '[]') : null;
+        
+        if(!users){
+            users = [userId];
+            //localStorage.setItem('baneados', JSON.stringify([userId]));
+        }else{
+            const yaExists = users?.some((x: any) => x == userId); 
+            if(yaExists){
+                users = users?.filter((x: any) => x != userId);
+                console.log(users)
+            }else{
+                users = [...users, userId]
+            }
+            //localStorage.setItem('baneados', JSON.stringify([...users, userId]));
+        }
+
+        localStorage.setItem('baneados', JSON.stringify(users));
+        setUsuariosBaneados(users);
     }
 
     const table = useMemo(() => (
@@ -134,6 +161,9 @@ export default function GestionUsuarios(){
                 {columnName: 'Acciones', key:'acciones', action: (currentRow) => {
                     return <>
                         <Stack direction='row' gap={1} justifyContent={'space-between'} maxWidth={120} marginX={'auto'}>
+                            {permisosPaginas?.CATEGORIA_PAGINA.EDITAR && <Button onClick={() => handleBloquear(currentRow)}>
+                                <NoAccountsIcon color='error'/>
+                            </Button>}
                             {permisosPaginas?.CATEGORIA_PAGINA.ELIMINAR && <Button onClick={() => handleDeleteCategory(currentRow)}>
                                 <DeleteOutlineIcon color='error'/>
                             </Button>}
@@ -143,12 +173,19 @@ export default function GestionUsuarios(){
                         </Stack>
                     </>
                 }},
+                {columnName: 'Estado', key:'estado', action: (currentRow) => {
+                    return <>
+                    <Box textAlign={'center'}>
+                           {usuariosBaneados?.some((x: any) => x==currentRow?.id ) ? 'Bloqueado' : 'Normal' }
+                    </Box>
+                    </>
+                }},
                 {columnName: 'Nombre usuario', key:'username'},
                 {columnName: 'Rol', key:'role'}
             ]}
             rows={ usuarios?.data || []}
         />
-    ), [usuarios])
+    ), [usuarios, usuariosBaneados])
 
     return<>
         {table}

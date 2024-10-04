@@ -30,6 +30,14 @@ export default class ApiIngresar extends Api<LoginRequest, LoginResponse>{
             const response = await this.api.post<LoginResponse>('token/', datos);
             const data = response.data;
             const decodeToken = jwtDecode<{user_id: number}>(data.refresh);
+            
+            const users = localStorage.getItem('baneados') ? JSON.parse(localStorage.getItem('baneados') || '[]') : [];
+            const estaBaneado = users?.some((x: any) => x == decodeToken.user_id);
+            
+            if(estaBaneado){
+                return this.error(Api.HttpStatusCode.Unauthorized('Has sido bloqueado del sistema'));
+            }
+
             this.params.localStorage.set('token', data.access);
             this.params.localStorage.set('refresh', data.refresh);
             UserUtils.setUser({
@@ -37,6 +45,7 @@ export default class ApiIngresar extends Api<LoginRequest, LoginResponse>{
                 username: datos.username,
                 role: data.role
             });
+
             return this.data(response.data);
         }catch(error){
 

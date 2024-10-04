@@ -10,7 +10,7 @@ export class PermisoUtils{
         // Inicializamos todo los permisos en true
         const defaultPermisos: PermisoPaginas = {
             CATEGORIA_PAGINA: PermisoUtils.all(true),
-            LIBRO_PAGINA: PermisoUtils.all(true),
+            LIBRO_PAGINA: {...PermisoUtils.all(true), KANBAN_ACCESO: true},
             USUARIO_PAGINA: PermisoUtils.all(true)
         } 
 
@@ -19,7 +19,7 @@ export class PermisoUtils{
         }
 
         defaultPermisos['CATEGORIA_PAGINA'] = PermisoUtils.all(false);
-        defaultPermisos['LIBRO_PAGINA'] = PermisoUtils.all(false);
+        defaultPermisos['LIBRO_PAGINA'] = {...PermisoUtils.all(false), KANBAN_ACCESO: false};
         defaultPermisos['USUARIO_PAGINA'] = PermisoUtils.all(false);
 
         if(rol === 'Editor' || rol === 'Publicador'){
@@ -28,6 +28,10 @@ export class PermisoUtils{
             defaultPermisos['LIBRO_PAGINA'].CREAR = true;
             defaultPermisos['LIBRO_PAGINA'].ELIMINAR = true;
         }
+
+        
+        defaultPermisos['LIBRO_PAGINA'].KANBAN_ACCESO = rol === 'Publicador';
+
 
         return defaultPermisos;
     }
