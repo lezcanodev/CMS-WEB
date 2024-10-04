@@ -1,12 +1,19 @@
 import { IVerLibroPage } from '@/templates/interfaces/pages/verLibro.page.interface';
-import { Box, Button, Divider, Grid, Stack, TextareaAutosize, TextField, Typography } from '@mui/material';
+import { UserUtils } from '@/utils/User/User.utils';
+import { Avatar, Box, Button, Divider, Grid, Stack, TextareaAutosize, TextField, Typography } from '@mui/material';
+import { useEffect, useRef, useState } from 'react';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
 
 export default function VerLibro({
     categoria, contenido, fechaPublicacion, titulo, idLibro, loading, isEmpty,
-    autorNombre
+    autorNombre, comentarios, crearComentario
 }: IVerLibroPage){
     if(isEmpty){
         return <Typography textAlign={'center'} fontWeight={'bold'} fontSize={'2em'}>No hay nada</Typography>
+    }
+
+    function addNuevoComentario(newComment: string){
+        crearComentario.onCrearComentario({contenido: newComment});
     }
 
     return <>
@@ -29,26 +36,54 @@ export default function VerLibro({
                 <Divider/>
             </Grid>
             <Grid item xs={12}>
-                <SeccionComentarios/>
+                <SeccionComentarios
+                    comentarios={comentarios}
+                    addNuevoComentario={addNuevoComentario}
+                />
             </Grid>
         </Grid>
     </>
 }
 
-function SeccionComentarios(){
+function SeccionComentarios({
+    comentarios, addNuevoComentario
+}:any ){
     return (
         <Stack marginBottom={10}>
             <Box>
-                <FormComentar />
+                <FormComentar addNuevoComentario={addNuevoComentario} />
             </Box>
             <Box>
-                <Comentarios/>
+                    <Grid container gap={2}>
+                        {comentarios?.items?.map(({nombreUsuario, contenido, fechaPublicacion}: any) => (<>            
+                            <Grid item xs={12} sx={{boxShadow: '0px 0px 20px #00000010', p: 2, borderRadius: 2}}>
+                                <Stack direction={'row'} alignItems={'flex-start'} gap={2}>
+                                    <Box>
+                                        <Avatar>{nombreUsuario?.charAt(0)}</Avatar>
+                                    </Box>
+                                    <Box sx={{width: '100%'}}>
+                                        <Box marginBottom={1}>
+                                            <Typography fontWeight={'bold'} color='primary'>{nombreUsuario}</Typography>
+                                            <Typography fontSize={'.7em'} fontWeight={'light'}>publicado el {fechaPublicacion}</Typography>
+                                        </Box>
+                                        <Divider/>
+                                        <Box marginTop={1}>
+                                            <Typography>{contenido}</Typography>
+                                        </Box>
+                                    </Box>
+                                </Stack>
+                            </Grid>
+                        </>))}
+                    </Grid>
             </Box>
         </Stack>
     )
 }
 
-function FormComentar(){
+function FormComentar({
+    addNuevoComentario
+}: any){
+    const [contenido, setContenido] = useState("");
     return (
         <Stack marginBottom={10}>
             <Box>
@@ -56,6 +91,8 @@ function FormComentar(){
             </Box>
             <Box>
                 <TextField
+                    onChange={(e) => setContenido(e.target.value)}
+                    value={contenido}
                     fullWidth
                     multiline
                     minRows={4}
@@ -63,13 +100,13 @@ function FormComentar(){
                 />
             </Box>
             <Box textAlign={'end'} marginTop={2}>
-                <Button variant='outlined' >Comentar</Button>
+                <Button variant='outlined' onClick={() => {addNuevoComentario({contenido}); setContenido(''); } } >Comentar</Button>
             </Box>
         </Stack>
     )
 }
 
-function Comentarios(){
+export function Comentarios(){
     return <>
         <Grid container gap={5}>
             <Grid item xs={12}>

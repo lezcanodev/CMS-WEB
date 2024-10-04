@@ -1,5 +1,5 @@
 
-import { Button, Stack } from '@mui/material';
+import { Box, Button, Stack } from '@mui/material';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
 import SectionTable from '@/components/SectionTable';
@@ -9,7 +9,9 @@ import { api } from '@/api';
 import { snackbarActions } from '@/redux/snackbar/snackbar.slice';
 import { useNavigate } from 'react-router';
 import { getRouteByName } from '@/router/helpers';
-
+import ViewWeekIcon from '@mui/icons-material/ViewWeek';
+import { Kanban } from '@/components/KanbaTable';
+import ReplyAllIcon from '@mui/icons-material/ReplyAll';
 
 interface TablaLibrosProps{
     onOpenLibroEditor: () => void
@@ -17,6 +19,7 @@ interface TablaLibrosProps{
 export default function TablaLibros({
     onOpenLibroEditor
 }: TablaLibrosProps){
+    const [seccionActual, setSeccionActual] = useState<'tabla' | 'kanba'>('tabla')
     const { permisosPaginas } = useAppSelector(st => st.permisos);
     const dispatch = useAppDispatch();
     const { data, loading } = useAppSelector((state) => state.api.libro.listar);
@@ -48,35 +51,67 @@ export default function TablaLibros({
     }
 
     return<>
-        <SectionTable
-            title='Gestión de libros'
-            puedoCrear={permisosPaginas?.LIBRO_PAGINA.CREAR}
-            onSearch={handleSearch}
-            onCreate={(onOpenLibroEditor)}
-            loading={loading}
-            columns={[
-                {columnName: 'Acciones', key:'acciones', action: (currentRow) => {
-                    return <>
-                        <Stack direction='row' gap={1} justifyContent={'center'} marginX={'auto'}>
-                            {permisosPaginas?.LIBRO_PAGINA.ELIMINAR &&  <Button onClick={() => handleDelete(currentRow)}>
-                                <DeleteOutlineIcon color='error'/>
-                            </Button>}
-                            {permisosPaginas?.LIBRO_PAGINA.EDITAR &&  <Button onClick={() => {}} disabled>
-                                <EditIcon color='primary' />
-                            </Button>}
-                            <Button onClick={() => navigate(getRouteByName('verLibro', {id: currentRow.id }))}>
-                                ver
-                            </Button>
-                        </Stack>
-                    </>
-                }},
-                {columnName: 'Autor', key:'autorNombre'},
-                {columnName: 'Titulo', key:'titulo'},
-                {columnName: 'Estado', key:'estado'},
-                {columnName: 'Categoría', key:'categoriaNombre'},
-                {columnName: 'Fecha', key:'fecha'}
-            ]}
-            rows={ data?.data || []}
-        />
+        {
+            seccionActual === 'kanba' ? (
+                <KanbaLibros
+                    seccionActual={seccionActual}
+                    setSeccionActual={setSeccionActual}
+                />
+            ) : (
+                <SectionTable
+                    title='Gestión de libros'
+                    puedoCrear={permisosPaginas?.LIBRO_PAGINA.CREAR}
+                    onSearch={handleSearch}
+                    onCreate={(onOpenLibroEditor)}
+                    masOpciones={<>
+                        { permisosPaginas?.LIBRO_PAGINA.KANBAN_ACCESO && (
+                            <Button onClick={() => setSeccionActual('kanba')  } variant='outlined' endIcon={<ViewWeekIcon   fontSize='small'/>}>Kanban</Button>
+                        )}
+                    </>}
+                    loading={loading}
+                    columns={[
+                        {columnName: 'Acciones', key:'acciones', action: (currentRow) => {
+                            return <>
+                                <Stack direction='row' gap={1} justifyContent={'center'} marginX={'auto'}>
+                                    {permisosPaginas?.LIBRO_PAGINA.ELIMINAR &&  <Button onClick={() => handleDelete(currentRow)}>
+                                        <DeleteOutlineIcon color='error'/>
+                                    </Button>}
+                                    {permisosPaginas?.LIBRO_PAGINA.EDITAR &&  <Button onClick={() => {}} disabled>
+                                        <EditIcon color='primary' />
+                                    </Button>}
+                                    <Button onClick={() => navigate(getRouteByName('verLibro', {id: currentRow.id }))}>
+                                        ver
+                                    </Button>
+                                </Stack>
+                            </>
+                        }},
+                        {columnName: 'Autor', key:'autorNombre'},
+                        {columnName: 'Titulo', key:'titulo'},
+                        {columnName: 'Estado', key:'estado'},
+                        {columnName: 'Categoría', key:'categoriaNombre'},
+                        {columnName: 'Fecha', key:'fecha'}
+                    ]}
+                    rows={ data?.data || []}
+                />
+            )
+        }
     </>
+}
+
+function KanbaLibros({
+    seccionActual,
+    setSeccionActual
+}: any){
+    return (
+        <Stack>
+            <Box>
+                <Stack direction={'row'} gap={1} marginBottom={1} justifyContent={'flex-start'}>
+                    <Button variant='text' onClick={() => setSeccionActual('tabla')} ><ReplyAllIcon/></Button>
+                </Stack> 
+            </Box>
+            <Box>
+                <Kanban/>
+            </Box>
+        </Stack>
+    );
 }

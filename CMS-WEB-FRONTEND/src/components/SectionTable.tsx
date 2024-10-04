@@ -10,10 +10,11 @@ interface SectionTableProps{
     title: string,
     puedoCrear?: boolean,
     onSearch: (query: string) => void,
-    onCreate: () => void
+    onCreate: () => void,
+    masOpciones?: React.ReactNode
 }
 export default function SectionTable({
-    columns, rows, onSearch, onCreate, loading, title, puedoCrear = false
+    columns, rows, onSearch, onCreate, loading, masOpciones, title, puedoCrear = false
 }: SectionTableProps) {
   return (
     <Stack direction={'column'} gap={5}>
@@ -22,14 +23,15 @@ export default function SectionTable({
         </Box>
         <Grid container maxWidth={1080} marginX={'auto'} gap={2}>
             <Grid item xs={12}>
-                <Stack direction='column' gap={1}>
-                    <Box>
+                <Stack direction='row-reverse' gap={1} justifyContent={'space-between'} alignItems={'center'}>
+                    <Stack direction={'row'} gap={.5}>
                         { puedoCrear && (
                             <Button onClick={() => onCreate()} variant='outlined' endIcon={<LibraryAddIcon   fontSize='small'/>}>Crear</Button>
                         )}
-                    </Box>
-                    <Box maxWidth={300} >
-                        <TextField 
+                        {masOpciones}
+                    </Stack>
+                    <Box >
+                        <TextField
                             onChange={(e) => onSearch(e.target.value)}
                             label={<>
                                 <Stack direction='row' alignItems={'center'} justifyContent={'center'} gap={1} >
@@ -41,7 +43,7 @@ export default function SectionTable({
                                     </Typography>
                                 </Stack>
                             </>}
-                            variant="standard" 
+                            variant="outlined" 
                             fullWidth 
                         />
                     </Box>
