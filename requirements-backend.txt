@@ -6,7 +6,7 @@ djangorestframework-simplejwt
 PyJWT
 pytz
 sqlparse
-psycopg2-binary
 python-dotenv
 drf-yasg
 pytest-django
+psycopg2-binary
