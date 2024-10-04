@@ -7,4 +7,17 @@ export interface IVerLibroPage{
     autorNombre: string;
     fechaPublicacion: string;
     contenido: React.ReactNode;
+    crearComentario: {
+        loading: boolean,
+        onCrearComentario: (p:{ contenido: string  }) => Promise<{error: string | null}>
+    },
+    comentarios: {
+        loading: boolean,
+        totalItems: number,
+        items: {
+            nombreUsuario: string,
+            contenido: string,
+            fechaPublicacion: string
+        }[]
+    }
 }

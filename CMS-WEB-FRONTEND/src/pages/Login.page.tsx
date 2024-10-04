@@ -20,7 +20,7 @@ const loginDataSchema = Yup.object({
 
 export function LoginPage(){
     const {elements} = useTemplate();
-    const InicioPageElement = elements['LoginPage'];
+    const LoginPageElement = elements['LoginPage'];
     const { error, loading } = useAppSelector((state) => state.api.seguridad.ingresar);
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
@@ -44,7 +44,7 @@ export function LoginPage(){
 
 
     return <>
-        <InicioPageElement 
+        <LoginPageElement 
             onSubmitLogin={formikLogin.handleSubmit}
             goToResetPassword={() => { navigate(getRouteByName('')) }}
             goToResetRegister={() => { navigate(getRouteByName('registrarse')) }}
