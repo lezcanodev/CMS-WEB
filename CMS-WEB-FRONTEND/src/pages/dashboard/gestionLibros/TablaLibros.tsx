@@ -39,7 +39,23 @@ export default function TablaLibros({
             })
         }
     }
-
+    const changeState = async (currentRow: any, nuevoEstado: string) => {
+        if(currentRow?.id){
+            await dispatch(api.libro.libroActualizarApiThunk({
+                id: currentRow.id,
+                titulo: currentRow.titulo,
+                categoria: currentRow.categoria,
+                estado: nuevoEstado
+            })).unwrap()
+            .then(() => {
+                setReload(!reload);
+                dispatch(snackbarActions.openSnackbar({
+                    message: `Se ha realizado la operación correctamente`
+                }))
+            })
+            
+        }
+    }
     // para obtener todos los datos y luego cargar en la tabla
     useEffect(() => {
        dispatch(api.libro.libroListarApiThunk())
@@ -82,6 +98,12 @@ export default function TablaLibros({
                                     <Button onClick={() => navigate(getRouteByName('verLibro', {id: currentRow.id }))}>
                                         ver
                                     </Button>
+                                    {permisosPaginas?.LIBRO_PAGINA.PUBLICAR && <Button onClick={() => changeState(currentRow,'Publicado')}>
+                                        Publicar
+                                    </Button>}
+                                    {permisosPaginas?.LIBRO_PAGINA.PUBLICAR && <Button onClick={() => changeState(currentRow,'Rechazado')}>
+                                        Rechazar
+                                    </Button>}
                                 </Stack>
                             </>
                         }},

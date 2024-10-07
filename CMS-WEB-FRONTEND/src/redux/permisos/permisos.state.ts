@@ -2,7 +2,8 @@ export interface BasePermisos{
     puedoAcceder: boolean;
     CREAR: boolean,
     ELIMINAR: boolean,
-    EDITAR: boolean
+    EDITAR: boolean,
+    PUBLICAR:boolean
 }
 
 export interface PermisoPaginas{

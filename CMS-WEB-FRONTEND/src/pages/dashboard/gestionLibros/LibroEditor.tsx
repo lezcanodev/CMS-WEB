@@ -36,7 +36,8 @@ export default function LibroEditor({
                 titulo: values.titulo,
                 categoria: parseInt(values.categoria),
                 contenido: contenido,
-                author: JSON.parse(localStorageServices.get('user') as any).userId as any
+                author: JSON.parse(localStorageServices.get('user') as any).userId as any,
+                estado: 'En Revision'
             });
             dispatch(asyncCategory())
             .unwrap()

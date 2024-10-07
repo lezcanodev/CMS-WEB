@@ -22,15 +22,18 @@ export class PermisoUtils{
         defaultPermisos['LIBRO_PAGINA'] = {...PermisoUtils.all(false), KANBAN_ACCESO: false};
         defaultPermisos['USUARIO_PAGINA'] = PermisoUtils.all(false);
 
-        if(rol === 'Editor' || rol === 'Publicador'){
+        if(rol === 'Editor'){
             defaultPermisos['CATEGORIA_PAGINA'].puedoAcceder = true;
             defaultPermisos['LIBRO_PAGINA'].puedoAcceder = true;
             defaultPermisos['LIBRO_PAGINA'].CREAR = true;
             defaultPermisos['LIBRO_PAGINA'].ELIMINAR = true;
         }
-
-        
-        defaultPermisos['LIBRO_PAGINA'].KANBAN_ACCESO = rol === 'Publicador';
+        if(rol == 'Publicador'){
+            defaultPermisos['CATEGORIA_PAGINA'].puedoAcceder = true;
+            defaultPermisos['LIBRO_PAGINA'].puedoAcceder = true;
+            defaultPermisos['LIBRO_PAGINA'].PUBLICAR = (rol === 'Publicador');
+            defaultPermisos['LIBRO_PAGINA'].KANBAN_ACCESO = rol === 'Publicador';
+        }
 
 
         return defaultPermisos;
@@ -42,6 +45,7 @@ export class PermisoUtils{
             CREAR: value,
             EDITAR: value,
             ELIMINAR: value,
+            PUBLICAR: value,
             puedoAcceder: value
         }
     }
