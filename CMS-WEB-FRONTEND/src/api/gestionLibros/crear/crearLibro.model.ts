@@ -6,6 +6,7 @@ export interface LibroCrearRequest{
     categoria: number;
     author: number;
     contenido: string;
+    estado:String;
 }
 
 /**
