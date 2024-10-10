@@ -10,8 +10,8 @@ import { snackbarActions } from '@/redux/snackbar/snackbar.slice';
 import { useNavigate } from 'react-router';
 import { getRouteByName } from '@/router/helpers';
 import ViewWeekIcon from '@mui/icons-material/ViewWeek';
-import { Kanban } from '@/components/KanbaTable';
 import ReplyAllIcon from '@mui/icons-material/ReplyAll';
+import SimpleKanban from '@/components/KanbaTable/KambaTable';
 
 interface TablaLibrosProps{
     onOpenLibroEditor: () => void
@@ -50,7 +50,8 @@ export default function TablaLibros({
             .then(() => {
                 setReload(!reload);
                 dispatch(snackbarActions.openSnackbar({
-                    message: `Se ha realizado la operación correctamente`
+                    message: `Se ha realizado la operación correctamente`,
+                    autoHideDuration: 1000
                 }))
             })
             
@@ -68,12 +69,14 @@ export default function TablaLibros({
 
     return<>
         {
-            seccionActual === 'kanba' ? (
+            seccionActual === 'kanba' ? (<>
                 <KanbaLibros
                     seccionActual={seccionActual}
                     setSeccionActual={setSeccionActual}
+                    libros={data?.data || []}
+                    changeState={changeState}
                 />
-            ) : (
+            </>) : (
                 <SectionTable
                     title='Gestión de libros'
                     puedoCrear={permisosPaginas?.LIBRO_PAGINA.CREAR}
@@ -122,7 +125,9 @@ export default function TablaLibros({
 
 function KanbaLibros({
     seccionActual,
-    setSeccionActual
+    setSeccionActual,
+    libros,
+    changeState
 }: any){
     return (
         <Stack>
@@ -132,7 +137,13 @@ function KanbaLibros({
                 </Stack> 
             </Box>
             <Box>
-                <Kanban/>
+                <SimpleKanban
+                    libros={libros}
+                    cambiarEstadoLibro={ async (libro, nuevoEstado) => {
+                        changeState(libro, nuevoEstado);
+                    }}
+                />
+                {/*<Kanban/>*/}
             </Box>
         </Stack>
     );

@@ -29,7 +29,7 @@ class Libro(models.Model):
     titulo = models.CharField(max_length=100)
     fecha = models.DateTimeField(auto_now_add=True)
     contenido = models.TextField()
-    estado = models.CharField(max_length=20)
+    estado = models.CharField(max_length=20, null=True)
 
     #el related_name me permite user.notes()
     #author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="libro")
