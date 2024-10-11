@@ -11,6 +11,11 @@ from .permisos import rol_Requerido
 from rest_framework.permissions import IsAuthenticated
 from api.roles import Roles
 
+
+from django.shortcuts import render
+from .emails import enviar_notificacion_email
+
+
 class UserProfileUpdateView(generics.UpdateAPIView):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileUpdateSerializer
@@ -191,3 +196,5 @@ class UserProfileUpdateView(generics.UpdateAPIView):
         retorna el perfil de usuario a ser actualizado.-
         """
         return self.request.user.userprofile
+
+
