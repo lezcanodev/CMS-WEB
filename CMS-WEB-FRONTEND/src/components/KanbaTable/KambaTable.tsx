@@ -25,6 +25,12 @@ const estadoLibro = {
     'publicados': 'Publicado',
     'guardados': 'Guardado'
 }
+const estadoLibroPermisos = {
+    'pendientes': 'REVISION',
+    'rechazados': 'RECHAZADO',
+    'publicados': 'PUBLICADO',
+    'guardados': 'GUARDADO'
+}
    
 interface SimpleKanbanProps{
     libros: LibroListarResponse,
@@ -36,7 +42,7 @@ const SimpleKanban = ({
   const dispatch = useAppDispatch();
   const { permisosPaginas } = useAppSelector(st => st.permisos);
   const [tasks, setTasks] = useState<{[statusKey: string]: EstadoKanbaData}>({
-    guardados: {
+    ...(permisosPaginas?.LIBRO_PAGINA.KANBAN_ESTADOS.GUARDADO.PUEDO_VER ? {guardados: {
         color: "#51a5f9",
         statusNombre: 'Guardados',
         data: libros?.filter(x => x.estado == 'Guardado').map(libro => ({
@@ -45,7 +51,7 @@ const SimpleKanban = ({
                 autorNombre: libro.autorNombre,
                 estado: 'guardados'
             })) || []
-    },
+    }} : {}),
     pendientes: {
         color: "#ef9433",
         statusNombre: 'En Revision',
@@ -103,7 +109,7 @@ const SimpleKanban = ({
         const estadoActual = draggedTask.estado; 
     
         if ( estadoActual !== estadoObjectivo) {
-                if(permisosPaginas?.LIBRO_PAGINA.PUBLICAR){
+                if((estadoLibroPermisos as any)?.[estadoObjectivo] && (permisosPaginas?.LIBRO_PAGINA.KANBAN_ESTADOS as any)?.[(estadoLibroPermisos as any)?.[estadoObjectivo] as any].PUEDO_CAMBIAR){
                     const seCambioDeEstadoConExito = await cambiarEstadoLibro(
                         libros.find(x => x.id == libroArrastrado.libroId)!,
                         (estadoLibro as any)?.[estadoObjectivo] || 'En Revision'
