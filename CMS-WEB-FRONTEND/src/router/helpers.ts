@@ -7,7 +7,8 @@ const PUBLIC_ROUTES: {[routeName: string]: string} = {
     'inicio': BASE_URL,  
     'ingresar': BASE_URL+'seguridad/ingresar',
     'registrarse': BASE_URL+'seguridad/registrarse',
-    'verLibro': BASE_URL+'ver-libro/:id'
+    'verLibro': BASE_URL+'ver-libro/:id',
+    'LibroEdit': BASE_URL+'editar-libro/:id'
 };
 
 const PRIVATE_ROUTES: {[routeName: string]: string} = {

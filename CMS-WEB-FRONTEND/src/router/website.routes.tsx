@@ -15,6 +15,7 @@ import GestionCategorias from '@/pages/dashboard/gestionCategorias';
 import GestionLibros from '@/pages/dashboard/gestionLibros';
 import { VerLibro } from '@/pages/VerLibro.page';
 import GestionUsuarios from '@/pages/dashboard/gestionUsuarios';
+import LibroEditor from '@/components/LibroEditor';
 
 // Rutas publicas accesibles sin necesidad de autenticación
 const PublicRoutes: RouteObject[] = [
@@ -29,6 +30,10 @@ const PublicRoutes: RouteObject[] = [
       {
         path: 'ver-libro/:id',
         element: <VerLibro/>
+      },
+      {
+        path: 'editar-libro/:id',
+        element: <LibroEditor/>
       },
       {
         path: "seguridad",

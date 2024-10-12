@@ -45,6 +45,7 @@ export default function TablaLibros({
                 id: currentRow.id,
                 titulo: currentRow.titulo,
                 categoria: currentRow.categoria,
+                contenido: currentRow.contenido,
                 estado: nuevoEstado
             })).unwrap()
             .then(() => {
@@ -62,7 +63,7 @@ export default function TablaLibros({
        dispatch(api.libro.libroListarApiThunk())
     },[reload])
 
-    
+
     const handleSearch = (query: string) => {
         console.log(query);
     }
@@ -91,11 +92,12 @@ export default function TablaLibros({
                     columns={[
                         {columnName: 'Acciones', key:'acciones', action: (currentRow) => {
                             return <>
+
                                 <Stack direction='row' gap={1} justifyContent={'center'} marginX={'auto'}>
                                     {permisosPaginas?.LIBRO_PAGINA.ELIMINAR &&  <Button onClick={() => handleDelete(currentRow)}>
                                         <DeleteOutlineIcon color='error'/>
                                     </Button>}
-                                    {permisosPaginas?.LIBRO_PAGINA.EDITAR &&  <Button onClick={() => {}} disabled>
+                                    {permisosPaginas?.LIBRO_PAGINA.EDITAR &&  <Button onClick={() => navigate(`/editar-libro/${currentRow.id}`)}>
                                         <EditIcon color='primary' />
                                     </Button>}
                                     <Button onClick={() => navigate(getRouteByName('verLibro', {id: currentRow.id }))}>
