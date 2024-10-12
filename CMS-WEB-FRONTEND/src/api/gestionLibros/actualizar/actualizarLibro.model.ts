@@ -5,6 +5,7 @@ export interface LibroActualizarRequest{
     id: number;
     titulo: string;
     categoria: number;
+    contenido: string;
     estado: string;
 }
 
