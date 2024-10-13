@@ -168,6 +168,14 @@ class UpdateLibroAPIView(generics.UpdateAPIView):
 
         if serializer.is_valid():
             serializer.save()
+            
+            # Enviar correo de notificación
+            enviar_notificacion_email(
+                'Actualizacion de estado',
+                'Se actualizo el estado de a',
+                ['fabriciojoel99@gmail.com']
+            )
+            
             return Response({"message": "mobile number updated successfully"})
 
         else:

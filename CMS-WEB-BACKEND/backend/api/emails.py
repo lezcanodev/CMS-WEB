@@ -6,5 +6,5 @@ def enviar_notificacion_email(subject, message, recipient_list):
         message,
         'mailcmsweb@gmail.com',  # From email
         recipient_list,  # List of recipient emails
-        fail_silently=False,
+        
     )

@@ -137,12 +137,12 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # email
 
-#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'mailcmsweb@gmail.com'
-EMAIL_HOST_PASSWORD = 'xwlk qkbw ldsp lasc'
+EMAIL_HOST_USER = os.getenv("MAIL_USER")
+EMAIL_HOST_PASSWORD = os.getenv("MAIL_PASSWORD")
 
 
 # Internationalization

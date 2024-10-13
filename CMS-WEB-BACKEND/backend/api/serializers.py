@@ -41,16 +41,15 @@ class UserSerializer(serializers.ModelSerializer):
         """Método reescrito, se crea el usuario una vez que el objeto validated_data sea correcto"""
         user = User.objects.create_user(**validated_data)
         
-        print('registro usuario')
-            # Registrar al usuario, etc.
-            
-            # Enviar correo de notificación
+        
+        # Enviar correo de notificación
         enviar_notificacion_email(
             'Bienvenido a la plataforma',
             'Gracias por registrarte en nuestro sitio web.',
             [user.username]
         )
         return user
+        
     
     
 
