@@ -15,18 +15,22 @@ import ReplyAllIcon from '@mui/icons-material/ReplyAll';
 import LibroEditor from '@/components/LibroEditor';
 
 interface TablaLibrosProps{
-    onOpenLibroEditor: () => void
+    onOpenLibroEditor: () => void,
+    applyFilters: (filters: Partial<{categoriaId: number, buscarPorTexto: string}>, opts?: {resetFilters: boolean}) => void,
+    currentFilters: Partial<{categoriaId: number, buscarPorTexto: string}>
 }
 export default function TablaLibros({
-    onOpenLibroEditor
+    onOpenLibroEditor, applyFilters,currentFilters
 }: TablaLibrosProps){
     const [seccionActual, setSeccionActual] = useState<'tabla' | 'kanba'>('tabla')
     const { permisosPaginas } = useAppSelector(st => st.permisos);
     const dispatch = useAppDispatch();
     const { data, loading } = useAppSelector((state) => state.api.libro.listar);
     const [reload, setReload] = useState<boolean>(false);
-    const navigate = useNavigate();
+    const [libro_filtrado, setFiltrados] = useState(data?.data || []);
 
+    const navigate = useNavigate();
+    
     // Aqui se controla la eliminacion de categoria
     const handleDelete = async (currentRow: any) => {
         if(currentRow?.id){
@@ -58,14 +62,34 @@ export default function TablaLibros({
             
         }
     }
-    // para obtener todos los datos y luego cargar en la tabla
+    // obtenemos los datos para cargar en la tabla
     useEffect(() => {
-       dispatch(api.libro.libroListarApiThunk())
-    },[reload])
+        dispatch(api.libro.libroListarApiThunk())
+            .unwrap()
+            .then((response) => {
+                // Actualiza libro_filtrado con los datos de la API
+                setFiltrados(response.data || []);
+            });
+    }, [dispatch]);
+    
 
 
     const handleSearch = (query: string) => {
-        console.log(query);
+        //Mientras el usuario ingrese algo en el buscador.-
+       if(query !== ''){
+            applyFilters({buscarPorTexto:query},{resetFilters:false});
+            const librosFiltrados = data?.data?.filter(libro => 
+                libro.titulo.toLowerCase().includes(query.toLowerCase())
+            );
+            setFiltrados(librosFiltrados || []);
+            //en caso de que no coincida con ningun libro.-
+            if(librosFiltrados === null){               
+                setFiltrados([]);
+            }
+        //sino que muestre todo.-
+       }else{
+            setFiltrados(data?.data || []);
+        }
     }
 
     return<>
@@ -116,7 +140,7 @@ export default function TablaLibros({
                         {columnName: 'Categoría', key:'categoriaNombre'},
                         {columnName: 'Fecha', key:'fecha'}
                     ]}
-                    rows={ data?.data || []}
+                    rows={libro_filtrado}
                 />
             )
         }

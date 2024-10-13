@@ -43,7 +43,6 @@ export default function LibroEditor() {
     useEffect(() => {
         if (libroData?.data?.[0] && categorias?.data?.[0]) {
             const libro = libroData.data[0];
-            const categoria = categorias?.data[0];
             setInitialValues({
                 id: libro.id || -1,
                 titulo: libro.titulo || '',
@@ -72,8 +71,6 @@ export default function LibroEditor() {
                 dispatch(snackbarActions.openSnackbar({
                     message: `Se ha editado el libro "${values.titulo}" exitosamente`
                 }));
-
-                navigate('/dashboard/gestion-libros');
             } catch (error: any) {
                 const errors: any = {};
                 if (error?.titulo) {
