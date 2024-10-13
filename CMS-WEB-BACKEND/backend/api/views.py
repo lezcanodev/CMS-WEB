@@ -162,18 +162,28 @@ class UpdateLibroAPIView(generics.UpdateAPIView):
     permission_classes = [rol_Requerido]
     rol_Requerido.roles = ['admin','editor']
 
+    
+    
+
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
+        
+        estado_anterior =instance.estado
+        author= instance.author
         serializer = self.get_serializer(instance, data=request.data, partial=True)
 
+        
+        
         if serializer.is_valid():
             serializer.save()
+            
+            estado_actual =instance.estado
             
             # Enviar correo de notificación
             enviar_notificacion_email(
                 'Actualizacion de estado',
-                'Se actualizo el estado de a',
-                ['fabriciojoel99@gmail.com']
+                f'Se actualizo el estado de "{estado_anterior}" a "{estado_actual}".',
+                [author]
             )
             
             return Response({"message": "mobile number updated successfully"})
