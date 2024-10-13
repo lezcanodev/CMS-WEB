@@ -170,6 +170,7 @@ class UpdateLibroAPIView(generics.UpdateAPIView):
         
         estado_anterior =instance.estado
         author= instance.author
+        titulo= instance.titulo
         serializer = self.get_serializer(instance, data=request.data, partial=True)
 
         
@@ -182,7 +183,7 @@ class UpdateLibroAPIView(generics.UpdateAPIView):
             # Enviar correo de notificación
             enviar_notificacion_email(
                 'Actualizacion de estado',
-                f'Se actualizo el estado de "{estado_anterior}" a "{estado_actual}".',
+                f'Su publicacion "{titulo}" se ha actualizado de "{estado_anterior}" a "{estado_actual}".',
                 [author]
             )
             
