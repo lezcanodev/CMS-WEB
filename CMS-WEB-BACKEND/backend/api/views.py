@@ -11,6 +11,11 @@ from .permisos import rol_Requerido
 from rest_framework.permissions import IsAuthenticated
 from api.roles import Roles
 
+
+from django.shortcuts import render
+from .emails import enviar_notificacion_email
+
+
 class UserProfileUpdateView(generics.UpdateAPIView):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileUpdateSerializer
@@ -157,12 +162,31 @@ class UpdateLibroAPIView(generics.UpdateAPIView):
     permission_classes = [rol_Requerido]
     rol_Requerido.roles = ['admin','editor']
 
+    
+    
+
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
+        
+        estado_anterior =instance.estado
+        author= instance.author
+        titulo= instance.titulo
         serializer = self.get_serializer(instance, data=request.data, partial=True)
 
+        
+        
         if serializer.is_valid():
             serializer.save()
+            
+            estado_actual =instance.estado
+            
+            # Enviar correo de notificación
+            enviar_notificacion_email(
+                'Actualizacion de estado',
+                f'Su publicacion "{titulo}" se ha actualizado de "{estado_anterior}" a "{estado_actual}".',
+                [author]
+            )
+            
             return Response({"message": "mobile number updated successfully"})
 
         else:
@@ -191,3 +215,5 @@ class UserProfileUpdateView(generics.UpdateAPIView):
         retorna el perfil de usuario a ser actualizado.-
         """
         return self.request.user.userprofile
+
+

@@ -1,7 +1,10 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from .models import Libro, Categoria, UserProfile
+import os
 
+from django.shortcuts import render
+from .emails import enviar_notificacion_email
 
 #para el manejo de los jsons
 class LibroSerializer(serializers.ModelSerializer):
@@ -37,7 +40,17 @@ class UserSerializer(serializers.ModelSerializer):
     def create (self, validated_data):
         """Método reescrito, se crea el usuario una vez que el objeto validated_data sea correcto"""
         user = User.objects.create_user(**validated_data)
+        
+        
+        # Enviar correo de notificación
+        enviar_notificacion_email(
+            'Bienvenido a la plataforma',
+            'Gracias por registrarte en nuestro sitio web.',
+            [user.username]
+        )
         return user
+        
+    
     
 
 class UserProfileSerializer(serializers.ModelSerializer):
