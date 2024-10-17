@@ -1,5 +1,3 @@
-
-import React from 'react'; 
 import { Box, Button, Stack, TextField, Typography, } from '@mui/material';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
@@ -25,6 +23,7 @@ export default function GestionCategorias(){
     const [openForm, setOpenForm] = useState<boolean>(false);
     const [reload, setReload] = useState<boolean>(false);
     const [editCategory, setEditCategory] = useState<CategoriaListarData | null>(null);
+    const [categoria_filtrada, setCategoria] = useState(categorias?.data || []);    // recupera todas o ninguna en todo caso.-
     const formikCategory = useFormik({
         initialValues: {
             nombre: '',
@@ -50,6 +49,7 @@ export default function GestionCategorias(){
                 dispatch(snackbarActions.openSnackbar({
                     message: `Se ha realizado la operación correctamente`
                 }))
+                
             })
             .catch(error => {
               const errors: any = {};
@@ -98,8 +98,14 @@ export default function GestionCategorias(){
 
     // para obtener todos los datos y luego cargar en la tabla
     useEffect(() => {
-       dispatch(api.categoria.categoriaListarApiThunk({}))
-    },[reload])
+       dispatch(api.categoria.categoriaListarApiThunk())
+        .unwrap()
+        .then((response) => {
+            //con lo que responda, cambiamos el estado de categorias.-
+            setCategoria(response.data || [])
+        });
+    //reload para que cada vez que liste, tambien recargue la pagina.-
+    },[dispatch,reload])
 
     const handleEditCategory = (currentRow: any) => {
         setEditCategory(currentRow);
@@ -109,8 +115,27 @@ export default function GestionCategorias(){
         setOpenForm(true);
     }
     
+    //aqui se realiza la busqueda de la categoria.-
     const handleSearch = (query: string) => {
-        console.log('buscar', query);
+
+        // Obtenemos las categorias disponibles.-
+        let Categorias_disponibles: any[] = [...(categorias?.data || [])];
+        
+        if(query !== ''){       
+            const filterCategorias = Categorias_disponibles.filter((categorias) => categorias.nombre.toLocaleLowerCase().includes(query.toLowerCase()));
+
+            //asignamos la categoria/s acertada/s.-
+            setCategoria(filterCategorias || []);
+            
+            if(filterCategorias == null){
+                //no mostramos nada en caso de que no coincida nada de lo buscado por el usuario.-
+                setCategoria([]);
+            }
+        }
+        else{
+            //sino mostra todo.-
+            setCategoria(categorias?.data || []);
+        }
     }
 
     return<>
@@ -135,7 +160,7 @@ export default function GestionCategorias(){
                 }},
                 {columnName: 'Nombre categoría', key:'nombre'}
             ]}
-            rows={ categorias?.data || []}
+            rows={categoria_filtrada}
         />
         <FormCrearCategoria
             openForm={openForm}
