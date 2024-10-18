@@ -31,6 +31,7 @@ export default function GestionUsuarios(){
     const [reload, setReload] = useState<boolean>(false);
     const [usuariosBaneados, setUsuariosBaneados] = useState([]);
     const [editCategory, setEditCategory] = useState<CategoriaListarData | null>(null);
+    const [user_filtrado, setFiltrados] = useState(usuarios?.data || []);
     const formikCategory = useFormik({
         initialValues: {
             username: '',
@@ -115,17 +116,33 @@ export default function GestionUsuarios(){
 
     // para obtener todos los datos y luego cargar en la tabla
     useEffect(() => {
-       dispatch(api.usuario.usuarioListarApiThunk());
+       dispatch(api.usuario.usuarioListarApiThunk())
+       .unwrap()
+       .then((response)=> {
+            setFiltrados(response.data || []);
+       });
        const users = localStorage.getItem('baneados') ? JSON.parse(localStorage.getItem('baneados') || '[]') : [];
        console.log(users) 
        setUsuariosBaneados(users);
-    },[reload])
+    },[dispatch,reload]);
 
     const handleEdit = (currentRow: any) => {
     }
     
     const handleSearch = (query: string) => {
-        console.log('buscar', query);
+        
+        if(query !== ''){
+            const users_Filtrados = usuarios?.data?.filter(usuarios => 
+                usuarios.username.toLowerCase().includes(query.toLowerCase())
+            );
+            
+            setFiltrados(users_Filtrados || []);
+
+        //sino que muestre todo.-
+        }else{
+            console.log("soy nulo")
+            setFiltrados(usuarios?.data || []);
+        }
     }
 
     const handleBloquear = (currentRow: any) => {
@@ -183,9 +200,9 @@ export default function GestionUsuarios(){
                 {columnName: 'Nombre usuario', key:'username'},
                 {columnName: 'Rol', key:'role'}
             ]}
-            rows={ usuarios?.data || []}
+            rows={user_filtrado}
         />
-    ), [usuarios, usuariosBaneados])
+    ), [user_filtrado, usuariosBaneados])
 
     return<>
         {table}
