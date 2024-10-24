@@ -5,6 +5,8 @@ import { usuarioListarApiThunk } from './listar/listarUsuario.thunk';
 import { UsuarioListarResponse } from './listar/listartUsuario.model';
 import { usuarioCrearApiThunk } from './crear/crearUsuario.thunk';
 import { UsuarioCrearResponse } from './crear/crearUsuario.model';
+import { usuarioActualizarApiThunk } from './actualizar/actualizarUsuario.thunk';
+import { UsuarioActualizarResponse } from './actualizar/actualizarUsuario.model';
 
 
 const listarSlice = createSlice({
@@ -25,15 +27,25 @@ const crearSlice = createSlice({
     }
 });
 
+const actualizarSlice = createSlice({
+    name: 'usuarioActualizar',
+    initialState: generateBaseState<BaseResponse<UsuarioActualizarResponse, void>>(),
+    reducers: {},
+    extraReducers: (builder) => {
+        buildCommonCases(usuarioActualizarApiThunk, builder);
+    }
+});
 
 const usuarioReducer = combineReducers({
     listar: listarSlice.reducer,
-    crear:  crearSlice.reducer
+    crear:  crearSlice.reducer,
+    actualizar: actualizarSlice.reducer
 });
 
 export default usuarioReducer;
 
 export const usuarioApi = {
     usuarioListarApiThunk,
-    usuarioCrearApiThunk
+    usuarioCrearApiThunk,
+    usuarioActualizarApiThunk
 }

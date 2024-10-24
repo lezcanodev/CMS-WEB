@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from .models import UserProfile
 from rest_framework import generics
 from api.roles import Roles
-from .serializers import UserSerializer
+from .serializers import UserProfileSerializer, UserSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -49,39 +49,39 @@ class CrearUsuarioView(generics.CreateAPIView):
 
 """ No funciona, solicita todos los datos del usuario para la actualizacion y debe ser parcial
 """
-class UpdateUsuarioView(generics.CreateAPIView):
-    #queryset = User.objects.all()
+class UpdateUsuarioView(generics.UpdateAPIView):
+    queryset = User.objects.all()
     serializer_class = UserSerializer
     lookup_field = 'pk'
     permission_classes = [IsAuthenticated]
 
-
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=True)
-        
         if serializer.is_valid():
             updatedUser = serializer.save()
 
             # Actualizar o crear el UserProfile
-            #UserProfile.objects.update_or_create(
-            #    user=updatedUser,
-            #    defaults={
-            #        'role': self.request.data.get('role', Roles.SUSCRIPTOR.value)  # Default a 'SUSCRIPTOR' si no se proporciona 'role'
-            #    }
-            #)
+            UserProfile.objects.update_or_create(
+                user=updatedUser,
+                defaults={
+                   'role': self.request.data.get('role')  # Default a 'SUSCRIPTOR' si no se proporciona 'role'
+               }
+            )
             return Response(serializer.data, status=200)  # Devuelve los datos actualizados
         else:
-            return Response(serializer.errors, status=400)  
+            return Response(serializer.errors, status=400)
+         
+    
 
 
 class ListarUsuariosView(generics.ListAPIView):
     """ Clase para listar los usuarios a traves de la clase ListAPIView del framework REST
     """
-    serializer_class = UserSerializer
+    serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticated]
         
     def get_queryset(self):
-        """retorna todos los libros
+        """retorna todos los usuarios
         """
-        return User.objects.all()
+        return UserProfile.objects.all()
