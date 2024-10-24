@@ -50,6 +50,8 @@ class CrearUsuarioView(generics.CreateAPIView):
 """ No funciona, solicita todos los datos del usuario para la actualizacion y debe ser parcial
 """
 class UpdateUsuarioView(generics.UpdateAPIView):
+    """Clase para actualizar los usuarios
+    """
     queryset = User.objects.all()
     serializer_class = UserSerializer
     lookup_field = 'pk'
@@ -83,5 +85,17 @@ class ListarUsuariosView(generics.ListAPIView):
         
     def get_queryset(self):
         """retorna todos los usuarios
+        """
+        return UserProfile.objects.all()
+
+
+class DeleteUsuarioView(generics.DestroyAPIView):
+    """View para borrar una usuario(opcional)
+    """
+    serializer_class = UserProfileSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        """Metodo que retorna el objeto que coincida con el nombre para ser eliminado
         """
         return UserProfile.objects.all()

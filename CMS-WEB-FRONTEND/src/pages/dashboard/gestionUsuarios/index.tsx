@@ -99,29 +99,6 @@ export default function GestionUsuarios(){
         setOpenForm(true);
     }
 
-
-    // Aqui se controla la eliminacion de categoria
-    const handleDeleteCategory = async (currentRow: any) => {
-        if(currentRow?.id){
-            dispatch(api.categoria.categoriaBorrarApiThunk({id: currentRow.id}))
-                .unwrap()
-                .then(() => {
-                    setReload(!reload);
-                    dispatch(snackbarActions.openSnackbar({
-                        message: `Se ha realizado la operación correctamente`
-                    }))
-                })
-                .catch(error => {
-                    if(error?.general){
-                        dispatch(snackbarActions.openSnackbar({
-                            message: error?.general,
-                            type: 'error'
-                        }))
-                    }
-                })
-        }
-    }
-
     // para obtener todos los datos y luego cargar en la tabla
     useEffect(() => {
        dispatch(api.usuario.usuarioListarApiThunk())
@@ -142,9 +119,7 @@ export default function GestionUsuarios(){
         });
         setSearchQuery(''); // Reinicia el valor de búsqueda
         setFiltrados(usuarios?.data || []); // Muestra todos los usuarios nuevamente
-        setOpenForm(true);
-
-        
+        setOpenForm(true);    
     }
     
     const handleSearch = (query: string) => {
@@ -183,6 +158,28 @@ export default function GestionUsuarios(){
         setUsuariosBaneados(users);
     }
 
+    // Aqui se controla la eliminacion de un usuarios
+    const handleDeleteUser = async (currentRow: any) => {
+        if(currentRow?.user.id){
+            dispatch(api.usuario.usuarioBorrarApiThunk({id: currentRow.user.id}))
+            .unwrap()
+            .then(() => {
+                setReload(!reload);
+                dispatch(snackbarActions.openSnackbar({
+                    message: `Se ha realizado la operación correctamente`
+                }))
+            })
+            .catch(error => {
+                if(error?.general){
+                    dispatch(snackbarActions.openSnackbar({
+                        message: error?.general,
+                        type: 'error'
+                    }))
+                }
+            })
+        }
+    }
+
     const table = useMemo(() => (
         <SectionTable
             title='Gestión de usuarios'
@@ -197,7 +194,7 @@ export default function GestionUsuarios(){
                             {permisosPaginas?.CATEGORIA_PAGINA.EDITAR && <Button onClick={() => handleBloquear(currentRow)}>
                                 <NoAccountsIcon color='error'/>
                             </Button>}
-                            {permisosPaginas?.CATEGORIA_PAGINA.ELIMINAR && <Button onClick={() => handleDeleteCategory(currentRow)}>
+                            {permisosPaginas?.CATEGORIA_PAGINA.ELIMINAR && <Button onClick={() => handleDeleteUser(currentRow)}>
                                 <DeleteOutlineIcon color='error'/>
                             </Button>}
                             {permisosPaginas?.CATEGORIA_PAGINA.EDITAR && <Button onClick={() => handleEdit(currentRow)}>
