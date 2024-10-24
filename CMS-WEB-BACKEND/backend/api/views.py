@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import generics
-from .serializers import UserProfileSerializer, UserProfileUpdateSerializer, UserSerializer, LibroSerializer, CategoriaSerializer
+from .serializers import UserProfileSerializer, UserProfileUpdateSerializer, UserSerializer, LibroSerializer, CategoriaSerializer, ComentarioSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .models import Libro, Categoria, UserProfile
+from .models import Libro, Categoria, UserProfile, Comentario
 from .permisos import rol_Requerido
 
 from rest_framework.response import Response
@@ -191,3 +191,45 @@ class UserProfileUpdateView(generics.UpdateAPIView):
         retorna el perfil de usuario a ser actualizado.-
         """
         return self.request.user.userprofile
+
+#GUARDAR Y LISTAR COMENTARIOS
+class ComentarioCreate(generics.CreateAPIView):
+    """ Clase para instanciar un comentario atraves de la clase CreateAPIView del framework REST
+    """
+    serializer_class = ComentarioSerializer
+    permission_classes = [AllowAny]         #Cualquier usuario puede comentar
+    #rol_Requerido.roles = ['admin', 'autor']
+    
+    def get_queryset(self):
+        """metodo reescrito, get_queryset retornara un set de comentarios para el libro correspondiente
+        """
+        id_libro = self.request.libro
+        return Comentario.objects.all()
+
+    def perform_create(self, serializer):
+        """Metodo reescrito para verificar que el objeto enviado atraves del serializer cumple con los atributos necesarios para su creacion para luego ser guardado
+        """
+        if serializer.is_valid():
+        
+            serializer.save(usuario=self.request.user, id_libro = self.request.libro)
+        else:
+            print(serializer.errors)
+
+#View para listar los comentario
+class ComentarioListar(generics.ListAPIView):
+    """ Clase para listar los comentarios atraves de la clase ListAPIView del framework REST
+    """
+    serializer_class = ComentarioSerializer
+    permission_classes = [AllowAny]                                 #cualquiera puede listar los comentarios
+        
+    def get_queryset(self):
+        """retorna todos los comentarios
+        """
+
+		#del front para el filtrado
+        id_libro = self.request.query_params.get('id', None)
+        if id_libro:
+            return Comentario.objects.filter(id_libro=id_libro)
+        return Comentario.objects.all()
+
+
