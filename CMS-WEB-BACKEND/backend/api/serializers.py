@@ -1,8 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Libro, Categoria, UserProfile
 import os
-
+from .models import Libro, Categoria, UserProfile, Comentario
 from django.shortcuts import render
 from .emails import enviar_notificacion_email
 
@@ -70,3 +69,13 @@ class UserProfileUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = ['role']  # Solo permitimos actualizar el campo 'role'
+
+#Comentarios
+class ComentarioSerializer(serializers.ModelSerializer):
+    id_libro = serializers.CharField(source='libro.id', read_only=True)
+    usuarioNombre = serializers.CharField(source='usuario.username', read_only=True)
+
+    """Serilizer para un comentario con los atributos id, fecha, contenido, usuario, libro """
+    class Meta:
+        model = Comentario
+        fields = ["id", "fecha", "contenido", "usuarioNombre", "id_libro"]

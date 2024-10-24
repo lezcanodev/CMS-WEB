@@ -72,8 +72,8 @@ urlpatterns = [
 
     #path("api/borrar-rol",RolesDelete.as_view(), name="borrar-rol" )   
 
-    path("api/actualizar-role",UserProfileUpdateView.as_view(),name="actualizar-role")
-
-
+    path("api/actualizar-role",UserProfileUpdateView.as_view(),name="actualizar-role"),
+	path("api/guardar-comentario",CrearComentarioView.as_view(), name="guardar-comentario"),
+	path("api/listar-comentarios",ListarComentariosView.as_view(), name="listar-comentarios")
 ]
 
