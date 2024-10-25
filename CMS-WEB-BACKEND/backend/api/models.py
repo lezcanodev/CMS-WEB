@@ -35,7 +35,7 @@ class Libro(models.Model):
     #author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="libro")
     #categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, related_name="categoria", default=1)
     author = models.ForeignKey(User, on_delete=models.DO_NOTHING , related_name="author")
-    categoria = models.ForeignKey(Categoria,on_delete=models.DO_NOTHING, related_name="categoria")
+    categoria = models.ForeignKey(Categoria,on_delete=models.SET_DEFAULT,default=2, related_name="categoria")
     """
     Retorna el nombre del articulo
     """
