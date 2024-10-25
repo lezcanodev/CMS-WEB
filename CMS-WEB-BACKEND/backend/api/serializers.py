@@ -50,18 +50,15 @@ class UserSerializer(serializers.ModelSerializer):
         )
         return user
         
-    
-    
-
 class UserProfileSerializer(serializers.ModelSerializer):
     
     """
     serializer para el perfil de cada usuario.-
     """
-    user = UserSerializer(read_only=True)
+    user = UserSerializer()
     class Meta:
         model = UserProfile
-        fields = ["user","rol"]
+        fields = ["user","role"]
   
   
 class UserProfileUpdateSerializer(serializers.ModelSerializer):

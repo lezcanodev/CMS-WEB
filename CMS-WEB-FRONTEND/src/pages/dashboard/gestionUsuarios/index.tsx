@@ -7,14 +7,14 @@ import { Modal } from '@/components/Modal';
 import { useEffect, useMemo, useState } from 'react';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { useAppDispatch, useAppSelector } from '@/redux';
 import { api } from '@/api';
-import { CategoriaListarData } from '@/api/gestionCategorias/listar/listartCategoria.model';
+import { useAppDispatch, useAppSelector } from '@/redux';
 import { snackbarActions } from '@/redux/snackbar/snackbar.slice';
 import NoAccountsIcon from '@mui/icons-material/NoAccounts';
+import { UsuarioListarData } from '@/api/gestionUsuarios/listar/listartUsuario.model';
 
 // esquema de datos para el formulario login
-const categoryDataSchema = Yup.object({
+const UserDataSchema = Yup.object({
     /** nombre del usuario */
     username: Yup.string().required('El campo es obligatorio'),
     /** contraseña del usuario */
@@ -30,34 +30,42 @@ export default function GestionUsuarios(){
     const [openForm, setOpenForm] = useState<boolean>(false);
     const [reload, setReload] = useState<boolean>(false);
     const [usuariosBaneados, setUsuariosBaneados] = useState([]);
-    const [editCategory, setEditCategory] = useState<CategoriaListarData | null>(null);
-    const formikCategory = useFormik({
+    const [editUser, setEditUser] = useState<UsuarioListarData | null>(null);
+    const [user_filtrado, setFiltrados] = useState(usuarios?.data || []);
+    const [searchQuery, setSearchQuery] = useState<string>('');
+    const formikUser = useFormik({
         initialValues: {
             username: '',
             password: '',
             role: ''
         },
-        validationSchema: categoryDataSchema,
+        validationSchema: UserDataSchema,
         // Aquí se controla la creación de categoria
-        onSubmit: async (values) => {
-            let asyncFn = () => api.usuario.usuarioCrearApiThunk({
-                ...values,
-                role: values.role as any
-            });
-            if(editCategory){
-                //asyncCategory = () => api.categoria.categoriaActualizarApiThunk({
-                //    id: editCategory.id,
-                //    nombre: values.username
-                //});
+        onSubmit: async (values,currentRow) => {
+            let asyncFn: () => Promise<any>;
+
+            if (editUser) {
+                //actualizamos el usuario con los datos ingresados.-  
+                asyncFn = () => dispatch(api.usuario.usuarioActualizarApiThunk({
+                    id: editUser.user.id,
+                    username: values.username,
+                    role: values.role as any
+                }));
+            } else {
+                asyncFn = () => dispatch(api.usuario.usuarioCrearApiThunk({
+                    username: values.username,
+                    password: values.password,
+                    role: values.role as any,
+                }));
             }
 
-            dispatch(asyncFn())
-            .unwrap()
+            asyncFn()
             .then(() => {
                 setOpenForm(false);
                 setReload(!reload);
-                setEditCategory(null);
-                formikCategory.resetForm();
+                setEditUser(null);
+                formikUser.resetForm();
+                
                 dispatch(snackbarActions.openSnackbar({
                     message: `Se ha realizado la operación correctamente`
                 }))
@@ -81,7 +89,7 @@ export default function GestionUsuarios(){
                 }))
               }
 
-              formikCategory.setErrors(errors);
+              formikUser.setErrors(errors);
             });
         } 
     })
@@ -91,45 +99,46 @@ export default function GestionUsuarios(){
         setOpenForm(true);
     }
 
-    // Aqui se controla la eliminacion de categoria
-    const handleDeleteCategory = async (currentRow: any) => {
-        if(currentRow?.id){
-            dispatch(api.categoria.categoriaBorrarApiThunk({id: currentRow.id}))
-                .unwrap()
-                .then(() => {
-                    setReload(!reload);
-                    dispatch(snackbarActions.openSnackbar({
-                        message: `Se ha realizado la operación correctamente`
-                    }))
-                })
-                .catch(error => {
-                    if(error?.general){
-                        dispatch(snackbarActions.openSnackbar({
-                            message: error?.general,
-                            type: 'error'
-                        }))
-                    }
-                })
-        }
-    }
-
     // para obtener todos los datos y luego cargar en la tabla
     useEffect(() => {
-       dispatch(api.usuario.usuarioListarApiThunk());
+       dispatch(api.usuario.usuarioListarApiThunk())
+       .unwrap()
+       .then((response)=> {
+            setFiltrados(response.data || []);
+       });
        const users = localStorage.getItem('baneados') ? JSON.parse(localStorage.getItem('baneados') || '[]') : [];
-       console.log(users) 
        setUsuariosBaneados(users);
-    },[reload])
+    },[dispatch,reload]);
 
     const handleEdit = (currentRow: any) => {
+        setEditUser(currentRow);
+        formikUser.setValues({
+            username: currentRow.user.username,
+            password: currentRow.password,
+            role: currentRow.role as any
+        });
+        setSearchQuery(''); // Reinicia el valor de búsqueda
+        setFiltrados(usuarios?.data || []); // Muestra todos los usuarios nuevamente
+        setOpenForm(true);    
     }
     
     const handleSearch = (query: string) => {
-        console.log('buscar', query);
+        setSearchQuery(query);
+        if(query !== ''){
+            const users_Filtrados = usuarios?.data?.filter(usuarios => 
+                usuarios.user.username.toLowerCase().includes(query.toLowerCase())
+            );
+            
+            setFiltrados(users_Filtrados || []);
+
+        //sino que muestre todo.-
+        }else{
+            setFiltrados(usuarios?.data || []);
+        }
     }
 
     const handleBloquear = (currentRow: any) => {
-        const userId = currentRow?.id;
+        const userId = currentRow?.user.id;
         let users = localStorage.getItem('baneados') ? JSON.parse(localStorage.getItem('baneados') || '[]') : null;
         
         if(!users){
@@ -139,7 +148,6 @@ export default function GestionUsuarios(){
             const yaExists = users?.some((x: any) => x == userId); 
             if(yaExists){
                 users = users?.filter((x: any) => x != userId);
-                console.log(users)
             }else{
                 users = [...users, userId]
             }
@@ -148,6 +156,28 @@ export default function GestionUsuarios(){
 
         localStorage.setItem('baneados', JSON.stringify(users));
         setUsuariosBaneados(users);
+    }
+
+    // Aqui se controla la eliminacion de un usuarios
+    const handleDeleteUser = async (currentRow: any) => {
+        if(currentRow?.user.id){
+            dispatch(api.usuario.usuarioBorrarApiThunk({id: currentRow.user.id}))
+            .unwrap()
+            .then(() => {
+                setReload(!reload);
+                dispatch(snackbarActions.openSnackbar({
+                    message: `Se ha realizado la operación correctamente`
+                }))
+            })
+            .catch(error => {
+                if(error?.general){
+                    dispatch(snackbarActions.openSnackbar({
+                        message: error?.general,
+                        type: 'error'
+                    }))
+                }
+            })
+        }
     }
 
     const table = useMemo(() => (
@@ -164,7 +194,7 @@ export default function GestionUsuarios(){
                             {permisosPaginas?.CATEGORIA_PAGINA.EDITAR && <Button onClick={() => handleBloquear(currentRow)}>
                                 <NoAccountsIcon color='error'/>
                             </Button>}
-                            {permisosPaginas?.CATEGORIA_PAGINA.ELIMINAR && <Button onClick={() => handleDeleteCategory(currentRow)}>
+                            {permisosPaginas?.CATEGORIA_PAGINA.ELIMINAR && <Button onClick={() => handleDeleteUser(currentRow)}>
                                 <DeleteOutlineIcon color='error'/>
                             </Button>}
                             {permisosPaginas?.CATEGORIA_PAGINA.EDITAR && <Button onClick={() => handleEdit(currentRow)}>
@@ -176,29 +206,35 @@ export default function GestionUsuarios(){
                 {columnName: 'Estado', key:'estado', action: (currentRow) => {
                     return <>
                     <Box textAlign={'center'}>
-                           {usuariosBaneados?.some((x: any) => x==currentRow?.id ) ? 'Bloqueado' : 'Normal' }
+                           {usuariosBaneados?.some((x: any) => x==currentRow?.user.id ) ? 'Bloqueado' : 'Normal' }
                     </Box>
                     </>
                 }},
-                {columnName: 'Nombre usuario', key:'username'},
+                {columnName: 'Nombre usuario', key:'username',action:(currentRow)=>{
+                    return <>
+                    <Box textAlign={'center'}>
+                           {currentRow.user.username}
+                    </Box>
+                    </>
+                }},
                 {columnName: 'Rol', key:'role'}
             ]}
-            rows={ usuarios?.data || []}
+            rows={user_filtrado}
         />
-    ), [usuarios, usuariosBaneados])
+    ), [user_filtrado, usuariosBaneados])
 
     return<>
         {table}
         <Modal 
             open={openForm}
-            setOpen={() => {setOpenForm(false); setEditCategory(null); formikCategory.resetForm(); }}
-            title={`${editCategory ? 'Editar' : 'Crear nuevo'} usuario`}
+            setOpen={() => {setOpenForm(false); setEditUser(null); formikUser.resetForm(); }}
+            title={`${editUser ? 'Editar' : 'Crear nuevo'} usuario`}
             Actions={ 
                 <Stack direction='row' gap={1} justifyContent={'space-between'} width={'100%'} marginX={'auto'}>
-                    <Button onClick={() => {setOpenForm(false); setEditCategory(null); formikCategory.resetForm() }}>
+                    <Button onClick={() => {setOpenForm(false); setEditUser(null); formikUser.resetForm() }}>
                         <Typography color='error'>Cancelar</Typography>
                     </Button>
-                    <Button onClick={() => {formikCategory.submitForm()}}>
+                    <Button onClick={() => {formikUser.submitForm()}}>
                         Confirmar
                     </Button>
                 </Stack>
@@ -212,11 +248,11 @@ export default function GestionUsuarios(){
                             type= 'text'
                             label= 'Nombre del usuario'
                             name='username'
-                            value= {formikCategory.values.username}
-                            onChange= {formikCategory.handleChange}
-                            onBlur= {formikCategory.handleBlur}
-                            error= {!!(formikCategory.touched.username && Boolean(formikCategory.errors.username))}
-                            helperText={formikCategory.touched.username && formikCategory.errors.username as any}
+                            value= {formikUser.values.username}
+                            onChange= {formikUser.handleChange}
+                            onBlur= {formikUser.handleBlur}
+                            error= {!!(formikUser.touched.username && Boolean(formikUser.errors.username))}
+                            helperText={formikUser.touched.username && formikUser.errors.username as any}
                         />
                     </Box>
                     <Box flexGrow={.45} maxWidth={180} >
@@ -226,11 +262,11 @@ export default function GestionUsuarios(){
                             type= 'text'
                             label= 'Rol'
                             name='role'
-                            value= {formikCategory.values.role}
-                            onChange= {formikCategory.handleChange}
-                            onBlur= {formikCategory.handleBlur}
-                            error= {!!(formikCategory.touched.role && Boolean(formikCategory.errors.role))}
-                            helperText={formikCategory.touched.role && formikCategory.errors.role as any}
+                            value= {formikUser.values.role}
+                            onChange= {formikUser.handleChange}
+                            onBlur= {formikUser.handleBlur}
+                            error= {!!(formikUser.touched.role && Boolean(formikUser.errors.role))}
+                            helperText={formikUser.touched.role && formikUser.errors.role as any}
                         >
                             <MenuItem value={'Administrador'} >Administrador</MenuItem> 
                             <MenuItem value={'Editor'} >Editor</MenuItem>
@@ -244,11 +280,11 @@ export default function GestionUsuarios(){
                     type= 'password'
                     label= 'Contraseña'
                     name='password'
-                    value= {formikCategory.values.password}
-                    onChange= {formikCategory.handleChange}
-                    onBlur= {formikCategory.handleBlur}
-                    error= {!!(formikCategory.touched.password && Boolean(formikCategory.errors.password))}
-                    helperText={formikCategory.touched.password && formikCategory.errors.password as any}
+                    value= {formikUser.values.password}
+                    onChange= {formikUser.handleChange}
+                    onBlur= {formikUser.handleBlur}
+                    error= {!!(formikUser.touched.password && Boolean(formikUser.errors.password))}
+                    helperText={formikUser.touched.password && formikUser.errors.password as any}
                 />
             </Box>
         </Modal>
