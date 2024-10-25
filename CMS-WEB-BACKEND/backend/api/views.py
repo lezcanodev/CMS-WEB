@@ -227,17 +227,35 @@ class CrearComentarioView(generics.CreateAPIView):
     def get_queryset(self):
         """metodo reescrito, get_queryset retornara un set de comentarios para el libro correspondiente
         """
-        id_libro = self.request.libro
+        id_libro = self.request.data.id_libro
         return Comentario.objects.all()
 
     def perform_create(self, serializer):
         """Metodo reescrito para verificar que el objeto enviado atraves del serializer cumple con los atributos necesarios para su creacion para luego ser guardado
         """
-        if serializer.is_valid():
+        author = 'autor' #self.request.libro.titulo
+        titulo =  'titulo' #self.request.libro.author
+        enviar_notificacion_email(
+            'Nuevo comentario',
+            f'Su publicacion "Nueva noticia" tiene un nuevo comentario.',
+            [author]
+        )
+        return
         
-            serializer.save(usuario=self.request.user, id_libro = self.request.libro)
+        print(self.request.data)
+        print('))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))')
+        if serializer.is_valid():
+            serializer.save(usuario=self.request.user, id_libro = Libro.objects(). self.request.data.get('id_libro'))
         else:
             print(serializer.errors)
+        author = 'autor' #self.request.libro.titulo
+        titulo =  'titulo' #self.request.libro.author
+        # Enviar correo de notificación
+        enviar_notificacion_email(
+            'Nuevo comentario',
+            f'Su publicacion "{titulo}" tiene un nuevo comentario.',
+            [author]
+        )
 
 #View para listar los comentario
 class ListarComentariosView(generics.ListAPIView):
