@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.urls import path, include
 #from api.views import CreateUserView, LibroListCreate, CategoriaListCreate, CategoriaDelete,LibroDelete, LibroListar,CategoriaListar, UpdateCategoriaAPIView, UpdateLibroAPIView
 from api.gestion_usuarios_views import CrearUsuarioView,ListarUsuariosView, UpdateUsuarioView
-from api.views import CreateUserView, LibroListCreate, CategoriaListCreate, CategoriaDelete,LibroDelete, LibroListar,CategoriaListar, UpdateCategoriaAPIView, UpdateLibroAPIView, UserProfileUpdateView
+from api.views import CreateUserView, LibroListCreate, CategoriaListCreate, CategoriaDelete,LibroDelete, LibroListar,CategoriaListar, UpdateCategoriaAPIView, UpdateLibroAPIView, UserProfileUpdateView,CrearComentarioView,ListarComentariosView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
@@ -72,8 +72,8 @@ urlpatterns = [
 
     #path("api/borrar-rol",RolesDelete.as_view(), name="borrar-rol" )   
 
-    path("api/actualizar-role",UserProfileUpdateView.as_view(),name="actualizar-role"),
-	path("api/guardar-comentario",CrearComentarioView.as_view(), name="guardar-comentario"),
-	path("api/listar-comentarios",ListarComentariosView.as_view(), name="listar-comentarios")
+    #path("api/actualizar-role",UserProfileUpdateView.as_view(),name="actualizar-role"),
+    path("api/guardar-comentario",CrearComentarioView.as_view(), name="guardar-comentario"),
+    path("api/listar-comentarios",ListarComentariosView.as_view(), name="listar-comentarios")
 ]
 

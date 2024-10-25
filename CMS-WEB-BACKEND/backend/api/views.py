@@ -217,7 +217,7 @@ class UserProfileUpdateView(generics.UpdateAPIView):
         return self.request.user.userprofile
 
 #GUARDAR Y LISTAR COMENTARIOS
-class ComentarioCreate(generics.CreateAPIView):
+class CrearComentarioView(generics.CreateAPIView):
     """ Clase para instanciar un comentario atraves de la clase CreateAPIView del framework REST
     """
     serializer_class = ComentarioSerializer
@@ -240,7 +240,7 @@ class ComentarioCreate(generics.CreateAPIView):
             print(serializer.errors)
 
 #View para listar los comentario
-class ComentarioListar(generics.ListAPIView):
+class ListarComentariosView(generics.ListAPIView):
     """ Clase para listar los comentarios atraves de la clase ListAPIView del framework REST
     """
     serializer_class = ComentarioSerializer
