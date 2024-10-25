@@ -1,7 +1,11 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from .models import Libro, Categoria, UserProfile, Comentario
+import os
 
+
+from django.shortcuts import render
+from .emails import enviar_notificacion_email
 
 #para el manejo de los jsons
 class LibroSerializer(serializers.ModelSerializer):
@@ -11,7 +15,7 @@ class LibroSerializer(serializers.ModelSerializer):
     """Serilizer para un articulo con los atributos id, titulo, fecha, autor, categoria"""
     class Meta:
         model = Libro
-        fields = ["id", "titulo", "fecha", "author", "categoria", "contenido", "categoriaNombre", "autorNombre"]
+        fields = ["id", "titulo", "fecha", "author", "categoria","estado", "contenido", "categoriaNombre", "autorNombre"]
         extra_kwargs ={"autor": {"read_only": True}}
 
 
@@ -37,7 +41,17 @@ class UserSerializer(serializers.ModelSerializer):
     def create (self, validated_data):
         """Método reescrito, se crea el usuario una vez que el objeto validated_data sea correcto"""
         user = User.objects.create_user(**validated_data)
+        
+        
+        # Enviar correo de notificación
+        enviar_notificacion_email(
+            'Bienvenido a la plataforma',
+            'Gracias por registrarte en nuestro sitio web.',
+            [user.username]
+        )
         return user
+        
+    
     
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -71,3 +85,4 @@ class ComentarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comentario
         fields = ["id", "fecha", "contenido", "usuarioNombre", "id_libro"]
+

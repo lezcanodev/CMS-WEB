@@ -8,11 +8,12 @@ from django.utils import timezone
 @pytest.mark.django_db
 def test_crear_libro():
     """Prueba la creación de un libro y relaciones de ForeignKey"""
+    x=Libro.objects.count()
     user = User.objects.create_user(username='testuser', password='testpassword')
     categoria = Categoria.objects.create(nombre="Ciencia Ficción")
     libro = Libro.objects.create(titulo="El viaje espacial", author=user, categoria=categoria, contenido="Contenido del libro")
 
-    assert Libro.objects.count() == 1
+    assert Libro.objects.count() == x+1
     assert libro.titulo == "El viaje espacial"
     assert libro.author == user
     assert libro.categoria == categoria

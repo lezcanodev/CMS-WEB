@@ -8,7 +8,8 @@ export default class ApiActualizarLibro extends Api<LibroActualizarRequest, Libr
         const libroId = datos.id;
         const datosActualizados: Omit<LibroActualizarRequest, 'id'> = {
             categoria: datos.categoria,
-            titulo: datos.titulo
+            titulo: datos.titulo,
+            estado: datos.estado
         }
         const response = await this.api.put<LibroActualizarResponse>(`update-libro/${libroId}`, datosActualizados);
         return this.data(response.data);
