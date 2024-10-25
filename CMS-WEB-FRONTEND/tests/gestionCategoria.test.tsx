@@ -5,12 +5,16 @@ import { userEvent } from '@testing-library/user-event'
 import { vi } from 'vitest';
 import GestionCategorias from '../src/pages/dashboard/gestionCategorias/index';
 import { TestComponent } from './utils/TestComponent';
+import {v7} from 'uuid';
 
+let nombreTestCategoria = v7();
 
 describe('CRUD Categoría', async () => {
 
+  // Inicializamos todos los datos de prueba
   beforeAll(() => {
-      
+    // generamos un nombre para testear CRUD categoria
+    nombreTestCategoria = v7();
   })
 
   beforeEach(async () => {
@@ -30,22 +34,25 @@ describe('CRUD Categoría', async () => {
     // Localizamos el campo de texto donde se ingresa el nombre de la categoría
     const nombreCategoria = screen.getByRole('textbox', { name: /nombre/i });
     expect(nombreCategoria).toBeDefined();
-    await userEvent.type(nombreCategoria, 'Categoria test');
+
+    // Escribimos el nombre de la categoria
+    await userEvent.type(nombreCategoria, nombreTestCategoria);
 
     // creamos la categoría
     await userEvent.click(btnConfirmarConfermacion);
 
-    // Esperamos que el mensaje de confirmación aparezca en el modal
     
-    //await waitFor(async () => {
-    //  expect(await screen.findByText(/Se ha realizado la operación correctamente/i)).toBeInTheDocument()
-    //});
     //act(async () => {
-    //  const mensajeConfirmacion = await screen.findByText(/Se ha realizado la operación correctamente/i);
-    //  expect(mensajeConfirmacion, "No se mostró mensaje de confirmación").toBeInTheDocument();
-    //})
+      //  const mensajeConfirmacion = await screen.findByText(/Se ha realizado la operación correctamente/i);
+      //  expect(mensajeConfirmacion, "No se mostró mensaje de confirmación").toBeInTheDocument();
+      //})
+      
+    });
+    
+    it('La nueva categoria deberia estar en la tabla', async () => {
+      expect(await screen.findByText(new RegExp(nombreTestCategoria, 'i'))).toBeInTheDocument();
+    })
 
-  });
 
   it('Debería mostrar un error si nombre categoría esta vacía', async () => {
 
