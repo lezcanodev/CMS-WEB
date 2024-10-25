@@ -36,6 +36,7 @@ export default class ApiCrearComentario extends Api<ComentarioCrearRequest, Come
             localStorage.setItem('comentarios', JSON.stringify(comentarios));
         }
         //const response = await this.api.post<ComentarioCrearResponse>('crear-comentario', nuevoComentario);
+        console.log(nuevoComentario)
         //return this.data(response.data);
 
         return this.data({})

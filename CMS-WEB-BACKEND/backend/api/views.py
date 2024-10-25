@@ -180,12 +180,13 @@ class UpdateLibroAPIView(generics.UpdateAPIView):
             
             estado_actual =instance.estado
             
+            if estado_actual!=estado_anterior:
             # Enviar correo de notificación
-            enviar_notificacion_email(
-                'Actualizacion de estado',
-                f'Su publicacion "{titulo}" se ha actualizado de "{estado_anterior}" a "{estado_actual}".',
-                [author]
-            )
+                enviar_notificacion_email(
+                    'Actualizacion de estado',
+                    f'Su publicacion "{titulo}" se ha actualizado de "{estado_anterior}" a "{estado_actual}".',
+                    [author]
+                )
             
             return Response({"message": "mobile number updated successfully"})
 

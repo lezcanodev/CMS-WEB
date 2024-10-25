@@ -1,5 +1,8 @@
 import pytest
 from django.contrib.auth.models import User
+from api.signals import crear_userprofile
+from api.models import UserProfile
+from api.serializers import UserProfileSerializer
 
 @pytest.mark.django_db
 def test_crearusuario():
@@ -13,4 +16,5 @@ def test_contraseñaEncriptada():
     
     
     assert user.password != 'testpassword'
-    
+
+
