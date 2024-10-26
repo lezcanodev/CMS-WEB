@@ -52,7 +52,7 @@ export function InicioPage(){
     }, [])
 
     return <InicioPageElement 
-        title='Ingeniería de software II'
+        title='Sistema de gestión de contenido web'
         isAdmin={UserUtils.isAdmin()}
         logout={handleLogout}
         goToDashboard={() => {navigate(getRouteByName('dashboard'))}}
