@@ -1,6 +1,6 @@
 import { IVerLibroPage } from '@/templates/interfaces/pages/verLibro.page.interface';
 import { UserUtils } from '@/utils/User/User.utils';
-import { Avatar, Box, Button, Divider, Grid, Stack, TextareaAutosize, TextField, Typography } from '@mui/material';
+import { Avatar, Box, Button, Divider, Grid, Stack, TextareaAutosize, TextField, Typography, CircularProgress } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 
@@ -9,7 +9,11 @@ export default function VerLibro({
     autorNombre, comentarios, crearComentario
 }: IVerLibroPage){
     if(isEmpty){
-        return <Typography textAlign={'center'} fontWeight={'bold'} fontSize={'2em'}>No hay nada</Typography>
+        return <>
+            <Box sx={{ display: 'relative'}}>
+                <CircularProgress className='loader' size="15rem" value={75} thickness={2.5}/>
+            </Box>
+        </>
     }
 
     function addNuevoComentario(newComment: string){
