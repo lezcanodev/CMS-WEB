@@ -1,11 +1,19 @@
 {
-    "name":"CMS-WEB-GRUPO-06",
+    "name": "CMS-WEB-GRUPO-06",
     "version": "1.0",
     "scripts": {
         "docker:build": "docker compose build",
-        "docker:dev":"docker compose up -d && start http://localhost:5173",
+        "docker:dev": "docker compose up -d && start http://localhost:5173",
         "docker:down": "docker compose down",
         "api:test": "docker compose up -d database && docker compose run api sh -c \"clear && python manage.py test\" && docker compose down database api ",
         "web:test": "docker compose run web sh -c \"clear && npm run test:ui\""
+    },
+    "dependencies": {
+        "@mui/icons-material": "^6.1.5",
+        "@mui/material": "^6.1.5",
+        "@mui/styles": "^6.1.5",
+        "react-material-ui-carousel": "^3.4.2",
+        "react-slick": "^0.30.2",
+        "slick-carousel": "^1.8.1"
     }
 }

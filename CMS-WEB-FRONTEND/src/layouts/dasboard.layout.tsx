@@ -18,6 +18,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import BarChartIcon from '@mui/icons-material/BarChart';
 import React, { useEffect, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '@/redux';
 import { logout } from '@/api/seguridad/seguridad.reducer';
@@ -38,6 +39,7 @@ export default function DashboardLayout(){
       //{pagina: NULL, label: 'Gestionar Reportes', icon: <ArticleIcon  color='inherit'/>, to: getRouteByName('') },
       {pagina:  'USUARIO_PAGINA', label: 'Gestionar Usuarios', icon: <GroupIcon  color='inherit'/>, to: getRouteByName('dashboard.gestioUsuarios') },
       //{ label: 'Gestionar Roles', icon: <SecurityIcon  color='inherit'/>, to: getRouteByName('') }
+      {pagina:  'USUARIO_PAGINA', label: 'Gestionar Reportes', icon: <BarChartIcon color='inherit'/>, to: getRouteByName('dashboard.gestioReportes') },
     ];
     
     return preMenu.filter( ({pagina}) => {
@@ -213,7 +215,7 @@ function MiniDrawer({
                 <ListItemIcon
                   sx={[
                     { minWidth: 0, justifyContent: 'center' },
-                    open ? { mr: 3 } : { mr: 'auto' }
+                    open ? { mr: 4 } : { mr: 'auto' }
                   ]}
                 >
                    {menu.icon}
