@@ -6,6 +6,13 @@ export default class ApiCrearComentario extends Api<ComentarioCrearRequest, Come
 
     protected async handle(datos: ComentarioCrearRequest){
         let comentarios: any = localStorage.getItem('comentarios');
+        
+        const response = await this.api.post<any>('guardar-comentario', {
+            usuarioNombre: UserUtils.getUser()?.username ,
+            contenido: (datos.contenido as any).contenido,
+            id_libro: parseInt(datos.libroId.toString()),
+            fecha: new Date().toLocaleDateString()
+        });
 
         if(!comentarios){
             localStorage.setItem('comentarios', JSON.stringify({
