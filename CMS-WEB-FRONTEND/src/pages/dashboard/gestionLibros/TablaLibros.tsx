@@ -75,6 +75,7 @@ export default function TablaLibros({
             const librosFiltrados = data?.data?.filter(libro => 
                 libro.titulo.toLowerCase().includes(query.toLowerCase())
             );
+            console.log(data?.data?.[0]?.fecha);
             setFiltrados(librosFiltrados || []);
             //en caso de que no coincida con ningun libro.-
             if(librosFiltrados === null){               
@@ -100,7 +101,7 @@ export default function TablaLibros({
                     title='Gestión de libros'
                     puedoCrear={permisosPaginas?.LIBRO_PAGINA.CREAR}
                     onSearch={handleSearch}
-                    onCreate={(onOpenLibroEditor)}
+                    onCreate={onOpenLibroEditor}
                     masOpciones={<>
                         { permisosPaginas?.LIBRO_PAGINA.KANBAN_ACCESO && (
                             <Button onClick={() => setSeccionActual('kanba')  } variant='outlined' endIcon={<ViewWeekIcon   fontSize='small'/>}>Kanban</Button>

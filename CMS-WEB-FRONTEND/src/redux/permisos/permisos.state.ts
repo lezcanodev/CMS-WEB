@@ -7,7 +7,8 @@ export interface BasePermisos{
 }
 
 export interface PermisoPaginas{
-    CATEGORIA_PAGINA: BasePermisos
+    CATEGORIA_PAGINA: BasePermisos,
+    REPORTES: BasePermisos,
     LIBRO_PAGINA: BasePermisos & { 
         KANBAN_ACCESO: boolean,
         KANBAN_ESTADOS: {

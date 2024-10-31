@@ -5,7 +5,6 @@ import { router } from './router/website.routes';
 import store from './redux';
 import { RefrescarToken } from './router/middlewares/RefrescarToken';
 
-
 /**
  * App de inicio
  * @returns 
