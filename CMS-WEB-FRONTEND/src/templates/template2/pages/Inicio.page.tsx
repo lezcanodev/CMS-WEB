@@ -115,7 +115,7 @@ export default function InicioPage({
                                 title='Llamado a Concurso Externo: Auxiliar Administrativo para el Departamento Operativo de Contrataciones ' 
                                 publishedDate='12/12/2024' 
                                 shortDescrition='Auxiliar Administrativo para el Departamento Operativo de Contrataciones (CE-FP-UNA-27-2024)...'
-                                image='https://i0.wp.com/www.pol.una.py/wp-content/uploads/llamado-a-concurso.jpg?resize=768%2C768&ssl=1'
+                                image='https://cdn-icons-png.flaticon.com/512/695/695896.png'
                             />
                         </Box>
                         <Box style={{width: '100%', height: '100%'}} maxWidth={'380px'}>
@@ -139,7 +139,7 @@ export default function InicioPage({
                                 title='Llamado a Concurso Externo: Auxiliar Administrativo para el Departamento Operativo de Contrataciones ' 
                                 publishedDate='12/12/2024' 
                                 shortDescrition='Auxiliar Administrativo para el Departamento Operativo de Contrataciones (CE-FP-UNA-27-2024)...'
-                                image='https://i0.wp.com/www.pol.una.py/wp-content/uploads/llamado-a-concurso.jpg?resize=768%2C768&ssl=1'
+                                image='https://cdn-icons-png.flaticon.com/512/695/695896.png'
                             />
                         </Box>
                     </Stack>

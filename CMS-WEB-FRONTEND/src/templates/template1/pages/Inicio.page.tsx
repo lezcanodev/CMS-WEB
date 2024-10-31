@@ -8,7 +8,7 @@ import {
     Person as PersonIcon,
     ExitToApp as ExitToAppIcon
 } from '@mui/icons-material';
-
+import './style.css';
 
 export default function InicioPage({
     title, goToLogin, goToRegister, auth, logout, goToDashboard,
@@ -59,7 +59,7 @@ export default function InicioPage({
                     <Typography fontSize={'.8em'} fontWeight={'light'}>
                         Bienvenido a
                     </Typography>
-                    <Typography fontSize={'3em'} fontWeight={'bold'}>
+                    <Typography fontSize={'3em'} fontWeight={'bold'} className='title'>
                         {title}
                     </Typography>
                 </Stack>
@@ -115,17 +115,17 @@ export default function InicioPage({
                 </>))}
             </Stack>
         </Box>
-        <Box paddingBottom={2} paddingX={1}>
-            <Stack direction={'row'} flexWrap={'wrap'} gap={1} justifyContent={'center'} minHeight={400}>
+        <Box paddingBottom={5} paddingX={1} className= "Box">
+            <Stack direction={'row'} flexWrap={'wrap'} gap={3} justifyContent={'center'} minHeight={400}>
                 {
                     libros?.data?.map((libro => (<>
-                        <Box key={libro?.id} style={{width: '100%', height: '100%'}} maxWidth={'380px'}>
+                        <Box key={libro?.id} style={{width: '100%', height: '100%'}} maxWidth={'380px'} className="BoxContentLibro">
                             <ContentCard
                                 title={libro.titulo} 
                                 verLibro={() => goToPageVerLibro(libro?.id)}
                                 publishedDate={libro.fecha} 
                                 shortDescrition={`${libro?.categoriaNombre} | Publicado por ${libro?.autorNombre}`}
-                                image='https://i0.wp.com/www.pol.una.py/wp-content/uploads/llamado-a-concurso.jpg?resize=768%2C768&ssl=1'
+                                image='https://cdn-icons-png.flaticon.com/512/695/695896.png'
                             />
                         </Box>   
                     </>)))
@@ -173,10 +173,12 @@ function ContentCard({
             <CardContent>
                 <Stack gap={2}>
                     <Box style={{width:'100%', height: 280}} maxWidth={'250px'} textAlign={'center'} marginX={'auto'}>
-                        <img   
-                            style={{width: '100%', height: '100%', objectFit: 'cover'}}
-                            src={`${image}`}
-                        />
+                        <Link onClick={(e)=>{e?.preventDefault(); verLibro();}}>
+                            <img
+                                style={{width: '100%', height: '100%', objectFit: 'cover'}}
+                                src={`${image}`}
+                            />
+                        </Link>
                     </Box>
                     <Stack>
                         <Stack>
@@ -187,7 +189,7 @@ function ContentCard({
                             <Divider/>
                         </Box>
                         <Typography  fontSize='.95em'>
-                            {shortDescrition} <Link style={{cursor: 'pointer'}} onClick={(e)=>{e?.preventDefault(); verLibro();}} >leer mas</Link>
+                            {shortDescrition}
                         </Typography>
                     </Stack>
                 </Stack>
