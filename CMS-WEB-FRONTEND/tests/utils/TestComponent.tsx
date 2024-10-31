@@ -30,9 +30,12 @@ const TestComponent2 = ({children}: any) => {
         password: '123456'
       }))
       .unwrap()
-      .then(() => {
-        console.log("ingreso")
+      .then((data) => {
+          console.log("Ingresamos con el usuario de prueba")
           dispatch(getPermisos());
+      })
+      .catch(err => {
+        console.log("Ocurrió un error al intentar ingresar")
       });
   }, [])
 

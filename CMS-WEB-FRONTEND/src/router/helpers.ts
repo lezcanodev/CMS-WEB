@@ -15,7 +15,8 @@ const PRIVATE_ROUTES: {[routeName: string]: string} = {
     'dashboard.home': BASE_URL+'dashboard/home',
     'dashboard.gestioCategoria': BASE_URL+'dashboard/gestion-categorias',
     'dashboard.gestioLibro': BASE_URL+'dashboard/gestion-libros',
-    'dashboard.gestioUsuarios': BASE_URL+'dashboard/gestion-usuarios'
+    'dashboard.gestioUsuarios': BASE_URL+'dashboard/gestion-usuarios',
+    'dashboard.gestioReportes': BASE_URL+'dashboard/gestion-reportes'
 };
 
 export function getRouteByName(routeName: string, params?: {[param: string]: any}){

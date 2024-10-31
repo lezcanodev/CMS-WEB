@@ -10,6 +10,7 @@ export class PermisoUtils{
         // Inicializamos todo los permisos en true
         const defaultPermisos: PermisoPaginas = {
             CATEGORIA_PAGINA: PermisoUtils.all(true),
+            REPORTES: PermisoUtils.all(true),
             LIBRO_PAGINA: {...PermisoUtils.all(true), KANBAN_ACCESO: true,
                 KANBAN_ESTADOS: {
                     GUARDADO: { PUEDO_CAMBIAR: true, PUEDO_VER: true },
@@ -25,6 +26,7 @@ export class PermisoUtils{
             return defaultPermisos;
         }
 
+        defaultPermisos['REPORTES'] = PermisoUtils.all(false);
         defaultPermisos['CATEGORIA_PAGINA'] = PermisoUtils.all(false);
         defaultPermisos['LIBRO_PAGINA'] = {...defaultPermisos['LIBRO_PAGINA'] , ...PermisoUtils.all(false), KANBAN_ACCESO: false};
         defaultPermisos['USUARIO_PAGINA'] = PermisoUtils.all(false);
