@@ -1,61 +1,64 @@
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Button, MenuItem, Stack, TextField, Typography, } from '@mui/material';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import EditIcon from '@mui/icons-material/Edit';
+import SectionTable from '@/components/SectionTable';
+import { useEffect, useMemo, useState } from 'react';
+import { api } from '@/api';
+import { useAppDispatch, useAppSelector } from '@/redux';
+import { snackbarActions } from '@/redux/snackbar/snackbar.slice';
+import { current } from '@reduxjs/toolkit';
+import Ranking from '@/components/ranking';
+import { LibroListarData } from '@/api/gestionLibros/listar/listarLibro.model';
+import CategoriasConMasLibros from './CategoriasConMasLIbros';
 
-export default function GestionReportes(){
-  
+
+export default function GestionUsuarios(){
+    const { permisosPaginas } = useAppSelector(st => st.permisos);
+    const dispatch = useAppDispatch();
+    //para listar todos los libros
+    const { data: libros, loading: loadingLibros } = useAppSelector((state) => state.api.libro.listar);
+    const [libro_filtrado, setLibros]  = useState(libros?.data || []);
+    const [reload, setReload] = useState<boolean>(false);
+
+    // para obtener todos los datos y luego cargar en la tabla
+    useEffect(() => {
+       dispatch(api.libro.libroListarApiThunk());
+    },[dispatch,reload]);
+
+    // useEffect para filtrar libros recién agregados
+    useEffect(() => {
+        const recienAgregados = () => {
+            const mesActual = new Date().getMonth()+1;
+            const librosFiltrados = libros?.data?.filter(libro => {
+                return BigInt(libro.fecha.split('/')[1]) === BigInt(mesActual);
+            }) || [];
+            return librosFiltrados;
+        };
+        setLibros(recienAgregados());
+    }, [libros]);
+
+
+    const rank_visitados = <Ranking
+    titulo = 'Los mas visitados'
+    libros = {libros?.data || []}
+    />;
+
+    const rank_gustados = <Ranking
+    titulo = 'Los mas gustados'
+    libros = {libros?.data || []}
+     />;
+
+    const rank_ingresados = <Ranking
+    titulo = 'Agregados recientemente'
+    libros = {libro_filtrado}
+    />;
+    
     return<>
-    <Stack direction={'row'} gap={2}>
-        <Box sx={{width: '100%', bgcolor: '#00000005', p:2, borderRadius:1}}>
-            <Typography fontWeight={800} fontSize={'1.1em'} pb={3}>Autores con mas libros</Typography>
-            <Stack maxWidth={800} gap={2}>
-                <Box>
-                    <Stack direction={'row'} gap={1} alignItems={'center'}>
-                        <Typography whiteSpace={'nowrap'}>Author 1</Typography>
-                        <Box bgcolor='error' sx={{p:2, bgcolor: '#27ae60', width: '100%'}} ></Box>
-                        <Typography>10</Typography>
-                    </Stack>
-                </Box>
-                <Box>
-                    <Stack direction={'row'} gap={1} alignItems={'center'}>
-                        <Typography whiteSpace={'nowrap'}>Author 1</Typography>
-                        <Box bgcolor='error' sx={{p:2, bgcolor: '#e67e22', width: '80%'}} ></Box>
-                        <Typography>8</Typography>
-                    </Stack>
-                </Box>
-                <Box>
-                    <Stack direction={'row'} gap={1} alignItems={'center'}>
-                        <Typography whiteSpace={'nowrap'}>Author 1</Typography>
-                        <Box bgcolor='error' sx={{p:2, bgcolor: '#2980b9', width: '60%'}} ></Box>
-                        <Typography>6</Typography>
-                    </Stack>
-                </Box>
-            </Stack>
-        </Box>
-        <Box sx={{width: '100%', bgcolor: '#46149b2b', p:2, borderRadius:1}}>
-            <Typography fontWeight={800} fontSize={'1.1em'} pb={3} >Libros con mas comentarios</Typography>
-            <Stack maxWidth={800} gap={2}>
-                <Box>
-                    <Stack direction={'row'} gap={1} alignItems={'center'}>
-                        <Typography whiteSpace={'nowrap'}>Author 1</Typography>
-                        <Box bgcolor='error' sx={{p:2, bgcolor: '#27ae60', width: '100%'}} ></Box>
-                        <Typography>10</Typography>
-                    </Stack>
-                </Box>
-                <Box>
-                    <Stack direction={'row'} gap={1} alignItems={'center'}>
-                        <Typography whiteSpace={'nowrap'}>Author 1</Typography>
-                        <Box bgcolor='error' sx={{p:2, bgcolor: '#e67e22', width: '80%'}} ></Box>
-                        <Typography>8</Typography>
-                    </Stack>
-                </Box>
-                <Box>
-                    <Stack direction={'row'} gap={1} alignItems={'center'}>
-                        <Typography whiteSpace={'nowrap'}>Author 1</Typography>
-                        <Box bgcolor='error' sx={{p:2, bgcolor: '#2980b9', width: '60%'}} ></Box>
-                        <Typography>6</Typography>
-                    </Stack>
-                </Box>
-            </Stack>
-        </Box>
-    </Stack>
+        <CategoriasConMasLibros />
+        {rank_gustados}
+        {rank_ingresados}
+        {rank_visitados}
+
+        
     </>
 }

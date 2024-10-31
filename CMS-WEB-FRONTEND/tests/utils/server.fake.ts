@@ -1,5 +1,6 @@
 import {http, HttpResponse} from 'msw';
 import { setupServer } from "msw/node";
+import { mockLibros } from './libros.mock';
 
 const MOCK_REFRESH_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTczMDI0MzcyNCwiaWF0IjoxNzMwMTU3MzI0LCJqdGkiOiI1OWU1N2MzMzIzYzU0ZjFmYTI2NTNlYWYwNDNjMzdmOCIsInVzZXJfaWQiOjJ9.zwaXptgmmu7osIxM0GGAmTRWrJ3yZcYIzULnAj0G_6Y';
 const MOCK_ACCESS_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTczMDI0MzcyNCwiaWF0IjoxNzMwMTU3MzI0LCJqdGkiOiI1OWU1N2MzMzIzYzU0ZjFmYTI2NTNlYWYwNDNjMzdmOCIsInVzZXJfaWQiOjJ9.zwaXptgmmu7osIxM0GGAmTRWrJ3yZcYIzULnAj0G_6Y';
@@ -10,12 +11,15 @@ const MOCK_CATEGORIAS = [
   { "id": 3, "nombre": "Categoria tres" },
   { "id": 4, "nombre": "Categoria cuatro" }
 ]
+
+
+
 /**
  * Aquí debería interceptar las solicitudes al backend y falsear las respuestas
 */
 export const handlers = [
   /**
-   * FAKE CATEGORÍAS SEGURIDAD
+   * FAKE SEGURIDAD
    */
   http.post('http://127.0.0.1:8000/api/token/refresh/', () => {
     return HttpResponse.json({
@@ -48,6 +52,12 @@ export const handlers = [
     return HttpResponse.json(nuevaCategoria,{status: 201});
   }),
   
+  /**
+   * FAKE LIBROS ENDPOINTS
+   */
+  http.get('http://127.0.0.1:8000/api/listar-libro', () => {
+    return HttpResponse.json(mockLibros().mockLibros, {status: 200});
+  })
 
 ];
 
