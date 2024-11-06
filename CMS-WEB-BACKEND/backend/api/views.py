@@ -1,3 +1,4 @@
+
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import generics
@@ -38,7 +39,7 @@ class LibroListCreate(generics.CreateAPIView):
     def get_queryset(self):
         """metodo reescrito, get_queryset retornara un set de libros del modelo "Libro" con el filtro de categoria
         """
-        categoria = self.request.categoria
+        
         return Libro.objects.all()
 
     def perform_create(self, serializer):
@@ -72,7 +73,7 @@ class LibroDelete(generics.DestroyAPIView):
     """
     serializer_class = LibroSerializer
     permission_classes = [IsAuthenticated]
-    #rol_Requerido.roless = ['admin','autor','editor']
+    
 
     def get_queryset(self):
         """Metodo reescrito, get_queryset dentro del metodo DestroyAPIView retorna el set de objetos que pueden ser borrados, solo podran ser borrados articulos que pertenecen al usuario"""
@@ -84,7 +85,7 @@ class CategoriaListCreate(generics.CreateAPIView):
     """View para crear/listar categorias (uso opcional)"""
     serializer_class = CategoriaSerializer
     permission_classes = [IsAuthenticated]
-    #rol_Requerido.roles = ['admin']
+    
 
     def get_queryset(self):
         """metodo que retorna todos los objetos del modelo Categoria"""
@@ -117,12 +118,12 @@ class CategoriaDelete(generics.DestroyAPIView):
     """
     serializer_class = CategoriaSerializer
     permission_classes = [IsAuthenticated]
-    #rol_Requerido.roles = ['admin']
+    
 
     def get_queryset(self):
         """Metodo que retorna el objeto que coincida con el nombre para ser eliminado
         """
-        #nombre = self.request.nombre
+        
         return Categoria.objects.all()
    
 
@@ -208,7 +209,7 @@ class UserProfileUpdateView(generics.UpdateAPIView):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileUpdateSerializer
     permission_classes = [IsAuthenticated]  # Solo 'admin' puede actualizar el rol
-    #rol_Requerido.roles = ['Admin']
+    
 
     def get_object(self):
         """
@@ -222,22 +223,22 @@ class CrearComentarioView(generics.CreateAPIView):
     """
     serializer_class = ComentarioSerializer
     permission_classes = [AllowAny]         #Cualquier usuario puede comentar
-    #rol_Requerido.roles = ['admin', 'autor']
+    
     
     def get_queryset(self):
         """metodo reescrito, get_queryset retornara un set de comentarios para el libro correspondiente
         """
-        id_libro = self.request.data.id_libro
+       
         return Comentario.objects.all()
 
     def perform_create(self, serializer):
         """Metodo reescrito para verificar que el objeto enviado atraves del serializer cumple con los atributos necesarios para su creacion para luego ser guardado
         """
-        author = 'autor' #self.request.libro.titulo
-        titulo =  'titulo' #self.request.libro.author
+        author = 'autor' 
+         
         enviar_notificacion_email(
             'Nuevo comentario',
-            f'Su publicacion "Nueva noticia" tiene un nuevo comentario.',
+            'Su publicacion "Nueva noticia" tiene un nuevo comentario.',
             [author]
         )
         return
@@ -248,8 +249,8 @@ class CrearComentarioView(generics.CreateAPIView):
             serializer.save(usuario=self.request.user, id_libro = Libro.objects(). self.request.data.get('id_libro'))
         else:
             print(serializer.errors)
-        author = 'autor' #self.request.libro.titulo
-        titulo =  'titulo' #self.request.libro.author
+        author = 'autor' 
+        titulo =  'titulo' 
         # Enviar correo de notificación
         enviar_notificacion_email(
             'Nuevo comentario',

@@ -5,6 +5,8 @@ import psycopg2
 Función para detectar si el servidor de postgres ya esta en curso para evitar
 que la api intente conectarse antes de que postgres haya inicializado
 """
+
+
 def check_postgres():
     try:
         # Intentar conectar a la base de datos usando los parámetros de settings

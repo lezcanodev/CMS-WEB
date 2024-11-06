@@ -12,7 +12,7 @@ class Categoria(models.Model):
         """retorna el nombre de la categoria"""
         return self.nombre
 
-
+# pragma: no cover
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     role = models.CharField(max_length=50, blank=True, null=True)
@@ -32,8 +32,7 @@ class Libro(models.Model):
     estado = models.CharField(max_length=20, null=True)
 
     #el related_name me permite user.notes()
-    #author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="libro")
-    #categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, related_name="categoria", default=1)
+  
     author = models.ForeignKey(User, on_delete=models.DO_NOTHING , related_name="author")
     categoria = models.ForeignKey(Categoria,on_delete=models.SET_DEFAULT,default=2, related_name="categoria")
     """
@@ -51,8 +50,7 @@ class Comentario(models.Model):
     contenido = models.TextField()
 
     #el related_name me permite user.notes()
-    #author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="libro")
-    #categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, related_name="categoria", default=1)
+
     usuario = models.ForeignKey(User, on_delete=models.DO_NOTHING , related_name="usuario")
     id_libro = models.ForeignKey(Libro,on_delete=models.DO_NOTHING, related_name="id_libro")
     """

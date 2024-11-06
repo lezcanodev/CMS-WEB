@@ -10,11 +10,11 @@ COPY requirements.txt detect_postgres.py ./
 
 # Instala herramientas de construcción necesarias
 RUN apk add --no-cache bash
-RUN apk add --no-cache gcc musl-dev libffi-dev
-RUN pip install --upgrade pip setuptools
+&& apk add --no-cache gcc musl-dev libffi-dev
+&& pip install --upgrade pip setuptools
 
 # Instala las dependencias de la aplicación
-RUN pip install --no-cache-dir -r requirements.txt
+&& pip install --no-cache-dir -r requirements.txt
 
 # Copiamos las dependencias instaladas en el directorio del docker a nuestro directorio de backend
 COPY . .
