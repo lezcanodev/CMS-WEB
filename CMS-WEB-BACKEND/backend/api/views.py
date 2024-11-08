@@ -45,7 +45,6 @@ class LibroListCreate(generics.CreateAPIView):
         """Metodo reescrito para verificar que el objeto enviado atraves del serializer cumple con los atributos necesarios para su creacion para luego ser guardado
         """
         if serializer.is_valid():
-        
             serializer.save(author=self.request.user)
         else:
             print(serializer.errors)
@@ -227,7 +226,7 @@ class CrearComentarioView(generics.CreateAPIView):
     def get_queryset(self):
         """metodo reescrito, get_queryset retornara un set de comentarios para el libro correspondiente
         """
-        id_libro = self.request.data.id_libro
+        
         return Comentario.objects.all()
 
     def perform_create(self, serializer):
@@ -240,12 +239,11 @@ class CrearComentarioView(generics.CreateAPIView):
             f'Su publicacion "Nueva noticia" tiene un nuevo comentario.',
             [author]
         )
-        return
         
-        print(self.request.data)
-        print('))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))')
+        objeto_libro = Libro.objects.get(id = dictionary["id_libro"])
         if serializer.is_valid():
-            serializer.save(usuario=self.request.user, id_libro = Libro.objects(). self.request.data.get('id_libro'))
+            serializer.save(usuario=self.request.user, id_libro =objeto_libro)
+
         else:
             print(serializer.errors)
         author = 'autor' #self.request.libro.titulo
@@ -257,7 +255,7 @@ class CrearComentarioView(generics.CreateAPIView):
             [author]
         )
 
-#View para listar los comentario
+#View para listar los comentarios
 class ListarComentariosView(generics.ListAPIView):
     """ Clase para listar los comentarios atraves de la clase ListAPIView del framework REST
     """
@@ -267,10 +265,24 @@ class ListarComentariosView(generics.ListAPIView):
     def get_queryset(self):
         """retorna todos los comentarios
         """
-
-		#del front para el filtrado
-        id_libro = self.request.query_params.get('id', None)
+        id_libro = self.request.query_params.get('libroId')
         if id_libro:
             return Comentario.objects.filter(id_libro=id_libro)
         return Comentario.objects.all()
+
+#View para borrar un comentario
+
+class BorrarComentarioView(generics.DestroyAPIView):
+    """View para borrar un comentario del modelo comenario 
+    con la clase DestroyAPIView del framework REST
+    """
+    serializer_class = ComentarioSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
+        """Metodo reescrito, get_queryset dentro del metodo DestroyAPIView retorna el set de objetos que pueden ser borrados, solo podran ser borrados articulos que pertenecen al usuario"""
+        id_comentario= self.request.query_params.get("pk")
+        return Comentario.objects.filter(id = id_comentario)
+
+
 
