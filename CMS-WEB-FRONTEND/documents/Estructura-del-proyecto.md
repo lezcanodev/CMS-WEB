@@ -104,5 +104,3 @@ children:
                 'seguridad/ingresar', baseApiThunk<LoginRequest>( async (loginData) => await seguridadApi.execute(loginData))
             )
         ```
-
-    - Una vez finalizado la implementación del método

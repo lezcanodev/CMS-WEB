@@ -15,7 +15,7 @@ RUN npm install
 COPY . .
 
 # Exponemos el puerto de desarrollo
-EXPOSE 5173
+EXPOSE 51204
 
 # Ejecutamos el servidor de desarrollo
-CMD [ "npm", "run", "dev"]
+CMD [ "npm", "run", "test:ui", "--", "--no-browser"]

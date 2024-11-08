@@ -10,7 +10,9 @@ export const MOCK_LIBROS = [
     "estado": "Guardado",
     "contenido": "<p>sdsdsds</p>",
     "categoriaNombre": "CTG1",
-    "autorNombre": "admin2"
+    "autorNombre": "admin2",
+    "vistas": 10,
+    "likes": 5
   },
   {
     "id": 3,
@@ -21,7 +23,9 @@ export const MOCK_LIBROS = [
     "estado": "En Revision",
     "contenido": "<p>sdsdsds</p>",
     "categoriaNombre": "CTG1",
-    "autorNombre": "admin2"
+    "autorNombre": "admin2",
+    "vistas": 2,
+    "likes": 3
   },
   {
     "id": 4,
@@ -32,7 +36,9 @@ export const MOCK_LIBROS = [
     "estado": "Rechazado",
     "contenido": "<p>sdsdsds</p>",
     "categoriaNombre": "CTG1",
-    "autorNombre": "admin2"
+    "autorNombre": "admin2",
+    "vistas": 1,
+    "likes": 1
   },
   {
     "id": 5,
@@ -43,7 +49,9 @@ export const MOCK_LIBROS = [
     "estado": "Publicado",
     "contenido": "<p>sdsdsds</p>",
     "categoriaNombre": "CTG1",
-    "autorNombre": "admin2"
+    "autorNombre": "admin2",
+    "vistas": 0,
+    "likes": 0
   }
 ]
 
@@ -55,5 +63,7 @@ export function mockLibros(){
         cantidadEnRevision: 1,
         cantidadPublicados: 1,
         cantidadRechazados: 1,
+        totalMeGustas:  MOCK_LIBROS.reduce((acc, libro) =>  acc + libro?.likes ,0),
+        totalVistas:  MOCK_LIBROS.reduce((acc, libro) =>  acc + libro?.vistas ,0)
     }
 }

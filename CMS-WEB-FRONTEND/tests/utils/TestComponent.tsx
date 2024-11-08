@@ -6,6 +6,7 @@ import { seguridadIngresarThunk } from '../../src/api/seguridad/Ingresar/ingresa
 import { getPermisos } from '../../src/redux/permisos/permisos.slice';
 import { RefrescarToken } from '../../src/router/middlewares/RefrescarToken';
 import { TemplateProvider } from '../../src/contexts/templateContext';
+import { MemoryRouter } from 'react-router-dom';
 
 /**
  * Se encarga de proporcionar el estado a los componentes de prueba
@@ -14,9 +15,11 @@ import { TemplateProvider } from '../../src/contexts/templateContext';
  */
 export const TestComponent = ({children}: any) => {
   return <Provider store={store}> 
-            <TestComponent2>
-              {children}
-            </TestComponent2>
+          <MemoryRouter>
+              <TestComponent2>
+                {children}
+              </TestComponent2>
+          </MemoryRouter>
         </Provider>
 }
   
