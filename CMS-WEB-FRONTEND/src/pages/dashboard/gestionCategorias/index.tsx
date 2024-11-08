@@ -76,7 +76,7 @@ export default function GestionCategorias(){
 
     // Aqui se controla la eliminacion de categoria
     const handleDeleteCategory = async (currentRow: any) => {
-        const length = categorias?.data?.length || 0;
+        const length = categorias?.data?.length ?? 0;
         if(currentRow?.id && length > 1){
             dispatch(api.categoria.categoriaBorrarApiThunk({id: currentRow.id}))
             .unwrap()

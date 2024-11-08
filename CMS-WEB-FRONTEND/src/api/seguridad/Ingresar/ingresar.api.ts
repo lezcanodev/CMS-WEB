@@ -31,7 +31,7 @@ export default class ApiIngresar extends Api<LoginRequest, LoginResponse>{
             const data = response.data;
             const decodeToken = jwtDecode<{user_id: number}>(data.refresh);
             
-            const users = localStorage.getItem('baneados') ? JSON.parse(localStorage.getItem('baneados') || '[]') : [];
+            const users = localStorage.getItem('baneados') ? JSON.parse(localStorage.getItem('baneados') ?? '[]') : [];
             const estaBaneado = users?.some((x: any) => x == decodeToken.user_id);
             
             if(estaBaneado){

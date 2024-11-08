@@ -85,7 +85,7 @@ export default function CategoriasConMasLibros(){
                 }}>
                     <p style={{
                                 background: cantLibrosPorEstado[estado]?.color ,
-                                width:  `${(cantLibrosPorEstado[estado]?.cantidad/(libros?.data?.length || 1))*100}%`,
+                                width:  `${(cantLibrosPorEstado[estado]?.cantidad/(libros?.data?.length ?? 1))*100}%`,
                                 height: 20
                     }} ></p>
                 </div>

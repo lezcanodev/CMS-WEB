@@ -83,7 +83,7 @@ export function VerLibro(){
             }}
             comentarios={{
                 loading: false,
-                totalItems: comentario?.listarComentario?.data?.data?.totalItems || 0,
+                totalItems: comentario?.listarComentario?.data?.data?.totalItems ?? 0,
                 items: comentario?.listarComentario?.data?.data?.comentarios?.map((c) => ({
                     contenido: (c.contenido as any)?.contenido,
                     fechaPublicacion: c.publicado,

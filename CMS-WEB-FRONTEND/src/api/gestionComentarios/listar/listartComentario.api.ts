@@ -3,7 +3,7 @@ import { ComentarioListarRequest, ComentarioListarResponse } from './listartCome
 
 const mockResponse = (libroId: number) => new Promise((resolve) => {
     setTimeout(() => {
-        let comentarios = localStorage.getItem('comentarios') ? JSON.parse(localStorage.getItem('comentarios') || "{}") : null;
+        let comentarios = localStorage.getItem('comentarios') ? JSON.parse(localStorage.getItem('comentarios') ?? "{}") : null;
         if(!comentarios || !comentarios?.[libroId]){
             resolve({
                 comentarios: [],
@@ -28,20 +28,5 @@ export default class ApiListarComentario extends Api<ComentarioListarRequest, Co
         console.log("sdsd= ",{r})
         return this.data(r);
 
-        let comentarios = localStorage.getItem('comentarios') ? JSON.parse(localStorage.getItem('comentarios') || "{}") : null;
-        if(!comentarios || !comentarios?.[data.libroId]){
-            return this.data({
-                comentarios: [],
-                paginaActual: 0,
-                totalItems: 0,
-                totalPaginas: 0
-            })
-        }
-        return this.data({
-            comentarios: comentarios?.[data.libroId],
-            paginaActual: 1,
-            totalItems: comentarios?.[data.libroId]?.length || 0,
-            totalPaginas: 10
-        })
     }
 }
