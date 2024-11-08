@@ -6,8 +6,15 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 
 export default function VerLibro({
     categoria, contenido, fechaPublicacion, titulo, idLibro, loading, isEmpty,
-    autorNombre, comentarios, crearComentario
+    autorNombre, comentarios, crearComentario, cargarVista, darMeGusta, yaDioMeGusta: initialYaDioMeGusta,
+    likes, visitas
 }: IVerLibroPage){
+    const [yaDioMeGusta, setYaDioMeGusta] = useState<boolean>(!!initialYaDioMeGusta)
+
+    useEffect(() => {
+        cargarVista();
+    }, [])
+    
     if(isEmpty){
         return <>
             <Box sx={{ display: 'relative'}}>
@@ -32,8 +39,21 @@ export default function VerLibro({
                             Publicado por {autorNombre} el {fechaPublicacion}</Typography>
                     </Stack>
                 </Box>
+                <Box>
+                    {visitas+1} visitas | {likes} likes
+                </Box>
+                <Box my={.5}>
+                    {yaDioMeGusta ? (
+                        <Typography fontSize='.9rem'>Ya diste me gusta</Typography>
+                    ) : (
+                        <Button size='small' onClick={() => {darMeGusta(); setYaDioMeGusta(true);}}>
+                            me gusta
+                        </Button>
+                    )}
+                </Box>
                 <Divider/>
             </Grid>
+
             <Grid item xs={12}>
                 {contenido}
                 <br/>

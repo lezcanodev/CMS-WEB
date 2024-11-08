@@ -97,8 +97,9 @@ export function InicioPage(){
         }}
         libros={{
             loading: libro?.listar?.loading,
-            data: libros /*libro?.listar?.data?.data?.map(l => ({
-                id: l?.id,
+            data: libro?.listar?.data?.data?.filter(libro => 
+                libro.estado.toLowerCase().includes('publicado')) || [],
+               /* id: l?.id,
                 titulo: l?.titulo,
                 fecha: l?.fecha,
                 categoria: l?.categoria,

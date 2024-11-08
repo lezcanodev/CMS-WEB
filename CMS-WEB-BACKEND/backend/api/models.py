@@ -30,6 +30,8 @@ class Libro(models.Model):
     fecha = models.DateTimeField(auto_now_add=True)
     contenido = models.TextField()
     estado = models.CharField(max_length=20, null=True)
+    likes = models.IntegerField()
+    vistas = models.IntegerField()
 
     #el related_name me permite user.notes()
   
