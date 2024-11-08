@@ -30,8 +30,8 @@ def check_postgres():
         conn.close()
         
         return db_exists is not None
-        #conn.close()
-        #return True
+        
+        
     except psycopg2.OperationalError:
         return False
 

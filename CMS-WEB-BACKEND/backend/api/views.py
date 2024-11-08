@@ -34,7 +34,7 @@ class LibroListCreate(generics.CreateAPIView):
     """
     serializer_class = LibroSerializer
     permission_classes = [IsAuthenticated]         #solo el administrador o el autor pueden crear libros     
-    #rol_Requerido.roles = ['admin', 'autor']
+    
     
     def get_queryset(self):
         """metodo reescrito, get_queryset retornara un set de libros del modelo "Libro" con el filtro de categoria

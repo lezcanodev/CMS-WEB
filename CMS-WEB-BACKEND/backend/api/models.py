@@ -1,5 +1,5 @@
-from django.db import models
-from django.contrib.auth.models import User
+from django.db import models # pragma: no cover
+from django.contrib.auth.models import User # pragma: no cover
 
 #clase del orm para categorias
 class Categoria(models.Model):
@@ -12,8 +12,8 @@ class Categoria(models.Model):
         """retorna el nombre de la categoria"""
         return self.nombre
 
-# pragma: no cover
-class UserProfile(models.Model):
+
+class UserProfile(models.Model): # pragma: no cover
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     role = models.CharField(max_length=50, blank=True, null=True)
 

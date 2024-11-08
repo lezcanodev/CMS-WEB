@@ -1,0 +1,17 @@
+[run]
+# Aquí defines las rutas de los archivos que quieres excluir
+omit =
+    ./backend/test/*
+    ./backend/conftest.py
+    ./backend/migrations/*
+
+[report]
+# Opcional: puedes configurar que ciertos patrones o nombres se excluyan del reporte
+exclude_lines =
+    # Estas son expresiones regulares para excluir líneas específicas
+    pragma: no cover
+    if __name__ == "__main__":
+    except ImportError
+    raise NotImplementedError
+    import
+    from
