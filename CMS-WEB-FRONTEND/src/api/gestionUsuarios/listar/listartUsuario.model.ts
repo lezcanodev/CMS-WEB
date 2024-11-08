@@ -10,8 +10,14 @@ export interface UsuarioListarRequest{}
  */
 export type UsuarioListarResponse = UsuarioListarData[]
 
+export interface user{
+    id:number,
+    username:string,
+    password:string
+}
+
+//dejamos lo mas parecido al back para evitar inconsistencias.-
 export interface UsuarioListarData{
-    id: number,
-    username: string,
+    user: user,
     role: UserRol
 }

@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-5^q3m4^++4orb)9wznaryt*8lce8o)4dk6@mk@dm=)qe&172)6'
+SECRET_KEY = os.getenv('API_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -135,6 +135,16 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+# email
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv("MAIL_USER")
+EMAIL_HOST_PASSWORD = os.getenv("MAIL_PASSWORD")
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
@@ -160,3 +170,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #el cors para que cualquier origen del request funcione
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWS_CREDENTIALS = True
+
+# configuracion para el mail
+

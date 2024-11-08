@@ -1,12 +1,11 @@
 /**
  * Datos necesarios para hacer una request a login del backend
  */
-export interface CategoriaActualizarRequest{
+export interface UsuarioBorrarRequest{
     id: number;
-    nombre: string;
 }
 
 /**
  * Datos retornados por el backend
  */
-export interface CategoriaActualizarResponse{}
+export interface UsuarioBorrarResponse{}

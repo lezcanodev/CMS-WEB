@@ -19,6 +19,3 @@ EXPOSE 5173
 
 # Ejecutamos el servidor de desarrollo
 CMD [ "npm", "run", "dev"]
-
-
-    

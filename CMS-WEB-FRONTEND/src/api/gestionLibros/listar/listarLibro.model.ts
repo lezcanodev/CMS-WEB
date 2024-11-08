@@ -19,5 +19,7 @@ export interface LibroListarData{
     author: number,
     categoria: number,
     categoriaNombre: string,
-    autorNombre: string
+    autorNombre: string,
+    likes: number,
+    vistas: number
 }

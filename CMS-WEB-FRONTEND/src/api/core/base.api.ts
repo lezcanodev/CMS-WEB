@@ -100,7 +100,7 @@ export default abstract class Api<RequestData, ResponseData>{
                 if(error.status === 400 && error?.response?.data){
                     return {error: HttpStatusCode.BadRequest(error?.response?.data)};
                 }else{
-                    return {error: HttpStatusCode.responseTo(error.status || 500)}
+                    return {error: HttpStatusCode.responseTo(error.status ?? 500)}
                 }
             }
 
