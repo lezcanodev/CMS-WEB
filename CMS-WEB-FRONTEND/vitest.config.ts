@@ -4,6 +4,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 
+
 export default defineConfig({
   plugins: [react()],
   server: {
@@ -18,6 +19,7 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     setupFiles: ['./tests/test.setup.ts'],
+    
   },
   resolve: {
     alias: {

@@ -2,5 +2,5 @@ projectKey=CMS2
 serverUrl=http://localhost:9000
 serverVersion=10.7.0.96327
 dashboardUrl=http://localhost:9000/dashboard?id=CMS2
-ceTaskId=35fa653f-3369-4ebe-b023-6b3f3df7e237
-ceTaskUrl=http://localhost:9000/api/ce/task?id=35fa653f-3369-4ebe-b023-6b3f3df7e237
+ceTaskId=e6086ed5-908e-4c54-b390-bcf0a415851c
+ceTaskUrl=http://localhost:9000/api/ce/task?id=e6086ed5-908e-4c54-b390-bcf0a415851c
