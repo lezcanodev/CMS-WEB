@@ -2,7 +2,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from api.gestion_usuarios_views import CrearUsuarioView,DeleteUsuarioView,ListarUsuariosView, UpdateUsuarioView
-from api.views import CreateUserView, LibroListCreate, CategoriaListCreate, CategoriaDelete,LibroDelete, LibroListar,CategoriaListar, UpdateCategoriaAPIView, UpdateLibroAPIView, UserProfileUpdateView,CrearComentarioView,ListarComentariosView
+from api.views import CreateUserView, LibroListCreate, CategoriaListCreate, CategoriaDelete,LibroDelete, LibroListar,CategoriaListar, UpdateCategoriaAPIView, UpdateLibroAPIView, UserProfileUpdateView,CrearComentarioView,ListarComentariosView,BorrarComentarioView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view

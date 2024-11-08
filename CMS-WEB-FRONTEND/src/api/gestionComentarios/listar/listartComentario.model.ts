@@ -16,6 +16,7 @@ export type ComentarioListarResponse = {
 }
 
 export interface ComentarioListarData{
+    id: number,
     usuarioNombre: string;
     publicado: string;
     contenido: string;

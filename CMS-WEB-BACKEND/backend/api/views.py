@@ -240,6 +240,7 @@ class CrearComentarioView(generics.CreateAPIView):
             [author]
         )
         
+        dictionary=self.request.data
         objeto_libro = Libro.objects.get(id = dictionary["id_libro"])
         if serializer.is_valid():
             serializer.save(usuario=self.request.user, id_libro =objeto_libro)
@@ -279,10 +280,12 @@ class BorrarComentarioView(generics.DestroyAPIView):
     serializer_class = ComentarioSerializer
     permission_classes = [AllowAny]
 
+
     def get_queryset(self):
         """Metodo reescrito, get_queryset dentro del metodo DestroyAPIView retorna el set de objetos que pueden ser borrados, solo podran ser borrados articulos que pertenecen al usuario"""
-        id_comentario= self.request.query_params.get("pk")
-        return Comentario.objects.filter(id = id_comentario)
+        id_comentario =  self.kwargs.get('pk')
+        comentario = Comentario.objects.filter(id=id_comentario)
+        return comentario
 
 
 

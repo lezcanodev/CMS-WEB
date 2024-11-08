@@ -1,11 +1,13 @@
 // hooks
 import { api } from '@/api';
-import { Kanban } from '@/components/KanbaTable';
+import { Box, Button, Stack } from '@mui/material';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { useTemplate } from '@/contexts/templateContext/useTemplate';
 import { useAppDispatch, useAppSelector } from '@/redux';
 import { UserUtils } from '@/utils/User/User.utils';
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router';
+import { snackbarActions } from '@/redux/snackbar/snackbar.slice';
 
 
 export function VerLibro(){
@@ -14,6 +16,7 @@ export function VerLibro(){
     const dispatch = useAppDispatch();
     const {data, loading} = useAppSelector(state => state.api.libro.listar);
     const {comentario} = useAppSelector(state => state.api);
+    const [reload, setReload] = useState<boolean>(false);
     const values = useParams(); 
 
     useEffect(() => {
@@ -25,7 +28,22 @@ export function VerLibro(){
                 libroId: parseInt(values?.id)
             }))
         }
-    }, [])
+    }, [reload])
+
+    // Aqui se controla la eliminacion del comentario
+    const handleDelete = (id : number) => {
+        console.log(id)
+        if(id){
+            dispatch(api.comentario.comentarioBorrarApiThunk({id: id}))
+            .unwrap()
+            .then(() => {
+                setReload(!reload);
+                dispatch(snackbarActions.openSnackbar({
+                    message: `Se borro el comentario correctamente`
+                }))
+            })
+        }
+    }
 
     return <>
         <VerLibro
@@ -53,6 +71,9 @@ export function VerLibro(){
                         libroId: data?.data?.[0]?.id?.toString() as any,
                         usuarioId: UserUtils.getUser()?.userId as any
                     }));
+                    //cada vez que agregamos un comentario,
+                    // actualizamos la pagina(deberia ser el grid nomas pero bueno)
+                    setReload(!reload);
                     dispatch(api.comentario.comentarioListarApiThunk({
                         libroId: data?.data?.[0]?.id?.toString() as any
                     }))
@@ -63,12 +84,16 @@ export function VerLibro(){
                 loading: false,
                 totalItems: comentario?.listarComentario?.data?.data?.totalItems || 0,
                 items: comentario?.listarComentario?.data?.data?.comentarios?.map((c) => ({
+                    id:c.id,
                     contenido: (c.contenido as any)?.contenido,
                     fechaPublicacion: c.publicado,
-                    nombreUsuario: c.usuarioNombre
+                    nombreUsuario: c.usuarioNombre,
                 })) || []
             }}
+            borrarComentario = {{
+                onDeleteComentario : handleDelete}}
         /> 
     </>
+    
 }
 
