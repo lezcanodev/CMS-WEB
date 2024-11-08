@@ -63,7 +63,7 @@ export default function CategoriasConMasLibros(){
     return<>
     <div className="content" style={{padding: '30px',marginLeft:'60px'}}>
         <Typography variant={'h5'} fontWeight={'bold'} style={{opacity: .5}} >Estado de los libros</Typography>
-        <Typography style={{ fontSize: '.9em', fontWeight: 'bold', marginBottom: '25px'}}>Total de libros:{libros?.data?.length }</Typography>
+        <Typography style={{ fontSize: '.8em', fontWeight: 'bold', marginBottom: '25px'}}>Total de libros:{libros?.data?.length }</Typography>
         <div className="container" style={{ margin: '10 auto', background: '#ffffff57', padding:8, borderRadius:8}}>
             {Object.keys(cantLibrosPorEstado)?.map((estado, index) => (
               <div key={index} style={{
