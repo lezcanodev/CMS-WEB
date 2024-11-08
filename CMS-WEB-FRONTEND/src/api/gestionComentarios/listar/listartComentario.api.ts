@@ -30,13 +30,12 @@ export default class ApiListarComentario extends Api<ComentarioListarRequest, Co
         
         if(!comentarios || !comentarios?.[query.libroId]){
             return this.data({
-                comentarios: comentarios,
+                comentarios: [],
                 paginaActual: 0,
                 totalItems: 0,
                 totalPaginas: 0
             })
         }
-       
 
         return this.data({
             comentarios: comentarios,

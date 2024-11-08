@@ -85,8 +85,8 @@ export function VerLibro(){
                 totalItems: comentario?.listarComentario?.data?.data?.totalItems || 0,
                 items: comentario?.listarComentario?.data?.data?.comentarios?.map((c) => ({
                     id:c.id,
-                    contenido: (c.contenido as any)?.contenido,
-                    fechaPublicacion: c.publicado,
+                    contenido: c?.contenido,
+                    fechaPublicacion: c?.fecha,
                     nombreUsuario: c.usuarioNombre,
                 })) || []
             }}
