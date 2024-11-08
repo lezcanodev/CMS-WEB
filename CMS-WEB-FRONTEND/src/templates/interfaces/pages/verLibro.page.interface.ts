@@ -1,3 +1,5 @@
+import React from "react";
+
 export interface IVerLibroPage{
     idLibro: string;
     titulo: string;
@@ -21,9 +23,13 @@ export interface IVerLibroPage{
         loading: boolean,
         totalItems: number,
         items: {
+            id: number,
             nombreUsuario: string,
             contenido: string,
             fechaPublicacion: string
         }[]
+    }
+    borrarComentario: {
+        onDeleteComentario : (id: number) => void
     }
 }
