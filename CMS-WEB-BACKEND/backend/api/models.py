@@ -30,8 +30,8 @@ class Libro(models.Model):
     fecha = models.DateTimeField(auto_now_add=True)
     contenido = models.TextField()
     estado = models.CharField(max_length=20, null=True)
-    likes = models.IntegerField()
-    vistas = models.IntegerField()
+    likes = models.IntegerField(default=0)
+    vistas = models.IntegerField(default=0)
 
     #el related_name me permite user.notes()
     #author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="libro")

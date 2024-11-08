@@ -7,7 +7,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 export default function VerLibro({
     categoria, contenido, fechaPublicacion, titulo, idLibro, loading, isEmpty,
-    autorNombre, comentarios, crearComentario, borrarComentario,, cargarVista, darMeGusta, yaDioMeGusta: initialYaDioMeGusta,
+    autorNombre, comentarios, crearComentario, borrarComentario, cargarVista, darMeGusta, yaDioMeGusta: initialYaDioMeGusta,
     likes, visitas
 }: IVerLibroPage){
     const [yaDioMeGusta, setYaDioMeGusta] = useState<boolean>(!!initialYaDioMeGusta)
@@ -57,7 +57,7 @@ export default function VerLibro({
                 </Box>
                 <Divider/>
             </Grid>
-            
+
             <Grid item xs={12}>
                 {contenido}
                 <br/>
