@@ -9,7 +9,7 @@ def test_estadoInicial():
     
     user = User.objects.create_user(username='testuser', password='testpassword')
     categoria = Categoria.objects.create(nombre="Ciencia Ficción")
-    libro = Libro.objects.create(titulo="El viaje espacial", author=user, categoria=categoria, contenido="Contenido del libro", estado='En Revision')
+    libro = Libro.objects.create(titulo="El viaje espacial", author=user, categoria=categoria, contenido="Contenido del libro", estado='En Revision',likes=0,vistas=0)
 
     
     assert libro.estado=='En Revision'
@@ -18,6 +18,6 @@ def test_estadoInicial():
 def test_modificarEstado():
     user = User.objects.create_user(username='testuser', password='testpassword')
     categoria = Categoria.objects.create(nombre="Ciencia Ficción")
-    libro = Libro.objects.create(titulo="El viaje espacial", author=user, categoria=categoria, contenido="Contenido del libro", estado='Rechazado')
+    libro = Libro.objects.create(titulo="El viaje espacial", author=user, categoria=categoria, contenido="Contenido del libro", estado='Rechazado',likes=0,vistas=0)
     
     assert libro.estado=='Rechazado'
