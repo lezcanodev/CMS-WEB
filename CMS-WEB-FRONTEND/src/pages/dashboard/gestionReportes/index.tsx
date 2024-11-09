@@ -58,7 +58,7 @@ export default function GestionUsuarios(){
     ///>;
     
     return<>
-    <Box maxWidth={1024} mx={'auto'}>
+    <Box mx={'auto'}>
         <CategoriasConMasLibros />
         <RankMasGustados />
         <RankMasVistos />
