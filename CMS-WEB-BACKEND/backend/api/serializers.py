@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 import os
-from .models import Libro, Categoria, UserProfile, Comentario
+from .models import Libro, Categoria, UserProfile, Comentario, Histograma
 from django.shortcuts import render
 from .emails import enviar_notificacion_email
 
@@ -50,7 +50,6 @@ class UserSerializer(serializers.ModelSerializer):
         return user
         
 class UserProfileSerializer(serializers.ModelSerializer):
-    
     """
     serializer para el perfil de cada usuario.-
     """
@@ -79,3 +78,13 @@ class ComentarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comentario
         fields = ["id", "fecha", "contenido", "usuarioNombre", "id_libro"]
+
+#Historial
+class HistogramaSerializer (serializers.ModelSerializer):
+    id_libro = serializers.CharField(source='libro.id', read_only=True)
+    usuarioNombre = serializers.CharField(source='usuario.username', read_only=True)
+
+    """Serilizer para un historial con los atributos id, fecha, usuario, libro, accion """
+    class Meta:
+        model = Histograma
+        fields = ["id", "fecha", "accion", "usuarioNombre", "id_libro"]

@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import generics
-from .serializers import UserProfileSerializer, UserProfileUpdateSerializer, UserSerializer, LibroSerializer, CategoriaSerializer, ComentarioSerializer
+from .serializers import UserProfileSerializer, UserProfileUpdateSerializer, UserSerializer, LibroSerializer, CategoriaSerializer, ComentarioSerializer, HistogramaSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .models import Libro, Categoria, UserProfile, Comentario
+from .models import Libro, Categoria, UserProfile, Comentario, Histograma
 from .permisos import rol_Requerido
 
 from rest_framework.response import Response
@@ -121,8 +121,6 @@ class CategoriaDelete(generics.DestroyAPIView):
    
 
 
-
-
 class CreateUserView(generics.CreateAPIView):
     """View para crear un usuario atraves de CreateAPIWiew del framework REST"""
     queryset = User.objects.all() #verificamos que no existe ya el user
@@ -157,8 +155,6 @@ class UpdateLibroAPIView(generics.UpdateAPIView):
     rol_Requerido.roles = ['admin','editor']
 
     
-    
-
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         
@@ -167,7 +163,6 @@ class UpdateLibroAPIView(generics.UpdateAPIView):
         titulo= instance.titulo
         serializer = self.get_serializer(instance, data=request.data, partial=True)
 
-        
         
         if serializer.is_valid():
             serializer.save()
@@ -230,7 +225,21 @@ class CrearComentarioView(generics.CreateAPIView):
         objeto_libro = Libro.objects.get(id = dictionary["id_libro"])
         enviar_notificacion_email(
             'Nuevo comentario',
-            f'Su publicacion "{objeto_libro}" tiene un nuevo comentario.',
+            f'Su publicacion "{titulo}" tiene un nuevo comentario.',
+            [author]
+        )
+        return
+        
+        if serializer.is_valid():
+            serializer.save(usuario=self.request.user, id_libro = Libro.objects(). self.request.data.get('id_libro'))
+        else:
+            print(serializer.errors)
+        author = 'autor' #self.request.libro.titulo
+        titulo =  'titulo' #self.request.libro.author
+        # Enviar correo de notificación
+        enviar_notificacion_email(
+            'Nuevo comentario',
+            f'Su publicacion "{titulo}" tiene un nuevo comentario.',
             [author]
         )
 
@@ -272,5 +281,43 @@ class BorrarComentarioView(generics.DestroyAPIView):
         comentario = Comentario.objects.filter(id=id_comentario)
         return comentario
 
+
+
+#Historial
+class HistogramaCreate (generics.CreateAPIView):
+    """ Clase para instanciar un "histograma" atraves de la clase CreateAPIView del framework REST
+    """
+    serializer_class = HistogramaSerializer
+    permission_classes = [AllowAny]         #Cualquier usuario que tiene permitido hacer un cambio debe poder acceder al view de crear una historia
+    
+    
+    def get_queryset(self):
+        """metodo reescrito, get_queryset retornara un set de historias para el libro correspondiente
+        """
+        id_libro = self.request.libro
+        return Histograma.objects.all(id_libro=id_libro)
+
+    def perform_create(self, serializer):
+        """Metodo reescrito para verificar que el objeto enviado atraves del serializer cumple con los atributos necesarios para su creacion para luego ser guardado
+        """
+        
+        if serializer.is_valid():
+            serializer.save(usuario=self.request.user, id_libro = self.request.libro)
+        else:
+            print(serializer.errors)
+
+class HistogramaListar(generics.ListAPIView):
+    """ Clase para listar los histogramas atraves de la clase ListAPIView del framework REST
+    """
+    serializer_class = HistogramaSerializer
+    permission_classes = [AllowAny]                                 #cualquiera puede listar las historias 
+        
+    def get_queryset(self):
+        """retorna todos las historias
+        """
+
+		#del front para el filtrado
+        id_libro = self.request.libro
+        return Histograma .objects.filter(id_libro=id_libro)
 
 

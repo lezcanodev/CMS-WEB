@@ -30,12 +30,8 @@ class Libro(models.Model):
     fecha = models.DateTimeField(auto_now_add=True)
     contenido = models.TextField()
     estado = models.CharField(max_length=20, null=True)
-    likes = models.IntegerField(default=0)
-    vistas = models.IntegerField(default=0)
-
-    #el related_name me permite user.notes()
-    #author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="libro")
-    #categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, related_name="categoria", default=1)
+    likes = models.IntegerField()
+    vistas = models.IntegerField()
     author = models.ForeignKey(User, on_delete=models.DO_NOTHING , related_name="author")
     categoria = models.ForeignKey(Categoria,on_delete=models.SET_DEFAULT,default=2, related_name="categoria")
     """
@@ -51,10 +47,6 @@ class Comentario(models.Model):
     """
     fecha = models.CharField(max_length=30)
     contenido = models.TextField()
-
-    #el related_name me permite user.notes()
-    #author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="libro")
-    #categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, related_name="categoria", default=1)
     usuario = models.ForeignKey(User, on_delete=models.DO_NOTHING , related_name="usuario")
     id_libro = models.ForeignKey(Libro,on_delete=models.DO_NOTHING, related_name="id_libro")
     """
@@ -62,3 +54,22 @@ class Comentario(models.Model):
     """
     def __str__(self):
         return self.contenido
+
+#Clase para los Histogramas
+class Histograma(models.Model):
+    """
+    Guarda una instancia de una historia
+    """
+    fecha = models.CharField(max_length=30)
+    usuario = models.ForeignKey(User, on_delete=models.DO_NOTHING , related_name="usuarioHistograma")
+    libro = models.ForeignKey(Libro,on_delete=models.DO_NOTHING, related_name="libro")
+    accion = models.TextField()
+
+    """
+    Retorna el usuario que modifico (metodo auxiliar)
+    """
+    def __str__(self):
+        return self.contenido
+
+
+
