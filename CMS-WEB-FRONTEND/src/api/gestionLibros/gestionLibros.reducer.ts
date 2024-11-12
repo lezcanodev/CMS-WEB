@@ -43,7 +43,7 @@ const libroActualizar = createSlice({
     initialState: generateBaseState<BaseResponse<LibroActualizarResponse>>(),
     reducers: {},
     extraReducers: (builder) => {
-        buildCommonCases(libroActualizarApiThunk.libroActualizarApiThunk, builder);
+        buildCommonCases(libroActualizarApiThunk.actualizarEstado, builder);
         buildCommonCases(libroActualizarApiThunk.aumentarCantidadVistaLibroThunk, builder);
         buildCommonCases(libroActualizarApiThunk.darLikeLibroThunk, builder);
     }

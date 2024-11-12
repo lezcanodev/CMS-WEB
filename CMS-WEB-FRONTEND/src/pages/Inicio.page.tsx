@@ -99,13 +99,7 @@ export function InicioPage(){
             loading: libro?.listar?.loading,
             data: libro?.listar?.data?.data?.filter(libro => 
                 libro.estado.toLowerCase().includes('publicado')) || [],
-               /* id: l?.id,
-                titulo: l?.titulo,
-                fecha: l?.fecha,
-                categoria: l?.categoria,
-                categoriaNombre: l?.categoriaNombre,
-                autorNombre: l?.autorNombre
-            })) || []*/
+               
         }}
         
     />;

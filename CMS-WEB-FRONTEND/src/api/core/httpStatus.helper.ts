@@ -18,7 +18,7 @@ export class HttpStatusCode{
             500: HttpStatusCode.InternalServerError
         };
 
-        return response?.[httpCode]() || HttpStatusCode.InternalServerError();
+        return response?.[httpCode] ? response?.[httpCode]() : HttpStatusCode.InternalServerError();
     }
 
     /**
@@ -37,12 +37,12 @@ export class HttpStatusCode{
     /**
     * Genera una respuesta de error para el código de estado HTTP 400 (Bad request).
     * 
-    * @param fieldsError - mapea el campo con su mensaje de error
+    * @param fieldsError - mapea el campo con su mensaje de error, ej: { "nombreCampo": "Este campo es obligatorio" }
     * @returns Un objeto de error que sigue la estructura definida en `BaseResponse<any>['error']`.
     */
     public static BadRequest(fieldsError?: {[field: string]: string}): BaseResponse<any>['error']{
         let response: BaseResponse<any>['error'] = {
-            httpCode: 401,
+            httpCode: 400,
             ...fieldsError
         };
         if(!fieldsError){

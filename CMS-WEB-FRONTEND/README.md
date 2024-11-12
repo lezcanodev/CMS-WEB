@@ -3,8 +3,8 @@
 Front-End del proyecto Sistema de Administración de Contenido Web (CMS Web).
 
 #  Tecnologías a utilizar
-- <b>React Testing Library y Jest</b> se usaran para realizar testing sobre los componentes del GUI y sobre los metodos, clases, etc. (https://testing-library.com/docs/react-testing-library/intro/)
-(https://jestjs.io/docs/getting-started)
+- <b>React Testing Library y Vitest</b> se usaran para realizar testing sobre los componentes del GUI y sobre los métodos, clases, etc. (https://testing-library.com/docs/react-testing-library/intro/)
+(https://vitest.dev/guide/)
 <br/><br/>
 - <b>React-router</b> sera el encargado del enrutamiento de paginas. (https://reactrouter.com/en/main)
 <br/><br/>

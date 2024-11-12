@@ -1,10 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { baseApiThunk } from '@/api/core/base.api.thunk';
 import { AumentarVisitasRequest, DarLikeRequest, LibroActualizarRequest } from './actualizarLibro.model';
-import ApiActualizarLibro, { AumentarCantidadVistaLibro, DarLikeLibro } from './listarLibros.api';
+import ApiActualizarLibroEstado, { AumentarCantidadVistaLibro, DarLikeLibro } from './actualizarLibro.api';
+import ApiGuardarHistorialLibro from '@/api/gestionHistorial/guardarHistorial/guardarHistorial.api';
 
-const libroActualizar = new ApiActualizarLibro();
-const actualizarEstado = createAsyncThunk(
+const libroActualizar = new ApiActualizarLibroEstado(new ApiGuardarHistorialLibro());
+const actualizarEstadoThunk = createAsyncThunk(
     'libro/actualizar', baseApiThunk<LibroActualizarRequest>( async (newData) => await libroActualizar.execute(newData))
 )
 
@@ -19,7 +20,7 @@ const darLikeLibroThunk = createAsyncThunk(
 )
 
 export const libroActualizarApiThunk = {
-    libroActualizarApiThunk: actualizarEstado,
+    actualizarEstado: actualizarEstadoThunk,
     aumentarCantidadVistaLibroThunk,
     darLikeLibroThunk
 }

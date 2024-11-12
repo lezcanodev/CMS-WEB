@@ -2,7 +2,8 @@
 from django.contrib import admin
 from django.urls import path, include
 from api.gestion_usuarios_views import CrearUsuarioView,DeleteUsuarioView,ListarUsuariosView, UpdateUsuarioView
-from api.views import CreateUserView, LibroListCreate, CategoriaListCreate, CategoriaDelete,LibroDelete, LibroListar,CategoriaListar, UpdateCategoriaAPIView, UpdateLibroAPIView, UserProfileUpdateView,CrearComentarioView,ListarComentariosView
+from api.views import CreateUserView, LibroListCreate, CategoriaListCreate, CategoriaDelete,LibroDelete, LibroListar,CategoriaListar, UpdateCategoriaAPIView, UpdateLibroAPIView, UserProfileUpdateView,CrearComentarioView,ListarComentariosView,BorrarComentarioView
+from api.views import CreateUserView, LibroListCreate, CategoriaListCreate, CategoriaDelete,LibroDelete, LibroListar,CategoriaListar, UpdateCategoriaAPIView, UpdateLibroAPIView, UserProfileUpdateView,CrearComentarioView,ListarComentariosView, HistogramaCreate, HistogramaListar
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
@@ -53,26 +54,19 @@ urlpatterns = [
     path("api/listar-usuario", ListarUsuariosView.as_view(), name="listar-usuario"),
     path("api/update-usuario/<int:pk>", UpdateUsuarioView.as_view(), name="update-usuario"),
     path("api/borrar-usuario/<int:pk>",DeleteUsuarioView.as_view(), name="borrar-usuario" ),
-    #path("api/update-usuario/<int:pk>",UpdateCategoriaAPIView.as_view(), name="update-usuario" ),
 
-    #path("api/listar-libro", login_required(LibroListar.as_view()), name="listar-libro"),
 
-    #path("api/borrar-libro",login_required(LibroDelete.as_view()), name="borrar-libro" ),
-
-    #path("api/crear-categoria", login_required(CategoriaListCreate.as_view()), name="crear-categoria"),
-
-    #path("api/listar-categoria", login_required(CategoriaListar.as_view()), name="listar-categoria"),
-
-    #path("api/borrar-categoria",login_required(CategoriaDelete.as_view()), name="borrar-categoria"),
-    
-    #path("api/actualizar-role",login_required(UserProfileUpdateView.as_view()),name="actualizar-role"),
-
-    #path("api/listar-roles", RolesListar.as_view(), name="listar-roles"),
-
-    #path("api/borrar-rol",RolesDelete.as_view(), name="borrar-rol" )   
-
-    #path("api/actualizar-role",UserProfileUpdateView.as_view(),name="actualizar-role"),
+    #Rutas comentarios
     path("api/guardar-comentario",CrearComentarioView.as_view(), name="guardar-comentario"),
-    path("api/listar-comentarios",ListarComentariosView.as_view(), name="listar-comentarios")
+    path("api/listar-comentarios",ListarComentariosView.as_view(), name="listar-comentarios"),
+    path("api/borrar-comentario/<int:pk>",BorrarComentarioView.as_view(), name="borrar-comentario"),
+
+    
+
+    
+	path("api/guardar-comentario",CrearComentarioView.as_view(), name="guardar-comentario"),
+    path("api/listar-comentarios",ListarComentariosView.as_view(), name="listar-comentarios"),
+	path("api/guardar-historial", HistogramaCreate.as_view(), name="guardar-historial"),
+	path("api/listar-historial", HistogramaListar.as_view(), name="listar-historial")
 ]
 

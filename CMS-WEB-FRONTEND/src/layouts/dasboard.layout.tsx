@@ -1,6 +1,6 @@
 import { Box, Divider, Link, ListItem, ListItemButton, ListItemText, Stack, Typography } from '@mui/material';
 import { Outlet, useNavigate } from 'react-router';
-import SecurityIcon from '@mui/icons-material/Security';
+
 import GroupIcon from '@mui/icons-material/Group';
 import WebStoriesIcon from '@mui/icons-material/WebStories';
 import ArticleIcon from '@mui/icons-material/Article';
