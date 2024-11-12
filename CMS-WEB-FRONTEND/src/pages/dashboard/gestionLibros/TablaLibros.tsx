@@ -12,6 +12,7 @@ import { getRouteByName } from '@/router/helpers';
 import ViewWeekIcon from '@mui/icons-material/ViewWeek';
 import ReplyAllIcon from '@mui/icons-material/ReplyAll';
 import SimpleKanban from '@/components/KanbaTable/KambaTable';
+import { HistorialLibro } from './ListarHistoriaLibro';
 
 interface TablaLibrosProps{
     onOpenLibroEditor: () => void
@@ -42,16 +43,25 @@ export default function TablaLibros({
     }
     const changeState = async (currentRow: any, nuevoEstado: string) => {
         if(currentRow?.id){
-            await dispatch(api.libro.libroActualizarApiThunk({
+            await dispatch(api.libro.actualizarEstado({
                 id: currentRow.id,
                 titulo: currentRow.titulo,
                 categoria: currentRow.categoria,
-                estado: nuevoEstado
+                estado: nuevoEstado,
+                
+                estadoAnterior: currentRow
             })).unwrap()
             .then(() => {
                 setReload(!reload);
                 dispatch(snackbarActions.openSnackbar({
                     message: `Se ha realizado la operación correctamente`,
+                    autoHideDuration: 1000
+                }))
+            })
+            .catch((err) => {
+                dispatch(snackbarActions.openSnackbar({
+                    message: `Ocurrió un error`,
+                    type: 'error',
                     autoHideDuration: 1000
                 }))
             })
@@ -88,6 +98,13 @@ export default function TablaLibros({
     }
 
     return<>
+            {/* Solo es para probar si lista */}
+            historial:
+            <HistorialLibro
+                libroId={4564}
+                libroNombre='hjfdkjdhkijsad'
+            />
+
         {
             seccionActual === 'kanba' ? (<>
                 <KanbaLibros

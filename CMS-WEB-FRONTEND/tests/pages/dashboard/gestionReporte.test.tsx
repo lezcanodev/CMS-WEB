@@ -65,7 +65,7 @@ describe('GUI - Gestión de reportes', async () => {
     })
 
     it('Debería mostrar el total de libros "Publicados" correctamente', async () => {
-      // Nos aseguramos que la cantidad de libro con estado "Publicados" sea correcta
+      // Nos aseguramos que la cantidad de libro con estado "Rechazados" sea correcta
       let elementoEnContenedor = await within(contenedorEstadoDeLosLibros).findByText((content, element) => {
           return content.startsWith('Publicado') && content.includes(`(${mockLibros().cantidadPublicados})`);
       }, { exact: false });

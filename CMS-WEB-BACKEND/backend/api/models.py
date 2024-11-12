@@ -68,8 +68,8 @@ class Histograma(models.Model):
     """
     Retorna el usuario que modifico (metodo auxiliar)
     """
-    def __str__(self):
-        return self.contenido
+    #def __str__(self):
+    #    return self.usuario
 
 
 

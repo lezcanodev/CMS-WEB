@@ -1,5 +1,5 @@
 /**
- * Datos necesarios para hacer una request a login del backend
+ * Datos necesarios para hacer una actualización de estado a un libro
  */
 export interface LibroActualizarRequest{
     id: number;
@@ -8,6 +8,9 @@ export interface LibroActualizarRequest{
     estado: string;
     likes?: number;
     vistas?: number;
+
+    // Sirve para identificar la modificación realizada
+    estadoAnterior: LibroActualizarRequest
 }
 
 export interface DarLikeRequest{

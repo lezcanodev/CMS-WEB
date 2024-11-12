@@ -10,8 +10,8 @@
     "preview": "vite preview",
     "generate-doc": "typedoc --options typedoc.config.mjs  && start docs/index.html",
     "coverage": "vitest run --coverage",
-    "coveragefile": "vitest --coverage --run tests/api/core/gestionLibros.test.tsx",
-    "test": "vitest run tests/pages/dashboard/gestionLibros.test.tsx",
+    "coveragefile": "vitest",
+    "test": "vitest",
     "test:ui": "vitest --ui"
   },
   "dependencies": {

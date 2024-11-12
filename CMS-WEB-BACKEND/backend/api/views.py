@@ -291,18 +291,22 @@ class HistogramaCreate (generics.CreateAPIView):
     permission_classes = [AllowAny]         #Cualquier usuario que tiene permitido hacer un cambio debe poder acceder al view de crear una historia
     
     
-    def get_queryset(self):
-        """metodo reescrito, get_queryset retornara un set de historias para el libro correspondiente
-        """
-        id_libro = self.request.libro
-        return Histograma.objects.all(id_libro=id_libro)
+    #def get_queryset(self):
+    #    """metodo reescrito, get_queryset retornara un set de historias para el libro correspondiente
+    #    """
+    #    print("data========================================>  ", self.request.data)
+    #    print("???? ", Histograma.objects.filter(id_libro=id_libro));
+    #    id_libro = self.request.data.get("libro") 
+    #    self.request.libro = Histograma.objects.filter(id_libro=id_libro) 
+    #    return Histograma.objects.filter(id_libro=id_libro)
 
     def perform_create(self, serializer):
         """Metodo reescrito para verificar que el objeto enviado atraves del serializer cumple con los atributos necesarios para su creacion para luego ser guardado
-        """
-        
+        """  
+        #id_libro = self.request.data.get("libro") 
+        libro_instance = Libro.objects.get(id=self.request.data.get("libro"))
         if serializer.is_valid():
-            serializer.save(usuario=self.request.user, id_libro = self.request.libro)
+            serializer.save(usuario=self.request.user, libro = libro_instance )
         else:
             print(serializer.errors)
 
@@ -317,7 +321,10 @@ class HistogramaListar(generics.ListAPIView):
         """
 
 		#del front para el filtrado
-        id_libro = self.request.libro
-        return Histograma .objects.filter(id_libro=id_libro)
+        id_libro = self.request.query_params.get("libro")
+        print("====> ", id_libro)
+        print("===> ", Histograma.objects.filter(libro_id=id_libro))
+        print("===> ", Histograma.objects.all()[0])
+        return Histograma.objects.filter(libro_id=id_libro)
 
 
