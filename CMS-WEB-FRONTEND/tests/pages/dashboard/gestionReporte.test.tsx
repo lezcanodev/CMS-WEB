@@ -1,32 +1,34 @@
 import React from 'react';
-import { expect, it, describe, beforeEach } from 'vitest'
+import { expect, it, describe, beforeEach, afterEach } from 'vitest'
 import {  render, screen,  within } from '@testing-library/react'
-import GestionReportes from '../src/pages/dashboard/gestionReportes/index';
-import { TestComponent } from './utils/TestComponent';
-import { mockLibros } from './utils/libros.mock';
+import GestionReportes from '@/pages/dashboard/gestionReportes/index';
+import { TestComponent } from '../../utils/TestComponent';
+import { LIBRO_ENDPOINTS, mockLibros } from '../../utils/libros.mock';
+import { workerFakeApi } from '@tests/utils/server.fake';
+import { http, HttpResponse } from 'msw';
 
-describe('Gestión de reportes', async () => {
+describe('GUI - Gestión de reportes', async () => {
 
   /**
    * =========================
    * REPORTE DE ESTADO DE LIBRO
    * =========================
    */
-  describe('Reporte "Estado de los libros"', async () => {
+  describe('Reporte "Libros por estado"', async () => {
     let tituloSeccionEstadoDeLosLibros: any = null;
     let contenedorEstadoDeLosLibros: any = null;
 
     beforeEach(async () => {
         render (<TestComponent> <GestionReportes /> </TestComponent>);
 
-        // Buscamos la sección de Estado de los libros
-        tituloSeccionEstadoDeLosLibros = await screen.findByText(/Estado de los libros/i);;
+        // Buscamos la sección de Libros por estado
+        tituloSeccionEstadoDeLosLibros = await screen.findByText(/Libros por estado/i);;
         // Obtenemos el contenedor
         contenedorEstadoDeLosLibros = tituloSeccionEstadoDeLosLibros.parentElement;
 
         // Nos aseguramos que esta definido
         if(!contenedorEstadoDeLosLibros){
-          throw new Error(`No se ha encontrado la sección "Estado de los libros" `);
+          throw new Error(`No se ha encontrado la sección "Libros por estado" `);
           return;
         }
     })
@@ -54,7 +56,7 @@ describe('Gestión de reportes', async () => {
       expect(elementoEnContenedor).toBeInTheDocument();
     })
 
-    it('Debería mostrar el total de libros "Rechazados" correctamente', async () => {
+    it('Debería mostrar el total de libros "Rechazado" correctamente', async () => {
       // Nos aseguramos que la cantidad de libro con estado "Rechazados" sea correcta
       let elementoEnContenedor = await within(contenedorEstadoDeLosLibros).findByText((content, element) => {
           return content.startsWith('Rechazado') && content.includes(`(${mockLibros().cantidadRechazados})`);
@@ -84,7 +86,7 @@ describe('Gestión de reportes', async () => {
       beforeEach(async () => {
           render (<TestComponent> <GestionReportes /> </TestComponent>);
 
-          // Buscamos la sección de Estado de los libros
+          // Buscamos la sección de este reporte
           tituloSeccionMasGustados = await screen.findByText(/Mas gustados/i);;
           // Obtenemos el contenedor
           contenedorMasGustados = tituloSeccionMasGustados.parentElement;
@@ -95,16 +97,51 @@ describe('Gestión de reportes', async () => {
             return;
           }
       })
+
+      afterEach(() => {
+        workerFakeApi.resetHandlers();
+      })
   
       it('Debería mostrar el total de likes correctamente', async () => {
           // Nos aseguramos que el label total de libros muestre lo esperado
-          //let texto = `Total de likes:${mockLibros().totalMeGustas}`;
           let texto = `Total de likes:`;
           let elementoEnContenedor = await within(contenedorMasGustados).findByText(new RegExp(texto, 'i'), { exact: false });
           let totalLikes = await within(elementoEnContenedor).findByText(new RegExp(mockLibros().totalMeGustas?.toString(), 'i'), { exact: false });
           expect(totalLikes).toBeInTheDocument();
       })
-  
+
+      it('Debería mostrar correctamente cuando no hay datos', async () => {
+        // Falseamos las respuesta de listar libro con un array vació
+        workerFakeApi.use(
+          http.get(LIBRO_ENDPOINTS.listarLibros, () => HttpResponse.json([], {status: 200}) )
+        );
+ 
+        render (<TestComponent> <GestionReportes /> </TestComponent>);
+
+        // Buscamos la sección de este reporte
+        tituloSeccionMasGustados = await screen.findByText(/Mas gustados/i);;
+        // Obtenemos el contenedor
+        contenedorMasGustados = tituloSeccionMasGustados.parentElement;
+
+        // Nos aseguramos que esta definido
+        if(!contenedorMasGustados){
+          throw new Error(`No se ha encontrado la sección de "Mas gustados" `);
+          return;
+        }
+
+        // verificamos que el texto cuando no hay datos sea correcto
+        let elementoEnContenedor = await within(contenedorMasGustados).findByText((content, element) => {
+          return content.startsWith('No hay datos para mostrar')
+        }, { exact: false });
+        expect(elementoEnContenedor).toBeInTheDocument();
+        
+        // Nos aseguramos que el total de likes sea cero
+        let texto = `Total de likes:`;
+        elementoEnContenedor = await within(contenedorMasGustados).findByText(new RegExp(texto, 'i'), { exact: false });
+        let totalLikes = await within(elementoEnContenedor).findByText(new RegExp("0", 'i'), { exact: false });
+        expect(totalLikes).toBeInTheDocument();
+      })
+      
     });
 
 
@@ -120,8 +157,9 @@ describe('Gestión de reportes', async () => {
       beforeEach(async () => {
           render (<TestComponent> <GestionReportes /> </TestComponent>);
 
-          // Buscamos la sección de Estado de los libros
-          tituloSeccionMasGustados = await screen.findByText(/Mas vistos/i);;
+          // Buscamos la sección de este reporte
+          tituloSeccionMasGustados = await screen.findByText(/Mas vistos/i);
+          
           // Obtenemos el contenedor
           contenedorMasGustados = tituloSeccionMasGustados.parentElement;
 
@@ -138,12 +176,40 @@ describe('Gestión de reportes', async () => {
           let elementoEnContenedor = await within(contenedorMasGustados).findByText(new RegExp(texto, 'i'), { exact: false });
           let totalLikes = await within(elementoEnContenedor).findByText(new RegExp(mockLibros().totalVistas?.toString(), 'i'), { exact: false });
           expect(totalLikes).toBeInTheDocument();
+      });
+
+      it('Debería mostrar correctamente cuando no hay datos', async () => {
+        // Falseamos las respuesta de listar libro con un array vació
+        workerFakeApi.use(
+          http.get(LIBRO_ENDPOINTS.listarLibros, () => HttpResponse.json([], {status: 200}) )
+        );
+ 
+        render (<TestComponent> <GestionReportes /> </TestComponent>);
+
+        // Buscamos la sección de este reporte
+        tituloSeccionMasGustados = await screen.findByText(/Mas vistos/i);;
+        // Obtenemos el contenedor
+        contenedorMasGustados = tituloSeccionMasGustados.parentElement;
+
+        // Nos aseguramos que esta definido
+        if(!contenedorMasGustados){
+          throw new Error(`No se ha encontrado la sección de "Mas gustados" `);
+          return;
+        }
+
+        // verificamos que el texto cuando no hay datos sea correcto
+        let elementoEnContenedor = await within(contenedorMasGustados).findByText((content, element) => {
+          return content.startsWith('No hay datos para mostrar')
+        }, { exact: false });
+        expect(elementoEnContenedor).toBeInTheDocument();
+        
+        // Nos aseguramos que el total de likes sea cero
+        let texto = `Total de vistas:`;
+        elementoEnContenedor = await within(contenedorMasGustados).findByText(new RegExp(texto, 'i'), { exact: false });
+        let totalLikes = await within(elementoEnContenedor).findByText(new RegExp("0", 'i'), { exact: false });
+        expect(totalLikes).toBeInTheDocument();
       })
   
     });
 
 });
-/*
-const longitud = getSlidesCount(seccionMasGustadosContainer);
-        console.log({longitud})
-*/

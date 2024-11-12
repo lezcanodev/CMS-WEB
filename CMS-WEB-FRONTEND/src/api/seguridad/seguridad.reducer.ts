@@ -72,3 +72,9 @@ const seguridadReducer = combineReducers({
 });
 
 export default seguridadReducer;
+
+export const apiSeguridad = {
+    seguridadRegistrarseThunk,
+    seguridadIngresarThunk,
+    seguridadRefrescarThunk
+}

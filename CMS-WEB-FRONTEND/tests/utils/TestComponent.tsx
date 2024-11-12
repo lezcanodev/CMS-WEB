@@ -1,11 +1,11 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import store, { useAppDispatch } from '../../src/redux';
+import store, { useAppDispatch } from '@/redux';
 import { useEffect } from 'react';
-import { seguridadIngresarThunk } from '../../src/api/seguridad/Ingresar/ingresar.thunk';
-import { getPermisos } from '../../src/redux/permisos/permisos.slice';
-import { RefrescarToken } from '../../src/router/middlewares/RefrescarToken';
-import { TemplateProvider } from '../../src/contexts/templateContext';
+import { seguridadIngresarThunk } from '@/api/seguridad/Ingresar/ingresar.thunk';
+import { getPermisos } from '@/redux/permisos/permisos.slice';
+import { RefrescarToken } from '@/router/middlewares/RefrescarToken';
+import { TemplateProvider } from '@/contexts/templateContext';
 import { MemoryRouter } from 'react-router-dom';
 
 /**
@@ -31,7 +31,7 @@ const TestComponent2 = ({children}: any) => {
     dispatch(seguridadIngresarThunk({
         username: 'admin2',
         password: '123456'
-      }))
+       }))
       .unwrap()
       .then((data) => {
           console.log("Ingresamos con el usuario de prueba")
@@ -46,6 +46,6 @@ const TestComponent2 = ({children}: any) => {
                   <TemplateProvider template={'template1'}>
                             {children}
                   </TemplateProvider>
-            </RefrescarToken>
+          </RefrescarToken>
 
 }

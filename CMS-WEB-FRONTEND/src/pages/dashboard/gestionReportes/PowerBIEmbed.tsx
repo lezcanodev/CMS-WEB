@@ -1,4 +1,4 @@
-const PowerBIEmbed = () => (
+export const PowerBIEmbed = () => (
     <iframe
       width="100%"
       height="600"
@@ -6,4 +6,3 @@ const PowerBIEmbed = () => (
       allowFullScreen={true}
     ></iframe>
   );
-  export default PowerBIEmbed;

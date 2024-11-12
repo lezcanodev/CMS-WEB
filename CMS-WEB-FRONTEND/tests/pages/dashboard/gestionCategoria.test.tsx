@@ -3,8 +3,8 @@ import { expect, it, describe, beforeEach, beforeAll } from 'vitest'
 import {  render, screen, waitFor } from '@testing-library/react'
 import { userEvent } from '@testing-library/user-event'
 import { vi } from 'vitest';
-import GestionCategorias from '../src/pages/dashboard/gestionCategorias/index';
-import { TestComponent } from './utils/TestComponent';
+import GestionCategorias from '../../../src/pages/dashboard/gestionCategorias/index';
+import { TestComponent } from '../../utils/TestComponent';
 import {v7} from 'uuid';
 
 let nombreTestCategoria = v7();

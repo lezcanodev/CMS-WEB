@@ -22,12 +22,20 @@ export default defineConfig({
       reporter: ['text', 'lcov'], // Genera los reportes en formato lcov
       reportsDirectory: './coverage', // Directorio donde se almacenarán los reportes
       all: true, // Incluye todos los archivos, incluso los que no han sido importados en los tests
-      exclude: ['tests/**', 'node_modules/**'], // Excluye el directorio de pruebas y node_modules
+      include: ['src/**/*.{ts,tsx}'],
+      exclude: [
+        'tests/**', 
+        'node_modules/**',
+        'src/**/*.thunk.ts',
+        'src/**/*.reducer.ts',
+        'src/**/templates/**'
+      ], // Excluye el directorio de pruebas y node_modules
     },
   },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
+      '@tests': path.resolve(__dirname, 'tests'),
     },
   },
 });

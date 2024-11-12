@@ -42,7 +42,6 @@ export function LoginPage(){
       } 
     })
 
-
     return <>
         <LoginPageElement 
             onSubmitLogin={formikLogin.handleSubmit}

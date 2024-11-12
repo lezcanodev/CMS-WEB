@@ -1,6 +1,6 @@
 import {http, HttpResponse} from 'msw';
 import { setupServer } from "msw/node";
-import { mockLibros } from './libros.mock';
+import { LIBRO_ENDPOINTS, mockLibros } from './libros.mock';
 
 const MOCK_REFRESH_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTczMDI0MzcyNCwiaWF0IjoxNzMwMTU3MzI0LCJqdGkiOiI1OWU1N2MzMzIzYzU0ZjFmYTI2NTNlYWYwNDNjMzdmOCIsInVzZXJfaWQiOjJ9.zwaXptgmmu7osIxM0GGAmTRWrJ3yZcYIzULnAj0G_6Y';
 const MOCK_ACCESS_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTczMDI0MzcyNCwiaWF0IjoxNzMwMTU3MzI0LCJqdGkiOiI1OWU1N2MzMzIzYzU0ZjFmYTI2NTNlYWYwNDNjMzdmOCIsInVzZXJfaWQiOjJ9.zwaXptgmmu7osIxM0GGAmTRWrJ3yZcYIzULnAj0G_6Y';
@@ -55,9 +55,7 @@ export const handlers = [
   /**
    * FAKE LIBROS ENDPOINTS
    */
-  http.get('http://127.0.0.1:8000/api/listar-libro', () => {
-    return HttpResponse.json(mockLibros().mockLibros, {status: 200});
-  })
+  http.get(LIBRO_ENDPOINTS.listarLibros, () => HttpResponse.json(mockLibros().mockLibros, {status: 200}) ),
 
 ];
 

@@ -1,6 +1,10 @@
 import { BaseResponse } from '@/api/core/base.api.model'
 import { InputProps } from '../common/Input'
 
+/**
+ * Datos que debe recibir la pagina de login para que la plantilla utilizada la
+ * pueda utilizar
+ */
 export interface ILoginPage{
     onSubmitLogin:  () => void,
     goToResetPassword: () => void,

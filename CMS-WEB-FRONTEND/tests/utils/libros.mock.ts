@@ -1,6 +1,13 @@
+import { LibroListarData } from '@/api/gestionLibros/listar/listarLibro.model'
+import { workerFakeApi } from './server.fake';
 
-
-export const MOCK_LIBROS = [
+export const LIBRO_ENDPOINTS = {
+  listarLibros: 'http://127.0.0.1:8000/api/listar-libro'
+}
+/**
+ * Listado de libros por defecto
+ */
+export const MOCK_LIBROS: LibroListarData[] = [
   {
     "id": 2,
     "titulo": "LIBRO_ Guardado",
@@ -25,7 +32,7 @@ export const MOCK_LIBROS = [
     "categoriaNombre": "CTG1",
     "autorNombre": "admin2",
     "vistas": 2,
-    "likes": 3
+    "likes": 4
   },
   {
     "id": 4,
@@ -38,7 +45,7 @@ export const MOCK_LIBROS = [
     "categoriaNombre": "CTG1",
     "autorNombre": "admin2",
     "vistas": 1,
-    "likes": 1
+    "likes": 2
   },
   {
     "id": 5,
@@ -51,11 +58,16 @@ export const MOCK_LIBROS = [
     "categoriaNombre": "CTG1",
     "autorNombre": "admin2",
     "vistas": 0,
-    "likes": 0
+    "likes": 3
   }
 ]
 
+/**
+ * Retorna el listado de libros y información acerca del listado
+ * @returns 
+ */
 export function mockLibros(){
+
     return {
         mockLibros: MOCK_LIBROS,
         cantidad: MOCK_LIBROS.length,
@@ -63,6 +75,8 @@ export function mockLibros(){
         cantidadEnRevision: 1,
         cantidadPublicados: 1,
         cantidadRechazados: 1,
+
+        libroConMasLike: MOCK_LIBROS.reduce((acc, libro) =>  acc?.likes < libro?.likes ? libro  : acc  , {} as LibroListarData ), 
         totalMeGustas:  MOCK_LIBROS.reduce((acc, libro) =>  acc + libro?.likes ,0),
         totalVistas:  MOCK_LIBROS.reduce((acc, libro) =>  acc + libro?.vistas ,0)
     }
