@@ -225,21 +225,7 @@ class CrearComentarioView(generics.CreateAPIView):
         objeto_libro = Libro.objects.get(id = dictionary["id_libro"])
         enviar_notificacion_email(
             'Nuevo comentario',
-            f'Su publicacion "{titulo}" tiene un nuevo comentario.',
-            [author]
-        )
-        return
-        
-        if serializer.is_valid():
-            serializer.save(usuario=self.request.user, id_libro = Libro.objects(). self.request.data.get('id_libro'))
-        else:
-            print(serializer.errors)
-        author = 'autor' #self.request.libro.titulo
-        titulo =  'titulo' #self.request.libro.author
-        # Enviar correo de notificación
-        enviar_notificacion_email(
-            'Nuevo comentario',
-            f'Su publicacion "{titulo}" tiene un nuevo comentario.',
+            f'Su publicacion "{objeto_libro}" tiene un nuevo comentario.',
             [author]
         )
 
