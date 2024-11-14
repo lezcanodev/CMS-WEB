@@ -4,6 +4,7 @@ import { BaseResponse } from '../core/base.api.model';
 import ApiGuardarHistorialLibro from './guardarHistorial/guardarHistorial.api';
 import { guardarHistorialLibroThunk } from './guardarHistorial/guardarHistorial.thunk';
 import { listarHistorialLibroThunk } from './listarHistorialLibro/listarHistorialLibro.thunk';
+import { ApiListarHistorialLibroResponse } from './listarHistorialLibro/listarHistorialLibro.model';
 
 
 const guardarHistorialLibroSlice = createSlice({
@@ -17,7 +18,7 @@ const guardarHistorialLibroSlice = createSlice({
 
 const listarHistorialLibroSlice = createSlice({
     name: 'listarHistorialLibroSlice',
-    initialState: generateBaseState<BaseResponse<ApiGuardarHistorialLibro>>(),
+    initialState: generateBaseState<BaseResponse<ApiListarHistorialLibroResponse>>(),
     reducers: {},
     extraReducers: (builder) => {
         buildCommonCases(listarHistorialLibroThunk, builder);

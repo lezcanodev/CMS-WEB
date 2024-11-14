@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router';
 import { getRouteByName } from '@/router/helpers';
 import ViewWeekIcon from '@mui/icons-material/ViewWeek';
 import ReplyAllIcon from '@mui/icons-material/ReplyAll';
+import PublishedWithChangesIcon from '@mui/icons-material/PublishedWithChanges';
 import SimpleKanban from '@/components/KanbaTable/KambaTable';
 import { HistorialLibro } from './ListarHistoriaLibro';
 
@@ -20,13 +21,14 @@ interface TablaLibrosProps{
 export default function TablaLibros({
     onOpenLibroEditor
 }: TablaLibrosProps){
-    const [seccionActual, setSeccionActual] = useState<'tabla' | 'kanba'>('tabla')
+    const [seccionActual, setSeccionActual] = useState<'tabla' | 'kanba'| 'Cambios_Libros'>('tabla')
     const { permisosPaginas } = useAppSelector(st => st.permisos);
     const dispatch = useAppDispatch();
     const { data, loading } = useAppSelector((state) => state.api.libro.listar);
     const [reload, setReload] = useState<boolean>(false);
     const navigate = useNavigate();
     const [libro_filtrado, setFiltrados] = useState(data?.data || []);
+    const [libro_cambio, setCambio] = useState(data?.data?.[0] || null);
 
     // Aqui se controla la eliminacion de categoria
     const handleDelete = async (currentRow: any) => {
@@ -85,7 +87,7 @@ export default function TablaLibros({
             const librosFiltrados = data?.data?.filter(libro => 
                 libro.titulo.toLowerCase().includes(query.toLowerCase())
             );
-            console.log(data?.data?.[0]?.fecha);
+
             setFiltrados(librosFiltrados || []);
             //en caso de que no coincida con ningun libro.-
             if(librosFiltrados === null){               
@@ -93,69 +95,75 @@ export default function TablaLibros({
             }
         //sino que muestre todo.-
         }else{
-                setFiltrados(data?.data || []);
+            setFiltrados(data?.data || []);
         }
     }
 
     return<>
-            {/* Solo es para probar si lista */}
-            historial:
-            <HistorialLibro
-                libroId={4564}
-                libroNombre='hjfdkjdhkijsad'
-            />
 
-        {
-            seccionActual === 'kanba' ? (<>
-                <KanbaLibros
-                    seccionActual={seccionActual}
-                    setSeccionActual={setSeccionActual}
-                    libros={data?.data || []}
-                    changeState={changeState}
-                />
-            </>) : (
-                <SectionTable
-                    title='Gestión de libros'
-                    puedoCrear={permisosPaginas?.LIBRO_PAGINA.CREAR}
-                    onSearch={handleSearch}
-                    onCreate={onOpenLibroEditor}
-                    masOpciones={<>
-                        { permisosPaginas?.LIBRO_PAGINA.KANBAN_ACCESO && (
-                            <Button onClick={() => setSeccionActual('kanba')  } variant='outlined' endIcon={<ViewWeekIcon   fontSize='small'/>}>Kanban</Button>
-                        )}
-                    </>}
-                    loading={loading}
-                    columns={[
-                        {columnName: 'Acciones', key:'acciones', action: (currentRow) => {
-                            return <>
-                                <Stack direction='row' gap={1} justifyContent={'center'} marginX={'auto'}>
-                                    {permisosPaginas?.LIBRO_PAGINA.ELIMINAR &&  <Button onClick={() => handleDelete(currentRow)}>
-                                        <DeleteOutlineIcon color='error'/>
-                                    </Button>}
-                                    {permisosPaginas?.LIBRO_PAGINA.EDITAR &&  <Button onClick={() => {}} disabled>
-                                        <EditIcon color='primary' />
-                                    </Button>}
-                                    <Button onClick={() => navigate(getRouteByName('verLibro', {id: currentRow.id }))}>
-                                        ver
-                                    </Button>
-                                    {permisosPaginas?.LIBRO_PAGINA.PUBLICAR && <Button onClick={() => changeState(currentRow,'Publicado')}>
-                                        Publicar
-                                    </Button>}
-                                    {permisosPaginas?.LIBRO_PAGINA.PUBLICAR && <Button onClick={() => changeState(currentRow,'Rechazado')}>
-                                        Rechazar
-                                    </Button>}
-                                </Stack>
-                            </>
-                        }},
-                        {columnName: 'Autor', key:'autorNombre'},
-                        {columnName: 'Titulo', key:'titulo'},
-                        {columnName: 'Estado', key:'estado'},
-                        {columnName: 'Categoría', key:'categoriaNombre'},
-                        {columnName: 'Fecha', key:'fecha'}
-                    ]}
-                    rows={libro_filtrado}
-                />
-            )
+        {seccionActual === 'kanba' && (
+            <KanbaLibros
+                seccionActual={seccionActual}
+                setSeccionActual={setSeccionActual}
+                libros={data?.data || []}
+                changeState={changeState}
+            />
+        )}
+        {seccionActual === 'tabla' && (
+            <SectionTable
+                title='Gestión de libros'
+                puedoCrear={permisosPaginas?.LIBRO_PAGINA.CREAR}
+                onSearch={handleSearch}
+                onCreate={onOpenLibroEditor}
+                masOpciones={<>
+                    { permisosPaginas?.LIBRO_PAGINA.KANBAN_ACCESO && (
+                        <Button onClick={() => setSeccionActual('kanba')  } variant='outlined' endIcon={<ViewWeekIcon   fontSize='small'/>}>Kanban</Button>
+                    )}
+                </>}
+                loading={loading}
+                columns={[
+                    {columnName: 'Acciones', key:'acciones', action: (currentRow) => {
+                        return <>
+                            <Stack direction='row' gap={1} justifyContent={'center'} marginX={'auto'}>
+                                {permisosPaginas?.LIBRO_PAGINA.ELIMINAR &&  <Button onClick={() => 
+                                        {setSeccionActual('Cambios_Libros')
+                                        setCambio(currentRow)}
+                                    }>
+                                    <PublishedWithChangesIcon/>
+                                </Button>}
+                                {permisosPaginas?.LIBRO_PAGINA.ELIMINAR &&  <Button onClick={() => handleDelete(currentRow)}>
+                                    <DeleteOutlineIcon color='error'/>
+                                </Button>}
+                                {permisosPaginas?.LIBRO_PAGINA.EDITAR &&  <Button onClick={() => {}} disabled>
+                                    <EditIcon color='primary' />
+                                </Button>}
+                                <Button onClick={() => navigate(getRouteByName('verLibro', {id: currentRow.id }))}>
+                                    ver
+                                </Button>
+                                {permisosPaginas?.LIBRO_PAGINA.PUBLICAR && <Button onClick={() => changeState(currentRow,'Publicado')}>
+                                    Publicar
+                                </Button>}
+                                {permisosPaginas?.LIBRO_PAGINA.PUBLICAR && <Button onClick={() => changeState(currentRow,'Rechazado')}>
+                                    Rechazar
+                                </Button>}
+                            </Stack>
+                        </>
+                    }},
+                    {columnName: 'Autor', key:'autorNombre'},
+                    {columnName: 'Titulo', key:'titulo'},
+                    {columnName: 'Estado', key:'estado'},
+                    {columnName: 'Categoría', key:'categoriaNombre'},
+                    {columnName: 'Fecha', key:'fecha'}
+                ]}
+                rows={libro_filtrado}
+            />)}
+        {seccionActual === 'Cambios_Libros' && (
+            <Histograma
+                seccionActual={seccionActual}
+                setSeccionActual={setSeccionActual}
+                libro_id={libro_cambio?.id || 1}
+                libro_nombre={libro_cambio?.titulo || ""}
+            /> )
         }
     </>
 }
@@ -184,4 +192,29 @@ function KanbaLibros({
             </Box>
         </Stack>
     );
+}
+
+/* funcion para llamar al componente a la tabla de cambios y para cerrar la pantalla renderizada */
+function Histograma({
+    seccionActual,
+    setSeccionActual,
+	libro_id,
+    libro_nombre
+}: any){
+    return (
+	    <Stack>
+            <Box>
+                <Stack direction={'row'} gap={1} marginBottom={1} justifyContent={'flex-start'}>
+                    <Button variant='text' onClick={() => setSeccionActual('tabla')} ><ReplyAllIcon/></Button>
+                </Stack> 
+            </Box>
+            <Box>
+                 <HistorialLibro
+                    libroId={libro_id}
+                    libroNombre={libro_nombre}
+				/> 
+            </Box>
+        </Stack>
+	
+	);
 }
