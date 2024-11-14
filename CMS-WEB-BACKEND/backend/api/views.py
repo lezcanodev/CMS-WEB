@@ -309,9 +309,7 @@ class HistogramaListar(generics.ListAPIView):
 
 		#del front para el filtrado
         id_libro = self.request.query_params.get("libro")
-        print("====> ", id_libro)
-        print("===> ", Histograma.objects.filter(libro_id=id_libro))
-        print("===> ", Histograma.objects.all()[0])
+        
         return Histograma.objects.filter(libro_id=id_libro)
 
 
