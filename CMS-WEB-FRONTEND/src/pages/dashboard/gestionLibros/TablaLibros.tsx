@@ -44,7 +44,7 @@ export default function TablaLibros({
         }
     }
     const changeState = async (currentRow: any, nuevoEstado: string) => {
-        if(currentRow?.id){
+        if(currentRow?.id && currentRow.estado != nuevoEstado){
             await dispatch(api.libro.actualizarEstado({
                 id: currentRow.id,
                 titulo: currentRow.titulo,
@@ -68,6 +68,11 @@ export default function TablaLibros({
                 }))
             })
             
+        }else{
+            dispatch(snackbarActions.openSnackbar({
+                message: `Ya se encuentra "${nuevoEstado}"`,
+                autoHideDuration: 1000
+            }))
         }
     }
     // obtenemos los datos para cargar en la tabla
