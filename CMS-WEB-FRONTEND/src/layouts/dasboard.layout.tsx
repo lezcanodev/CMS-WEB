@@ -36,10 +36,8 @@ export default function DashboardLayout(){
     const preMenu: Menu[] =  [
       {pagina: 'LIBRO_PAGINA', label: 'Gestionar Libros', icon: <WebStoriesIcon  color='inherit'/>,to: getRouteByName('dashboard.gestioLibro') },
       {pagina: 'CATEGORIA_PAGINA', label: 'Gestionar Categorías', icon: <SellIcon  color='inherit'/>, to: getRouteByName('dashboard.gestioCategoria') },
-      {pagina: 'REPORTES', label: 'Gestionar Reportes', icon: <ArticleIcon  color='inherit'/>, to: getRouteByName('dashboard.gestioReportes') },
       {pagina:  'USUARIO_PAGINA', label: 'Gestionar Usuarios', icon: <GroupIcon  color='inherit'/>, to: getRouteByName('dashboard.gestioUsuarios') },
-      //{ label: 'Gestionar Roles', icon: <SecurityIcon  color='inherit'/>, to: getRouteByName('') }
-      {pagina:  'USUARIO_PAGINA', label: 'Gestionar Reportes', icon: <BarChartIcon color='inherit'/>, to: getRouteByName('dashboard.gestioReportes') },
+      {pagina:  'REPORTES', label: 'Gestionar Reportes', icon: <BarChartIcon color='inherit'/>, to: getRouteByName('dashboard.gestioReportes') },
     ];
     
     return preMenu.filter( ({pagina}) => {
