@@ -68,7 +68,7 @@ export default abstract class Api<RequestData, ResponseData>{
      * @param extraData son datos a parte de los retornados por la api
      * @returns BaseResponse<ResponseData>
      */
-    protected data<TDataExtra = any>(data: ResponseData, extraData?: TDataExtra): BaseResponse<ResponseData>{
+    protected data<TDataExtra = void>(data: ResponseData, extraData?: TDataExtra): BaseResponse<ResponseData>{
         return { data, extraData };
     }
 
@@ -88,14 +88,18 @@ export default abstract class Api<RequestData, ResponseData>{
     }
 
     /**
-     * Método que se encarga de hacer la solicitud a la api
+     * Método que se encarga de comunicarse con la api y preparar
+     * los datos para ser mostrados en el GUI
+     * 
      * @param data - datos que dependen de la endpoint 
      * @returns BaseResponse<ResponseData>
+     * 
+     * @abstract
      */
     protected abstract handle(data: RequestData): Promise<BaseResponse<ResponseData>>;
 
     /**
-     * Método que llama a handle para realizar la solicitud y manejar
+     * Método que llama a {@link handle} para realizar la solicitud y manejar
      * operaciones y errores comunes entre todas las endpoints
      * 
      * @param data - datos que dependen de la endpoint 

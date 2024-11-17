@@ -1,3 +1,6 @@
+/**
+* @packageDocumentation GUI-Libros
+ */
 import ContentEditor from '@/components/ContentEditor';
 import { Stack, Grid, TextField, MenuItem, Box, Button, Divider } from '@mui/material';
 import { useEffect, useState } from 'react';
@@ -19,7 +22,7 @@ const libroDataSchema = Yup.object({
 interface LibroEditorProps{
     onCloseLibroEditor: () => void
 }
-export default function LibroEditor({
+export function LibroEditor({
     onCloseLibroEditor
 }: LibroEditorProps){
     const dispatch = useAppDispatch();

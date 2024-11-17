@@ -1,5 +1,5 @@
 import React from 'react';
-import { expect, it, describe, beforeEach, afterEach } from 'vitest'
+import { expect, it, describe, beforeEach, afterEach, beforeAll, vi } from 'vitest'
 import {  render, screen,  within } from '@testing-library/react'
 import GestionReportes from '@/pages/dashboard/gestionReportes/index';
 import { TestComponent } from '../../utils/TestComponent';
@@ -8,6 +8,7 @@ import { workerFakeApi } from '@tests/utils/server.fake';
 import { http, HttpResponse } from 'msw';
 
 describe('GUI - Gestión de reportes', async () => {
+
 
   /**
    * =========================
@@ -19,6 +20,9 @@ describe('GUI - Gestión de reportes', async () => {
     let contenedorEstadoDeLosLibros: any = null;
 
     beforeEach(async () => {
+        workerFakeApi.resetHandlers();
+        vi.clearAllMocks();
+
         render (<TestComponent> <GestionReportes /> </TestComponent>);
 
         // Buscamos la sección de Libros por estado
@@ -41,6 +45,16 @@ describe('GUI - Gestión de reportes', async () => {
     })
 
     it('Debería mostrar el total de libros "Guardados" correctamente', async () => {
+      // Buscamos la sección de Libros por estado
+      tituloSeccionEstadoDeLosLibros = await screen.findByText(/Libros por estado/i);;
+      // Obtenemos el contenedor
+      contenedorEstadoDeLosLibros = tituloSeccionEstadoDeLosLibros.parentElement;
+      // Nos aseguramos que esta definido
+      if(!contenedorEstadoDeLosLibros){
+        throw new Error(`No se ha encontrado la sección "Libros por estado" `);
+        return;
+      }
+
         // Nos aseguramos que la cantidad de libro con estado "Guardado" sea correcta
         let elementoEnContenedor = await within(contenedorEstadoDeLosLibros).findByText((content, element) => {
             return content.startsWith('Guardado') && content.includes(`(${mockLibros().cantidadGuardados})`);
@@ -49,6 +63,16 @@ describe('GUI - Gestión de reportes', async () => {
     })
 
     it('Debería mostrar el total de libros "En revision" correctamente', async () => {
+      // Buscamos la sección de Libros por estado
+      tituloSeccionEstadoDeLosLibros = await screen.findByText(/Libros por estado/i);;
+      // Obtenemos el contenedor
+      contenedorEstadoDeLosLibros = tituloSeccionEstadoDeLosLibros.parentElement;
+      // Nos aseguramos que esta definido
+      if(!contenedorEstadoDeLosLibros){
+        throw new Error(`No se ha encontrado la sección "Libros por estado" `);
+        return;
+      }
+
       // Nos aseguramos que la cantidad de libro con estado "En revision" sea correcta
       let elementoEnContenedor = await within(contenedorEstadoDeLosLibros).findByText((content, element) => {
           return content.startsWith('En Revision') && content.includes(`(${mockLibros().cantidadEnRevision})`);
@@ -57,6 +81,16 @@ describe('GUI - Gestión de reportes', async () => {
     })
 
     it('Debería mostrar el total de libros "Rechazado" correctamente', async () => {
+            // Buscamos la sección de Libros por estado
+      tituloSeccionEstadoDeLosLibros = await screen.findByText(/Libros por estado/i);;
+      // Obtenemos el contenedor
+      contenedorEstadoDeLosLibros = tituloSeccionEstadoDeLosLibros.parentElement;
+      // Nos aseguramos que esta definido
+      if(!contenedorEstadoDeLosLibros){
+        throw new Error(`No se ha encontrado la sección "Libros por estado" `);
+        return;
+      }
+
       // Nos aseguramos que la cantidad de libro con estado "Rechazados" sea correcta
       let elementoEnContenedor = await within(contenedorEstadoDeLosLibros).findByText((content, element) => {
           return content.startsWith('Rechazado') && content.includes(`(${mockLibros().cantidadRechazados})`);
@@ -65,6 +99,16 @@ describe('GUI - Gestión de reportes', async () => {
     })
 
     it('Debería mostrar el total de libros "Publicados" correctamente', async () => {
+            // Buscamos la sección de Libros por estado
+      tituloSeccionEstadoDeLosLibros = await screen.findByText(/Libros por estado/i);;
+      // Obtenemos el contenedor
+      contenedorEstadoDeLosLibros = tituloSeccionEstadoDeLosLibros.parentElement;
+      // Nos aseguramos que esta definido
+      if(!contenedorEstadoDeLosLibros){
+        throw new Error(`No se ha encontrado la sección "Libros por estado" `);
+        return;
+      }
+
       // Nos aseguramos que la cantidad de libro con estado "Rechazados" sea correcta
       let elementoEnContenedor = await within(contenedorEstadoDeLosLibros).findByText((content, element) => {
           return content.startsWith('Publicado') && content.includes(`(${mockLibros().cantidadPublicados})`);

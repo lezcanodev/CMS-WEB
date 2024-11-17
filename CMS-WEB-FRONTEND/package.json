@@ -10,8 +10,9 @@
     "preview": "vite preview",
     "generate-doc": "typedoc --options typedoc.config.mjs  && start docs/index.html",
     "coverage": "vitest run --coverage",
-    "coveragefile": "vitest",
-    "test": "vitest",
+    "coveragefile": "vitest run tests/pages/dashboard/ListarHistorialLibro.test.tsx --coverage",
+    "test": "vitest run tests/api/gestionHistorial/guardarHistorial/guardarHistorial.test.ts",
+    "test:historial": "vitest --ui  tests/api/gestionHistorial/guardarHistorial/guardarHistorial.test.ts tests/api/gestionHistorial/listarHistorialLibro/listarHistorialLibro.test.ts tests/pages/dashboard/ListarHistorialLibro.test.tsx",
     "test:ui": "vitest --ui"
   },
   "dependencies": {

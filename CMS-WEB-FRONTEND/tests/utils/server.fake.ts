@@ -1,6 +1,7 @@
 import {http, HttpResponse} from 'msw';
 import { setupServer } from "msw/node";
 import { LIBRO_ENDPOINTS, mockLibros } from './libros.mock';
+import { HISTORIAL_ENDPOINTS } from './historial.mock';
 
 const MOCK_REFRESH_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTczMDI0MzcyNCwiaWF0IjoxNzMwMTU3MzI0LCJqdGkiOiI1OWU1N2MzMzIzYzU0ZjFmYTI2NTNlYWYwNDNjMzdmOCIsInVzZXJfaWQiOjJ9.zwaXptgmmu7osIxM0GGAmTRWrJ3yZcYIzULnAj0G_6Y';
 const MOCK_ACCESS_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTczMDI0MzcyNCwiaWF0IjoxNzMwMTU3MzI0LCJqdGkiOiI1OWU1N2MzMzIzYzU0ZjFmYTI2NTNlYWYwNDNjMzdmOCIsInVzZXJfaWQiOjJ9.zwaXptgmmu7osIxM0GGAmTRWrJ3yZcYIzULnAj0G_6Y';
@@ -15,7 +16,8 @@ const MOCK_CATEGORIAS = [
 
 
 /**
- * Aquí debería interceptar las solicitudes al backend y falsear las respuestas
+ * Aquí debería interceptar las solicitudes al backend y falsear las respuestas por defecto,
+ * luego se pueden sobre escribir y ajustar a cada test
 */
 export const handlers = [
   /**
@@ -56,6 +58,12 @@ export const handlers = [
    * FAKE LIBROS ENDPOINTS
    */
   http.get(LIBRO_ENDPOINTS.listarLibros, () => HttpResponse.json(mockLibros().mockLibros, {status: 200}) ),
+
+  /**
+   * FAKE HISTORIAL ENDPOINTS
+   */
+  http.post(HISTORIAL_ENDPOINTS.guardarHistorial, () => HttpResponse.json({}, {status: 201}) ),
+  http.get(HISTORIAL_ENDPOINTS.listarHistorial, () => HttpResponse.json([],  {status: 200}) )
 
 ];
 

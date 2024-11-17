@@ -1,7 +1,9 @@
+import { LibroListarData } from '../listar/listarLibro.model';
+
 /**
  * Datos necesarios para hacer una actualización de estado a un libro
  */
-export interface LibroActualizarRequest{
+export interface LibroActualizarEstadoRequest{
     id: number;
     titulo: string;
     categoria: number;
@@ -10,8 +12,27 @@ export interface LibroActualizarRequest{
     vistas?: number;
 
     // Sirve para identificar la modificación realizada
-    estadoAnterior: LibroActualizarRequest
+    estadoAnterior: LibroActualizarEstadoRequest
 }
+/**
+ * Datos retornados por el backend
+ */
+export interface LibroActualizarEstadoResponse{}
+
+
+export interface LibroActualizarRequest{
+    id: number;
+    titulo: string;
+    categoria: number;
+    estado: string;
+    contenido: string;
+    nuevaCategoriaNombre: string;
+
+    // Sirve para identificar la modificación realizada
+    estadoAnterior: LibroListarData
+}
+export interface LibroActualizarResponse{}
+
 
 export interface DarLikeRequest{
     id: number;
@@ -23,7 +44,3 @@ export interface AumentarVisitasRequest{
     vistas?: number;
 }
 
-/**
- * Datos retornados por el backend
- */
-export interface LibroActualizarResponse{}

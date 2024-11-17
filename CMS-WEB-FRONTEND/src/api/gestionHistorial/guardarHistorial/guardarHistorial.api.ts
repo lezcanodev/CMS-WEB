@@ -1,44 +1,71 @@
+
 /**
- * Este modulo contiene la clase encargada de guardar las modificaciones hechas a un libro
- * 
- * @module ApiGuardarHistorialLibro
+ * Contiene la clase encargada de guardar el historial de un libro
+ *
+ * @packageDocumentation GestionHistorial
  */
 import Api from '@/api/core/base.api';
 import { 
     ApiGuardarHistorialLibroRequest, 
     ApiGuardarHistorialLibroResponse
 } from './guardarHistorial.model';
+import { UserUtils } from '@/utils/User/User.utils';
 
 /** 
 *  Esta clase se encarga de guardar una modificación hecha a un libro
 * 
 * @example
-* se le pasa por parámetro los siguientes datos
+* Ejemplo de uso:
 * ```tsx
-*   {
-*       "libro": 1, // id del libro
-*       "accion": "Estado cambiado de \"En Revision\" a \"Guardado\"", //  descripción de la modificaron hecha
-*       "fecha": "11/11/2024", // fecha de la modificacion
-*       "usuario": 2 // usuario que lo hizo
-*   }
+*    // Creamos una instancia del caso de uso 
+*    const instancia = new ApiGuardarHistorialLibro();
+* 
+*    // Ejecutamos el método que realizara el guardado
+*    instancia.execute(
+*       {
+*          // id del libro afectado
+*         "libro": 1,
+*          
+*         //  descripción de la modificaron hecha  
+*         "accion": "Estado cambiado de \"En Revision\" a \"Guardado\"",
+*   
+*         // Tiempo en el que se hizo la modificación 
+*         // Debe tener el formato ISO
+*         // Es opcional, por defecto sera fecha actual
+*         "fecha": "2024-11-16T18:25:43.586Z",
+* 
+*         // id del usuario que lo realizo 
+*         // Es opcional, por defecto usuario actual
+*         "usuario": 2
+*       }
+*   )
 * ```
 */
 export default class ApiGuardarHistorialLibro extends Api<ApiGuardarHistorialLibroRequest, ApiGuardarHistorialLibroResponse>{
 
     /**
-     * Prepara el reporte de libros por estado y guarda el historial del libro.
-     * Realiza una solicitud para guardar el historial del libro.
+     * Se encarga de guardar la acción realizada sobre un libro
      * 
-     * @param data Objeto que contiene la información necesaria para guardar el historial del libro.
-     * @property {string} data.fecha La fecha de la acción realizada en el historial del libro.
-     * @property {number} data.usuario El id del usuario que realiza la acción.
-     * @property {number} data.libro El id del libro al que se le guarda el historial.
-     * @property {string} data.accion La acción realizada con respecto al libro.
+     * @param data - Objeto que contiene la información necesaria para guardar en el historial del libro.
      * 
-     * @returns {} retorna un objeto vació
+     * @returns retorna el ID del nuevo registro
      */
     protected async handle(data: ApiGuardarHistorialLibroRequest){
-        await this.api.post(`guardar-historial`, data);
-        return this.data({});
+      
+        // preparamos los datos asignándole los valores por defecto
+        const datos = {
+            fecha: new Date().toISOString(),
+            usuario: UserUtils.getUser()!.userId,
+            ...data
+        }
+
+        // realizamos la solicitud para guardar historial
+        const response = await this.api.post(`guardar-historial`, datos);
+
+        // retornamos los datos
+        return this.data({
+            id: response?.data?.id
+        });
     }
+
 }
