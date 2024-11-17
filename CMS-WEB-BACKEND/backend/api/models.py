@@ -62,7 +62,7 @@ class Histograma(models.Model):
     """
     fecha = models.CharField(max_length=30)
     usuario = models.ForeignKey(User, on_delete=models.DO_NOTHING , related_name="usuarioHistograma")
-    libro = models.ForeignKey(Libro,on_delete=models.DO_NOTHING, related_name="libro")
+    libro = models.ForeignKey(Libro,on_delete=models.CASCADE, related_name="libro")
     accion = models.TextField()
 
     """
