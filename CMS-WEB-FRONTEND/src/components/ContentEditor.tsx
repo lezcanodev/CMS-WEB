@@ -38,14 +38,15 @@ const formats = [
 
 interface ContentEditorProps{
     value: string,
-    onChange: (newValue: string) => void
+    onChange: (newValue: string) => void,
+    defaultValue?: string
 }
 export default function ContentEditor({
-    value, onChange
+    value, onChange, defaultValue
 }: ContentEditorProps){
     return <>
          <div className="quill-container">
-            <ReactQuill theme="snow" modules={modules} formats={formats} value={value} onChange={onChange} />
+            <ReactQuill theme="snow" defaultValue={defaultValue || ''} modules={modules} formats={formats} value={value} onChange={onChange} />
         </div>
     </>
 }

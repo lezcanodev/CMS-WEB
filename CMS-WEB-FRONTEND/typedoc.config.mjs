@@ -18,7 +18,7 @@ const config= {
         "**/@/templates/**", 
         "**/*.spec.ts",
         "**/src/**/*.thunk.ts",
-        "**/src/**/*.model.ts",
+        //"**/src/**/*.model.ts",
         "**/src/**/*.reducer.ts",
     ],
     
