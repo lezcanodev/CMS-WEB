@@ -34,13 +34,8 @@ export default class ApiActualizarLibroEstado extends Api<LibroActualizarEstadoR
      * Este método actualiza el libro especificado por su ID, guarda un registro en el historial con la acción de cambio de estado.
      * 
      * @param datos Objeto que contiene los datos del libro a actualizar, incluyendo su estado anterior.
-     * @param datos.id El ID del libro que se va a actualizar.
-     * @param datos.titulo El título del libro.
-     * @param datos.categoria El ID de la categoría del libro.
-     * @param datos.estado El nuevo estado del libro.
-     * @param datos.estadoAnterior El estado anterior del libro, utilizado para registrar la modificación en el historial.
-     * @param datos.likes (opcional) El número de "me gusta" del libro.
-     * @param datos.vistas (opcional) El número de vistas del libro.
+     * 
+     * @returns Un objeto con e libro actualizado
      */
     protected async handle(datos: LibroActualizarEstadoRequest){
         const {id: libroId, estadoAnterior} = datos;
@@ -79,6 +74,11 @@ export class ApiActualizarLibro extends Api<LibroActualizarRequest, LibroActuali
     ){ super(); }
 
     /**
+     * Recibe los datos actualizados del libro y los datos anteriores realiza una comparación
+     * entre ambos para registrar en el historial cada cambio y luego actualiza el libro.
+     * 
+     * @param datos - datos para actualizar el libro
+     * @returns un objeto con el libro actualizado
      */
     protected async handle(datos: LibroActualizarRequest){
 
@@ -92,14 +92,19 @@ export class ApiActualizarLibro extends Api<LibroActualizarRequest, LibroActuali
 
         // mensaje de descripción de lo que se realizo
         let accionRealizada: string = '';
+        // para detectar si hubo cambios o fue una actualización sin cambios
+        let hayCambios: boolean = false;
 
         // verificamos si el titulo ha cambiado y lo registramos
         if(estadoAnterior?.titulo != datos?.titulo){
+            hayCambios = true;
+            accionRealizada+="\\n";
             accionRealizada =  `Titulo cambiado de "${estadoAnterior?.titulo}" a "${datos.titulo}"`;  
         }
 
         // verificamos si la categoría ha cambiado y lo registramos
-        if(estadoAnterior?.categoria != datos?.categoria){
+        if(estadoAnterior?.categoria != datos?.categoria){ 
+            hayCambios = true;
             // agregamos salto de linea en caso de que haya habado una acciona antes
             if(accionRealizada?.length) accionRealizada+="\\n";
 
@@ -109,6 +114,7 @@ export class ApiActualizarLibro extends Api<LibroActualizarRequest, LibroActuali
 
         // verificamos si el contenido ha cambiado y lo registramos
         if(estadoAnterior?.contenido != datos?.contenido){
+            hayCambios = true;
             // cantidad de caracteres del contenido en el estado anterior del libro
             const contenidoAnteriorTamano = estadoAnterior?.contenido?.length;  
 
@@ -131,6 +137,11 @@ export class ApiActualizarLibro extends Api<LibroActualizarRequest, LibroActuali
                 // se removieron caracteres menos contenido
                 accionRealizada+=`Contenido se ha modificado, se ha removido ${diferencia} caracteres`;
             }
+        }
+
+        // Si no hay cambios especificamos que hubo una actualización pero sin cambios
+        if(!hayCambios){
+            accionRealizada='Actualización realizada, pero sin cambios'
         }
 
         // guardamos el registro en el historial

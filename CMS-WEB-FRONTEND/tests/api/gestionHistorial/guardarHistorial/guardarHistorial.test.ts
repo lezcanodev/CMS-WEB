@@ -11,8 +11,6 @@ import ApiGuardarHistorialLibro from '@/api/gestionHistorial/guardarHistorial/gu
 import { ApiGuardarHistorialLibroRequest } from '@/api/gestionHistorial/guardarHistorial/guardarHistorial.model';
 import { HISTORIAL_ENDPOINTS } from '@tests/utils/historial.mock';
 import ApiActualizarLibroEstado, { ApiActualizarLibro } from '@/api/gestionLibros/actualizar/actualizarLibro.api';
-import { LibroActualizarRequest } from '@/api/gestionLibros/actualizar/actualizarLibro.model';
-import { LIBRO_ENDPOINTS } from '@tests/utils/libros.mock';
 import ApiCrearLibro from '@/api/gestionLibros/crear/crearLibro.api';
 
 describe('Api Guardar Historial Libro' , async  () => {
@@ -151,6 +149,178 @@ describe('Api Guardar Historial Libro' , async  () => {
         expect(executeSpy).toHaveBeenCalledWith( {
             libro: 1,
             accion: "Titulo cambiado de \"MOCK_TITULO_NUEVO\" a \"MOCK_TITULO_INICIAL\"\\nCategoría cambiada de \"final\" a \"INICIAL\"\\nContenido se ha modificado, se ha removido -1 caracteres"
+        });
+    })
+
+    /**
+    * Verificamos que la diferencia de caracteres del contenido sea correcto,
+    * probamos removiendo caracteres
+    */
+    it('Verificamos la cantidad de caracteres removidos al actualizar libro', async () => {
+        // falseamos la solicitud de actualización de libro
+        workerFakeApi.use(
+            http.put(`http://127.0.0.1:8000/api/update-libro/1`, async ({ request }) => {
+                return HttpResponse.json({}, {status: 201}) ;
+            })
+        );
+
+        // Hacemos un mock de execute de Api Guardar Historial Libro para verificar
+        // que Api Actualizar Libro lo esta llamando correctamente
+        const executeSpy = vi.spyOn(ApiGuardarHistorialLibro.prototype, 'execute').mockImplementation((data) => {return null!;});
+
+        // Creamos las instancias de los casos de uso
+        const guardarInstance = new ApiGuardarHistorialLibro();
+        const instance = new ApiActualizarLibro(guardarInstance);
+
+        // Preparamos los datos falsos
+        const mockDataLibro: any = {
+            id: 1,
+            // valores actualizados
+            contenido: '123456',
+
+            // valores antes de la actualización
+            estadoAnterior: {
+                contenido: '1234567'
+            }
+        } 
+
+        // Ejecutamos ApiActualizarLibro
+        await instance.execute(mockDataLibro);
+
+        // Verificamos que ApiActualizarLibro haga la llamada correcta a ApiGuardarHistorialLibro con
+        // los parámetros correctos
+        expect(executeSpy).toHaveBeenCalledWith( {
+            libro: 1,
+            accion: "Contenido se ha modificado, se ha removido -1 caracteres"
+        });
+    })
+
+    /**
+    * Verificamos que la diferencia de caracteres del contenido sea correcto,
+    * probamos agregando caracteres
+    */
+    it('Verificamos la cantidad de caracteres agregados al actualizar libro', async () => {
+        // falseamos la solicitud de actualización de libro
+        workerFakeApi.use(
+            http.put(`http://127.0.0.1:8000/api/update-libro/1`, async ({ request }) => {
+                return HttpResponse.json({}, {status: 201}) ;
+            })
+        );
+
+        // Hacemos un mock de execute de Api Guardar Historial Libro para verificar
+        // que Api Actualizar Libro lo esta llamando correctamente
+        const executeSpy = vi.spyOn(ApiGuardarHistorialLibro.prototype, 'execute').mockImplementation((data) => {return null!;});
+
+        // Creamos las instancias de los casos de uso
+        const guardarInstance = new ApiGuardarHistorialLibro();
+        const instance = new ApiActualizarLibro(guardarInstance);
+
+        // Preparamos los datos falsos
+        const mockDataLibro: any = {
+            id: 1,
+            // valores actualizados
+            contenido: '123456789',
+
+            // valores antes de la actualización
+            estadoAnterior: {
+                contenido: '123456'
+            }
+        } 
+
+        // Ejecutamos ApiActualizarLibro
+        await instance.execute(mockDataLibro);
+
+        // Verificamos que ApiActualizarLibro haga la llamada correcta a ApiGuardarHistorialLibro con
+        // los parámetros correctos
+        expect(executeSpy).toHaveBeenCalledWith( {
+            libro: 1,
+            accion: "Contenido se ha modificado, se ha agregado +3 caracteres"
+        });
+    })
+
+    
+    /**
+    * Verificamos que la diferencia de caracteres del contenido sea correcto,
+    * probamos misma cantidad de caracteres
+    */
+    it('Verificamos la cantidad de caracteres sea la misma al actualizar libro', async () => {
+        // falseamos la solicitud de actualización de libro
+        workerFakeApi.use(
+            http.put(`http://127.0.0.1:8000/api/update-libro/1`, async ({ request }) => {
+                return HttpResponse.json({}, {status: 201}) ;
+            })
+        );
+
+        // Hacemos un mock de execute de Api Guardar Historial Libro para verificar
+        // que Api Actualizar Libro lo esta llamando correctamente
+        const executeSpy = vi.spyOn(ApiGuardarHistorialLibro.prototype, 'execute').mockImplementation((data) => {return null!;});
+
+        // Creamos las instancias de los casos de uso
+        const guardarInstance = new ApiGuardarHistorialLibro();
+        const instance = new ApiActualizarLibro(guardarInstance);
+
+        // Preparamos los datos falsos
+        const mockDataLibro: any = {
+            id: 1,
+            // valores actualizados
+            contenido: '123456789',
+
+            // valores antes de la actualización
+            estadoAnterior: {
+                contenido: '987654321'
+            }
+        } 
+
+        // Ejecutamos ApiActualizarLibro
+        await instance.execute(mockDataLibro);
+
+        // Verificamos que ApiActualizarLibro haga la llamada correcta a ApiGuardarHistorialLibro con
+        // los parámetros correctos
+        expect(executeSpy).toHaveBeenCalledWith( {
+            libro: 1,
+            accion: "Contenido se ha modificado"
+        });
+    })
+
+    /**
+    * Verificamos que se registre que se realizo una actualizacion aunque no haya cambios
+    */
+    it('Verificamos que se haya registrado el evento actualizar aunque no haya cambios', async () => {
+        // falseamos la solicitud de actualización de libro
+        workerFakeApi.use(
+            http.put(`http://127.0.0.1:8000/api/update-libro/1`, async ({ request }) => {
+                return HttpResponse.json({}, {status: 201}) ;
+            })
+        );
+
+        // Hacemos un mock de execute de Api Guardar Historial Libro para verificar
+        // que Api Actualizar Libro lo esta llamando correctamente
+        const executeSpy = vi.spyOn(ApiGuardarHistorialLibro.prototype, 'execute').mockImplementation((data) => {return null!;});
+
+        // Creamos las instancias de los casos de uso
+        const guardarInstance = new ApiGuardarHistorialLibro();
+        const instance = new ApiActualizarLibro(guardarInstance);
+
+        // Preparamos los datos falsos
+        const mockDataLibro: any = {
+            id: 1,
+            // valores actualizados
+            contenido: 'CONTENIDO',
+
+            // valores antes de la actualización
+            estadoAnterior: {
+                contenido: 'CONTENIDO'
+            }
+        } 
+
+        // Ejecutamos ApiActualizarLibro
+        await instance.execute(mockDataLibro);
+
+        // Verificamos que ApiActualizarLibro haga la llamada correcta a ApiGuardarHistorialLibro con
+        // los parámetros correctos
+        expect(executeSpy).toHaveBeenCalledWith( {
+            libro: 1,
+            accion: "Actualización realizada, pero sin cambios"
         });
     })
 
