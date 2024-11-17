@@ -1,5 +1,5 @@
 import React from 'react'; 
-import { Box, Button, CircularProgress, Grid, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Grid, InputAdornment, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -33,18 +33,21 @@ export default function SectionTable({
                     <Box >
                         <TextField
                             onChange={(e) => onSearch(e.target.value)}
-                            label={<>
-                                <Stack direction='row' alignItems={'center'} justifyContent={'center'} gap={1} >
-                                    <Box>
-                                        <SearchIcon fontSize='small' />
-                                    </Box>
-                                    <Typography>
-                                        Buscar...
-                                    </Typography>
-                                </Stack>
-                            </>}
-                            variant="outlined" 
-                            fullWidth 
+                            variant="outlined"
+                            fullWidth
+                            placeholder="Buscar..."
+                            InputProps={{
+                                startAdornment: (
+                                <InputAdornment position="start">
+                                    <SearchIcon fontSize="small" />
+                                </InputAdornment>
+                                ),
+                            }}
+                            sx={{
+                                '& .MuiOutlinedInput-root': {
+                                  borderRadius: '20px',
+                                },
+                            }}
                         />
                     </Box>
                 </Stack>
