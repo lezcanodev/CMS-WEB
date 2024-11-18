@@ -52,7 +52,6 @@ describe('Core - Api Base', async () => {
         await  fakeApi.execute({});
         
         // Verificamos que el access token sea correcto
-        console.log(headerRequestAuthorization);
         expect(headerRequestAuthorization, 'El access token es incorrecto').toBe(`Bearer ${tokenAccess}`);
 
         // removemos el access token

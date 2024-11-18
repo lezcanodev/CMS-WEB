@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/vitest'
 import { cleanup } from '@testing-library/react'
-import { afterAll, afterEach, beforeAll } from 'vitest'
+import { afterAll, afterEach, beforeAll, vi } from 'vitest'
 import { workerFakeApi } from './utils/server.fake'
 
 beforeAll(async () => {
@@ -14,7 +14,8 @@ afterEach(() => {
 })
 
 afterAll(async () => {
-  console.log("Fake Api Finalizada")
+  console.log("Fake Api Finalizada");
+  vi.resetAllMocks();
   workerFakeApi.close();
 })
 

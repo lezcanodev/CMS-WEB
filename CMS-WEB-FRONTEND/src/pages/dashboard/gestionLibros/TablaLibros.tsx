@@ -1,5 +1,7 @@
-
-import { Box, Button, Stack } from '@mui/material';
+/**
+* @packageDocumentation GUI-Libros
+ */
+import {  Button, Stack } from '@mui/material';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
 import SectionTable from '@/components/SectionTable';
@@ -10,16 +12,17 @@ import { snackbarActions } from '@/redux/snackbar/snackbar.slice';
 import { useNavigate } from 'react-router';
 import { getRouteByName } from '@/router/helpers';
 import ViewWeekIcon from '@mui/icons-material/ViewWeek';
-import ReplyAllIcon from '@mui/icons-material/ReplyAll';
 import PublishedWithChangesIcon from '@mui/icons-material/PublishedWithChanges';
-import SimpleKanban from '@/components/KanbaTable/KambaTable';
-import { HistorialLibro } from './ListarHistoriaLibro';
+import {Histograma} from './Histograma';
+import {KanbaLibros} from './KanbaLibros';
+import { LibroListarData } from '@/api/gestionLibros/listar/listarLibro.model';
 
 interface TablaLibrosProps{
-    onOpenLibroEditor: () => void
+    onOpenLibroEditor: () => void,
+    onOpenEditarLibro: (libro: LibroListarData) => void
 }
-export default function TablaLibros({
-    onOpenLibroEditor
+export function TablaLibros({
+    onOpenLibroEditor, onOpenEditarLibro
 }: TablaLibrosProps){
     const [seccionActual, setSeccionActual] = useState<'tabla' | 'kanba'| 'Cambios_Libros'>('tabla')
     const { permisosPaginas } = useAppSelector(st => st.permisos);
@@ -106,6 +109,7 @@ export default function TablaLibros({
 
     return<>
 
+        {/* Componente Kanba, muestra un tablero kanba para facilitar el cambio de estado de los libros listados */}
         {seccionActual === 'kanba' && (
             <KanbaLibros
                 seccionActual={seccionActual}
@@ -114,6 +118,8 @@ export default function TablaLibros({
                 changeState={changeState}
             />
         )}
+
+        {/* Componente tabla, muestra el listado de los libros */}
         {seccionActual === 'tabla' && (
             <SectionTable
                 title='Gestión de libros'
@@ -139,7 +145,7 @@ export default function TablaLibros({
                                 {permisosPaginas?.LIBRO_PAGINA.ELIMINAR &&  <Button onClick={() => handleDelete(currentRow)}>
                                     <DeleteOutlineIcon color='error'/>
                                 </Button>}
-                                {permisosPaginas?.LIBRO_PAGINA.EDITAR &&  <Button onClick={() => {}} disabled>
+                                {permisosPaginas?.LIBRO_PAGINA.EDITAR &&  <Button onClick={() => { onOpenEditarLibro(currentRow)  }}>
                                     <EditIcon color='primary' />
                                 </Button>}
                                 <Button onClick={() => navigate(getRouteByName('verLibro', {id: currentRow.id }))}>
@@ -162,64 +168,16 @@ export default function TablaLibros({
                 ]}
                 rows={libro_filtrado}
             />)}
+
+    
+        {/* Componente histograma, muestra el historial de un libro */}
         {seccionActual === 'Cambios_Libros' && (
-            <Histograma
-                seccionActual={seccionActual}
-                setSeccionActual={setSeccionActual}
-                libro_id={libro_cambio?.id || 1}
-                libro_nombre={libro_cambio?.titulo || ""}
-            /> )
+                <Histograma
+                    volverAtras={() => {setSeccionActual('tabla')}}
+                    libro_id={libro_cambio!.id}
+                    libro_nombre={libro_cambio!.titulo}
+                /> 
+            )
         }
     </>
-}
-
-function KanbaLibros({
-    seccionActual,
-    setSeccionActual,
-    libros,
-    changeState
-}: any){
-    return (
-        <Stack>
-            <Box>
-                <Stack direction={'row'} gap={1} marginBottom={1} justifyContent={'flex-start'}>
-                    <Button variant='text' onClick={() => setSeccionActual('tabla')} ><ReplyAllIcon/></Button>
-                </Stack> 
-            </Box>
-            <Box>
-                <SimpleKanban
-                    libros={libros}
-                    cambiarEstadoLibro={ async (libro, nuevoEstado) => {
-                        changeState(libro, nuevoEstado);
-                    }}
-                />
-                {/*<Kanban/>*/}
-            </Box>
-        </Stack>
-    );
-}
-
-/* funcion para llamar al componente a la tabla de cambios y para cerrar la pantalla renderizada */
-function Histograma({
-    seccionActual,
-    setSeccionActual,
-	libro_id,
-    libro_nombre
-}: any){
-    return (
-	    <Stack>
-            <Box>
-                <Stack direction={'row'} gap={1} marginBottom={1} justifyContent={'flex-start'}>
-                    <Button variant='text' onClick={() => setSeccionActual('tabla')} ><ReplyAllIcon/></Button>
-                </Stack> 
-            </Box>
-            <Box>
-                 <HistorialLibro
-                    libroId={libro_id}
-                    libroNombre={libro_nombre}
-				/> 
-            </Box>
-        </Stack>
-	
-	);
 }

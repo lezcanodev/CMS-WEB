@@ -47,33 +47,35 @@ export function LibrosPorEstado(){
             {/* Muestra la cantidad de libros por estado y el porcentaje */}
             <div className="container" style={{ margin: '10 auto',  padding:8, borderRadius:8}}>
                 {Object.keys(librosPorEstado?.data?.cantidadLibrosPorEstado || {})?.map((estado, index) => (
-                <div key={index} style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    marginBottom:10
-                }}>
-                    {/* Muestra el nombre del estado y la cantidad libros */}
-                    <div>
-                        <div style={{fontSize: '.8em'}}>
-                            <h3>{estado} ({librosPorEstado?.data?.cantidadLibrosPorEstado[estado].cantidad})</h3>
+
+                    <div key={index} style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        marginBottom:10
+                    }}>
+                        {/* Muestra el nombre del estado y la cantidad libros */}
+                        <div>
+                            <div style={{fontSize: '.8em'}}>
+                                <h3>{estado} ({librosPorEstado?.data?.cantidadLibrosPorEstado[estado].cantidad})</h3>
+                            </div>
+                        </div>
+
+                        {/* Muestra una barra que representa el porcentaje de libros en ese estado */}
+                        <div style={{
+                            width: '100%',
+                            border: `1px solid ${librosPorEstado?.data?.cantidadLibrosPorEstado[estado]?.color}2f`,
+                            borderRadius: 8,
+                            overflow: 'hidden',
+                            background:  `${librosPorEstado?.data?.cantidadLibrosPorEstado[estado]?.color}0f`
+                        }}>
+                            <p style={{
+                                        background: librosPorEstado?.data?.cantidadLibrosPorEstado[estado]?.color ,
+                                        width:  `${(librosPorEstado?.data?.cantidadLibrosPorEstado[estado]?.porcentaje || 0)*100}%`,
+                                        height: 20
+                            }} ></p>
                         </div>
                     </div>
-
-                    {/* Muestra una barra que representa el porcentaje de libros en ese estado */}
-                    <div style={{
-                        width: '100%',
-                        border: `1px solid ${librosPorEstado?.data?.cantidadLibrosPorEstado[estado]?.color}2f`,
-                        borderRadius: 8,
-                        overflow: 'hidden',
-                        background:  `${librosPorEstado?.data?.cantidadLibrosPorEstado[estado]?.color}0f`
-                    }}>
-                        <p style={{
-                                    background: librosPorEstado?.data?.cantidadLibrosPorEstado[estado]?.color ,
-                                    width:  `${(librosPorEstado?.data?.cantidadLibrosPorEstado[estado]?.porcentaje || 0)*100}%`,
-                                    height: 20
-                        }} ></p>
-                    </div>
-                </div>
+                    
                 ))}
             </div>
             

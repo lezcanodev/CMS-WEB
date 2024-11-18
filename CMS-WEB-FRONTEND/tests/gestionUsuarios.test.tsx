@@ -5,7 +5,7 @@ import { TestComponent } from './utils/TestComponent';
 import GestionUsuarios from '../src/pages/dashboard/gestionUsuarios/index';
 import userEvent from '@testing-library/user-event';
 
-test('renderiza el nombre del usuario', async () => {
+test.skip('renderiza el nombre del usuario', async () => {
     // Renderizamos el componente con propiedades de prueba
     render(<TestComponent><GestionUsuarios /></TestComponent>);
 

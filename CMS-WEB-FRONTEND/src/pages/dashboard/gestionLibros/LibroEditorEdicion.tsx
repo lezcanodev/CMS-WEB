@@ -9,45 +9,46 @@ import { useFormik } from 'formik';
 import { useAppDispatch, useAppSelector } from '@/redux';
 import { api } from '@/api';
 import ReplyAllIcon from '@mui/icons-material/ReplyAll';
-import { localStorageServices } from '@/services';
 import { snackbarActions } from '@/redux/snackbar/snackbar.slice';
+import { LibroListarData } from '@/api/gestionLibros/listar/listarLibro.model';
 
 // esquema de datos para el formulario login
 const libroDataSchema = Yup.object({
     titulo: Yup.string().required('El campo es obligatorio'),
     categoria: Yup.string().required('El campo es obligatorio'),
-    // author
 });
 
 interface LibroEditorProps{
-    onCloseLibroEditor: () => void
+    onCloseLibroEditor: () => void,
+    libro: LibroListarData
 }
-export function LibroEditor({
-    onCloseLibroEditor
+export function LibroEditorEdicion({
+    onCloseLibroEditor, libro
 }: LibroEditorProps){
     const dispatch = useAppDispatch();
     const { data: categorias } = useAppSelector((state) => state.api.categoria.listar);
-    const [contenido, setContenido] = useState<string>('');
+    const [contenido, setContenido] = useState<string>(libro?.contenido);
     const formikLibro = useFormik({
         initialValues: {
-            titulo: '',
-            categoria: ''
+            titulo: libro?.titulo,
+            categoria: libro?.categoria
         },
         validationSchema: libroDataSchema,
         onSubmit: async (values) => {
-            let asyncCategory: any = () => api.libro.libroCrearApiThunk({
+            let asyncCategory: any = () => api.libro.actualizarLibroThunk({
+                id: libro.id,
                 titulo: values.titulo,
-                categoria: parseInt(values.categoria),
+                categoria: values.categoria,
                 contenido: contenido,
-                author: JSON.parse(localStorageServices.get('user') as any).userId as any,
-                estado: 'En Revision'
+                estado: libro.estado,
+                nuevaCategoriaNombre: (categorias?.data || []).find(cat => cat.id == values.categoria )?.nombre || '',
+                estadoAnterior: libro
             });
             dispatch(asyncCategory())
             .unwrap()
             .then(() => {
-                formikLibro.resetForm();
                 dispatch(snackbarActions.openSnackbar({
-                    message: `Se ha creado el libro "${values.titulo}"`
+                    message: `Se ha actualizado el libro`
                 }))
             })
             .catch((error: any) => {
@@ -79,7 +80,7 @@ export function LibroEditor({
             <Grid item xs={12}>
                 <Stack direction={'row'} gap={1} marginBottom={1} justifyContent={'flex-start'}>
                     <Button variant='text' onClick={() => onCloseLibroEditor()} ><ReplyAllIcon/></Button>
-                    <Button variant='outlined' onClick={() => formikLibro.submitForm() }>Guardar</Button>
+                    <Button variant='outlined' onClick={() => formikLibro.submitForm() }>Actualizar</Button>
                 </Stack> 
                 <Divider/>  
             </Grid>
@@ -125,6 +126,7 @@ export function LibroEditor({
                 <ContentEditor 
                     value={contenido}
                     onChange={setContenido}
+                    defaultValue={libro?.contenido}
                 />
             </Grid>
         </Grid>
