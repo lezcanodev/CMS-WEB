@@ -52,7 +52,7 @@ export function InicioPage(){
     }, [])
 
     return <InicioPageElement 
-        title='Ingeniería de software II'
+        title='Sistema de gestión de contenido web'
         isAdmin={UserUtils.isAdmin()}
         logout={handleLogout}
         goToDashboard={() => {navigate(getRouteByName('dashboard'))}}
@@ -97,14 +97,9 @@ export function InicioPage(){
         }}
         libros={{
             loading: libro?.listar?.loading,
-            data: libros /*libro?.listar?.data?.data?.map(l => ({
-                id: l?.id,
-                titulo: l?.titulo,
-                fecha: l?.fecha,
-                categoria: l?.categoria,
-                categoriaNombre: l?.categoriaNombre,
-                autorNombre: l?.autorNombre
-            })) || []*/
+            data: libro?.listar?.data?.data?.filter(libro => 
+                libro.estado.toLowerCase().includes('publicado')) || [],
+               
         }}
         
     />;

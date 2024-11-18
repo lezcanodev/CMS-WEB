@@ -1,9 +1,11 @@
 import { combineSlices } from '@reduxjs/toolkit';
-import seguridadReducer from './seguridad/seguridad.reducer';
+import seguridadReducer, { apiSeguridad } from './seguridad/seguridad.reducer';
 import categoriaReducer, { categoriaApi } from './gestionCategorias/gestionCategoria.reducer';
 import libroReducer, { libroApi } from './gestionLibros/gestionLibros.reducer';
 import usuarioReducer, { usuarioApi } from './gestionUsuarios/gestionUsuario.reducer';
 import comentarioReducer, { comentarioApi } from './gestionComentarios/gestionComentario.reducer';
+import reporteReducer, { reporteApi } from './gestionReporte/gestionReportes.reducer';
+import historialLibroApiReducer, { historialLibroApi } from './gestionHistorial/gestionGestionHistorial.reducer';
 
 /**
  * Combina todos los slices {@link https://redux-toolkit.js.org/api/createSlice} de los distintos recursos que se encuentran
@@ -17,19 +19,21 @@ export const apiReducer = combineSlices({
     categoria: categoriaReducer,
     libro: libroReducer,
     usuario: usuarioReducer,
-    comentario: comentarioReducer
+    comentario: comentarioReducer,
+    reporte: reporteReducer,
+    historialLibro: historialLibroApiReducer
 });
-
 
 /**
  * Combina todos los recursos de las api dentro del objeto api, estos son los que 
  * iniciaran la solicitud 
- * 
- * @privateRemarks
  */
 export const api = {
+    seguridad: apiSeguridad,
     categoria: categoriaApi,
     libro: libroApi,
     usuario: usuarioApi,
-    comentario: comentarioApi
+    comentario: comentarioApi,
+    reporte: reporteApi,
+    historialLibro: historialLibroApi
 }

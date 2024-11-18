@@ -10,7 +10,8 @@
     "target": "ES6",
     "jsx": "react",
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "noImplicitAny": false
   },
   "references": [
     { "path": "./tsconfig.app.json" },

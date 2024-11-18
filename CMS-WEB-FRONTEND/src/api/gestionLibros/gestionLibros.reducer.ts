@@ -8,7 +8,7 @@ import { libroBorrarApiThunk } from './borrar/borrarLibro.thunk';
 import { LibroBorrarResponse } from './borrar/borrarLibro.model';
 import { LibroCrearResponse } from './crear/crearLibro.model';
 import { libroActualizarApiThunk } from './actualizar/actualizarLibro.thunk';
-import { LibroActualizarResponse } from './actualizar/actualizarLibro.model';
+import { LibroActualizarEstadoResponse } from './actualizar/actualizarLibro.model';
 
 
 const libroListar = createSlice({
@@ -40,10 +40,13 @@ const libroBorrar = createSlice({
 
 const libroActualizar = createSlice({
     name: 'libroActualizar',
-    initialState: generateBaseState<BaseResponse<LibroActualizarResponse>>(),
+    initialState: generateBaseState<BaseResponse<LibroActualizarEstadoResponse>>(),
     reducers: {},
     extraReducers: (builder) => {
-        buildCommonCases(libroActualizarApiThunk, builder);
+        buildCommonCases(libroActualizarApiThunk.actualizarEstado, builder);
+        buildCommonCases(libroActualizarApiThunk.aumentarCantidadVistaLibroThunk, builder);
+        buildCommonCases(libroActualizarApiThunk.darLikeLibroThunk, builder);
+        buildCommonCases(libroActualizarApiThunk.actualizarLibroThunk, builder);
     }
 });
 
@@ -60,5 +63,5 @@ export const libroApi = {
     libroListarApiThunk,
     libroCrearApiThunk,
     libroBorrarApiThunk,
-    libroActualizarApiThunk
+    ...libroActualizarApiThunk
 }

@@ -1,4 +1,7 @@
-
+/**
+ * Datos que debe recibir la pagina de inicio para que la plantilla utilizada la
+ * pueda utilizar
+ */
 export interface IInicioPage{
     title: string,
     isAdmin: boolean,

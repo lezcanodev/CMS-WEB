@@ -1,3 +1,6 @@
+/**
+* @packageDocumentation GUI-Libros
+ */
 import ContentEditor from '@/components/ContentEditor';
 import { Stack, Grid, TextField, MenuItem, Box, Button, Divider } from '@mui/material';
 import { useEffect, useState } from 'react';
@@ -19,7 +22,7 @@ const libroDataSchema = Yup.object({
 interface LibroEditorProps{
     onCloseLibroEditor: () => void
 }
-export default function LibroEditor({
+export function LibroEditor({
     onCloseLibroEditor
 }: LibroEditorProps){
     const dispatch = useAppDispatch();
@@ -36,7 +39,8 @@ export default function LibroEditor({
                 titulo: values.titulo,
                 categoria: parseInt(values.categoria),
                 contenido: contenido,
-                author: JSON.parse(localStorageServices.get('user') as any).userId as any
+                author: JSON.parse(localStorageServices.get('user') as any).userId as any,
+                estado: 'En Revision'
             });
             dispatch(asyncCategory())
             .unwrap()
