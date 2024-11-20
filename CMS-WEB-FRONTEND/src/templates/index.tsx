@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 import { Box } from '@mui/material';
 import { ITemplateElements } from './interfaces';
+import {CircularProgress, Stack } from '@mui/material';
 
 // Asocia una plantilla con su grupo de componentes
 export const TEMPLATES: {[templateFolder: string]: ITemplateElements} = {
@@ -15,7 +16,20 @@ export const TEMPLATES: {[templateFolder: string]: ITemplateElements} = {
         VerLibro: lazy(() => import('@/templates/template1/pages/VerLibro.page')),
 
         // Componentes
-        LoadingPageComponent: () => <h1>Loading plantilla 1....</h1>,
+        LoadingPageComponent: () => {
+        return <>
+            <Box 
+                sx={{ 
+                    display: 'flex',
+                    justifyContent: 'center', 
+                    alignItems: 'center',
+                    height: '100vh', 
+                    position: 'relative'
+                }}
+            >
+                <CircularProgress className='loader' size="15rem" value={75} thickness={2.5} />
+            </Box>
+        </>},
     },
 
     //'template2': {

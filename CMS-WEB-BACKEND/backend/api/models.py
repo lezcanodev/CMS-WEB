@@ -71,5 +71,11 @@ class Histograma(models.Model):
     #def __str__(self):
     #    return self.usuario
 
+class Likes(models.Model):
+    """
+    Guarda una instancia de un like...
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE , related_name="userLikes")
+    libro = models.ForeignKey(Libro,on_delete=models.CASCADE, related_name="libroLikeado")
 
 

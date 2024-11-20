@@ -2,7 +2,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from api.gestion_usuarios_views import CrearUsuarioView,DeleteUsuarioView,ListarUsuariosView, UpdateUsuarioView
-from api.views import CreateUserView, LibroListCreate, CategoriaListCreate, CategoriaDelete,LibroDelete, LibroListar,CategoriaListar, UpdateCategoriaAPIView, UpdateLibroAPIView, UserProfileUpdateView,CrearComentarioView,ListarComentariosView,BorrarComentarioView, HistogramaCreate, HistogramaListar
+from api.views import CreateUserView, LibroListCreate, CategoriaListCreate, CategoriaDelete,LibroDelete, LibroListar,CategoriaListar, UpdateCategoriaAPIView, UpdateLibroAPIView, UserProfileUpdateView,CrearComentarioView,ListarComentariosView,BorrarComentarioView, HistogramaCreate, HistogramaListar,GuardarLikeView,CheckLikeView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
@@ -62,6 +62,11 @@ urlpatterns = [
 
     #Rutas historial
 	path("api/guardar-historial", HistogramaCreate.as_view(), name="guardar-historial"),
-	path("api/listar-historial", HistogramaListar.as_view(), name="listar-historial")
+	path("api/listar-historial", HistogramaListar.as_view(), name="listar-historial"),
+
+    #Rutas likes
+    path("api/guardar-like",GuardarLikeView.as_view(),name="guardar-like"),
+    path("api/check-like",CheckLikeView.as_view(),name="check-like")
+    #path("api/borrar-like",LikeBorrarView.as_view(),name="borrar-like"),
 ]
 

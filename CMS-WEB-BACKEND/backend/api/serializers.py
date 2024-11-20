@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 import os
-from .models import Libro, Categoria, UserProfile, Comentario, Histograma
+from .models import Libro, Categoria, Likes, UserProfile, Comentario, Histograma
 from django.shortcuts import render
 from .emails import enviar_notificacion_email
 
@@ -88,3 +88,13 @@ class HistogramaSerializer (serializers.ModelSerializer):
     class Meta:
         model = Histograma
         fields = ["id", "fecha", "accion", "usuarioNombre", "id_libro"]
+
+#Likes
+class LikeSerializer (serializers.ModelSerializer):
+    user = serializers.CharField(source='usuario.username', read_only=True)
+    libro = serializers.CharField(source='libro.id', read_only=True)
+    
+    """Serilizer para la tabla likes con los atributos usuario, libro. """
+    class Meta:
+        model = Likes
+        fields = ["user", "libro"]

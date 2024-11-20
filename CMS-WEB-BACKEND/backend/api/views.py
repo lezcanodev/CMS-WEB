@@ -1,9 +1,10 @@
+from rest_framework.views import APIView
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import generics
-from .serializers import UserProfileSerializer, UserProfileUpdateSerializer, UserSerializer, LibroSerializer, CategoriaSerializer, ComentarioSerializer, HistogramaSerializer
+from .serializers import LikeSerializer, UserProfileSerializer, UserProfileUpdateSerializer, UserSerializer, LibroSerializer, CategoriaSerializer, ComentarioSerializer, HistogramaSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .models import Libro, Categoria, UserProfile, Comentario, Histograma
+from .models import Libro, Categoria, UserProfile, Comentario, Histograma, Likes
 from .permisos import rol_Requerido
 
 from rest_framework.response import Response
@@ -297,6 +298,8 @@ class HistogramaCreate (generics.CreateAPIView):
         else:
             print(serializer.errors)
 
+
+
 class HistogramaListar(generics.ListAPIView):
     """ Clase para listar los histogramas atraves de la clase ListAPIView del framework REST
     """
@@ -311,5 +314,37 @@ class HistogramaListar(generics.ListAPIView):
         id_libro = self.request.query_params.get("libro")
         
         return Histograma.objects.filter(libro_id=id_libro)
+    
+#Likes
+class GuardarLikeView(generics.CreateAPIView):
+    """ Clase para instanciar un "histograma" atraves de la clase CreateAPIView del framework REST
+    """
+    serializer_class = LikeSerializer
+    permission_classes = [AllowAny]         #Cualquier usuario que tiene permitido hacer un cambio debe poder acceder al view de crear una historia
+
+    def perform_create(self, serializer):
+        """Metodo reescrito para verificar que el objeto enviado atraves del serializer cumple con los atributos necesarios para su creacion para luego ser guardado
+        """  
+        libro_instance = Libro.objects.get(id=self.request.data.get("libro"))
+        if serializer.is_valid():
+            serializer.save(user=self.request.user, libro = libro_instance )
+        else:
+            print(serializer.errors)
+
+class CheckLikeView(APIView):
+    """ Clase para Checkear si el usuario ya dio like al libro..."""
+    serializer_class = LikeSerializer
+    permission_classes = [AllowAny]
+        
+    def get(self,request):
+        """retorna True si ya dio like el usuario o False sino
+        """
+        #del front para el filtrado
+        id_libro = self.request.query_params.get("id_libro")
+        #filtramos por user y por libro para saber si dio like al libro o no...
+        print("esto recibo",self.request.user,id_libro)
+        exists = Likes.objects.filter(user=self.request.user, libro=id_libro).exists()
+        print("esto te envio ..", exists)
+        return Response({'isLike': exists})
 
 
