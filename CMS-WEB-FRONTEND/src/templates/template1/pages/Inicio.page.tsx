@@ -1,5 +1,5 @@
 import { IInicioPage } from '@/templates/interfaces/pages/inicio.page.interface';
-import { Box, Card, CardContent, Chip, Divider, Link, Stack, Typography } from '@mui/material';
+import { Box, Card, CardContent, Chip, CircularProgress, Divider, Link, Stack, Typography } from '@mui/material';
 import {
     Login as LoginIcon,
     Search as SearchIcon,
@@ -130,7 +130,8 @@ export default function InicioPage({
                         </Box>   
                     </>)))
                 }
-                { !libros?.data?.length && <Typography textAlign={'center'} fontSize={'2em'} >No hay libros</Typography> }
+                {!libros?.data?.length && libros.loading && <CircularProgress size='100px'/>}
+                {!libros?.data?.length && !libros.loading && <Typography textAlign={'center'} fontSize={'2em'} >No hay libros publicados</Typography> }
             </Stack>
         </Box>
     </>
