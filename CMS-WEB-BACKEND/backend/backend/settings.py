@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import dj_database_url
 from pathlib import Path
 from datetime import timedelta
 from dotenv import load_dotenv 
@@ -25,9 +25,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('API_KEY')
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -113,7 +110,11 @@ DATABASES = {
     }
 }
 
-
+DATABASES['default'] = dj_database_url.config(
+    default=os.getenv("DATABASE_URL"),
+    conn_max_age=600,
+    conn_health_checks=True,
+)
 
 
 # Password validation
@@ -170,6 +171,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #el cors para que cualquier origen del request funcione
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWS_CREDENTIALS = True
-
-# configuracion para el mail
-
