@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import { ReactElement } from 'react';
-import {PowerBIEmbed} from './PowerBIEmbed';
+import {SupersetEmbed} from './SuperSet';
 import { RankMasGustados } from './RankMasGustados';
 import { RankMasVistos } from './RankMasVistos';
 import {LibrosPorEstado} from './LibrosPorEstado';
@@ -9,12 +9,12 @@ import {LibrosPorEstado} from './LibrosPorEstado';
  * Se encarga de preparar el contenido para los reportes
  * 
  * ## Reportes incluidos:
- *      - Reporte power bi
+ *      - Reportes de Apache Superset
  *      - Reporte de libros mas gustados
  *      - Reporte de libros mas vistos
  *      - Reporte de libros por estado
  * 
- * ## Form de usar:
+ * ## Forma de usar:
  *  Solo se debe llamar al componente
  * 
  * ```tsx
@@ -26,7 +26,10 @@ import {LibrosPorEstado} from './LibrosPorEstado';
 export default function GestionReportes(): ReactElement{
     return<>
         <Box maxWidth={1024} mx={'auto'}>
-            <PowerBIEmbed />
+            {/**
+             * Reportes de Apache Superset
+             */}
+            <SupersetEmbed/>
             {/**
              * Reporte de cantidad de libros por estado
              */}

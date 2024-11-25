@@ -11,3 +11,4 @@ python-dotenv
 drf-yasg
 pytest-django
 apache-superset
+dj_database_url
