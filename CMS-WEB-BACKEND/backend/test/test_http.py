@@ -5,7 +5,7 @@ from rest_framework import status
 from api.models import Histograma, User, Libro,Categoria
 
 @pytest.mark.django_db
-def test_listar_usuarios_autenticado():
+def test_listar_usuarios():
     # Configuración del cliente de prueba
     client = APIClient()
 
