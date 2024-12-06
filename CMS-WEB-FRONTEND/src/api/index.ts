@@ -6,6 +6,7 @@ import usuarioReducer, { usuarioApi } from './gestionUsuarios/gestionUsuario.red
 import comentarioReducer, { comentarioApi } from './gestionComentarios/gestionComentario.reducer';
 import reporteReducer, { reporteApi } from './gestionReporte/gestionReportes.reducer';
 import historialLibroApiReducer, { historialLibroApi } from './gestionHistorial/gestionGestionHistorial.reducer';
+import IdActualReducer, { IdActualApi } from './gestionSuperset/IdActual.reducer';
 
 /**
  * Combina todos los slices {@link https://redux-toolkit.js.org/api/createSlice} de los distintos recursos que se encuentran
@@ -21,7 +22,8 @@ export const apiReducer = combineSlices({
     usuario: usuarioReducer,
     comentario: comentarioReducer,
     reporte: reporteReducer,
-    historialLibro: historialLibroApiReducer
+    historialLibro: historialLibroApiReducer,
+    superset: IdActualReducer
 });
 
 /**
@@ -35,5 +37,6 @@ export const api = {
     usuario: usuarioApi,
     comentario: comentarioApi,
     reporte: reporteApi,
-    historialLibro: historialLibroApi
+    historialLibro: historialLibroApi,
+    superset: IdActualApi
 }

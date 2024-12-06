@@ -2,7 +2,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from api.gestion_usuarios_views import CrearUsuarioView,DeleteUsuarioView,ListarUsuariosView, UpdateUsuarioView
-from api.views import CreateUserView, LibroListCreate, CategoriaListCreate, CategoriaDelete,LibroDelete, LibroListar,CategoriaListar, UpdateCategoriaAPIView, UpdateLibroAPIView, UserProfileUpdateView,CrearComentarioView,ListarComentariosView,BorrarComentarioView, HistogramaCreate, HistogramaListar
+from api.views import CreateUserView, LibroListCreate, CategoriaListCreate, CategoriaDelete,LibroDelete, LibroListar,CategoriaListar, UpdateCategoriaAPIView, UpdateLibroAPIView, UserProfileUpdateView,CrearComentarioView,ListarComentariosView,BorrarComentarioView, HistogramaCreate, HistogramaListar,CrearTablaIDAPIView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
@@ -59,6 +59,10 @@ urlpatterns = [
     path("api/guardar-comentario",CrearComentarioView.as_view(), name="guardar-comentario"),
     path("api/listar-comentarios",ListarComentariosView.as_view(), name="listar-comentarios"),
     path("api/borrar-comentario/<int:pk>",BorrarComentarioView.as_view(), name="borrar-comentario"),
+
+    #Rutas Para saber el ID_actual
+    path("api/guardar-id/<int:pk>", CrearTablaIDAPIView.as_view(), name="guardar-id"),
+
 
     #Rutas historial
 	path("api/guardar-historial", HistogramaCreate.as_view(), name="guardar-historial"),

@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { ReactElement } from 'react';
 import {SupersetEmbed} from './SuperSet';
 import { RankMasGustados } from './RankMasGustados';
@@ -25,11 +25,20 @@ import {LibrosPorEstado} from './LibrosPorEstado';
  */
 export default function GestionReportes(): ReactElement{
     return<>
-        <Box maxWidth={1024} mx={'auto'}>
+        <Box maxWidth={"90%"} mx={'auto'} marginLeft={"4%"}>
+            <Typography variant={'h5'} fontWeight={'bold'} style={{opacity: .5}} >{"Gestion de Reportes"}</Typography>
             {/**
              * Reportes de Apache Superset
              */}
-            <SupersetEmbed/>
+            <SupersetEmbed  iframeUrl={"http://127.0.0.1:8088/superset/dashboard/p/VdM2ZBO7yvY/"} style={{
+                display: 'inline-block',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '125vh',
+                margin: '30px',
+                marginLeft: "6%",
+                marginRight: "3%",
+            }}/>
             {/**
              * Reporte de cantidad de libros por estado
              */}

@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from rest_framework import generics
 from .serializers import UserProfileSerializer, UserProfileUpdateSerializer, UserSerializer, LibroSerializer, CategoriaSerializer, ComentarioSerializer, HistogramaSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .models import Libro, Categoria, UserProfile, Comentario, Histograma
+from .models import IdActual, Libro, Categoria, UserProfile, Comentario, Histograma
 from .permisos import rol_Requerido
 
 from rest_framework.response import Response
@@ -311,5 +311,40 @@ class HistogramaListar(generics.ListAPIView):
         id_libro = self.request.query_params.get("libro")
         
         return Histograma.objects.filter(libro_id=id_libro)
+
+
+#Reportes
+class CrearTablaIDAPIView(generics.UpdateAPIView):
+    """ Clase para crear una tabla con el ID del usuario actual
+    """
+    queryset = IdActual.objects.all()
+    permission_classes = [AllowAny]
+    lookup_field = 'pk'
+    lookup_url_kwarg = 'pk'  # Clave en la URL
+
+    def update(self, request, *args, **kwargs):
+
+        # Obtemos el id del usuario
+        usuario_id =  kwargs.get('pk')
+
+        #print("el usuario id que recibo es:",usuario_id,self.request.data)
+        if usuario_id is not None:
+            try:
+                # Actualizar o crear el registro de IdActual con id=1
+                obj, created = IdActual.objects.update_or_create(
+                    #siempre modificaremos el primer elemento...
+                    id = 1, 
+                    defaults={"id_actual": usuario_id}
+                )
+                
+                #todo correcto
+                return Response({"message": "IdActual actualizado correctamente", "id_actual": obj.id_actual}, status=200)
+            
+            except Exception as e:
+                # En caso de error, devolver el detalle del error
+                return Response({"error": "Error al actualizar IdActual", "details": str(e)}, status=500)
+        else:
+            # Si 'usuarioId' no está en los datos de la solicitud
+            return Response({"error": "'usuarioId' no proporcionado"}, status=400)
 
 

@@ -72,4 +72,8 @@ class Histograma(models.Model):
     #    return self.usuario
 
 
+class IdActual(models.Model):
+    id_actual = models.IntegerField(null=True)
 
+    def __str__(self):
+        return self.id_actual
